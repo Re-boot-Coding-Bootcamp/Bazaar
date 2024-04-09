@@ -1,1 +1,1 @@
-export * from "./AccordionTypes";
+export * from "./AccordionItemTypes";

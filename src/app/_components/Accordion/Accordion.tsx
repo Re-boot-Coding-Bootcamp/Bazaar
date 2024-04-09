@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { AccordionItem } from "../AccordionItem";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import type { AccordionChild } from "~/types";
+import type { AccordionItemType } from "~/types";
+import { AccordionItem } from "./AccordionItem";
 
 interface AccordionProps {
-  items: AccordionChild[];
+  items: AccordionItemType[];
   expandAllOption?: boolean;
 }
 
@@ -34,7 +34,7 @@ const Accordion = ({ expandAllOption, items, ...props }: AccordionProps) => {
       {items.map((item, index) => (
         <AccordionItem
           key={index}
-          child={item}
+          item={item}
           expandAllAccordionItems={expandAllAccordionItems}
         />
       ))}

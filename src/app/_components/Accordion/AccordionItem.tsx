@@ -1,14 +1,14 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
-import type { AccordionChild } from "~/types";
+import type { AccordionItemType } from "~/types";
 
 interface AccordionItemProps {
-  child: AccordionChild;
+  item: AccordionItemType;
   expandAllAccordionItems: boolean;
 }
 
 const AccordionItem = ({
-  child,
+  item,
   expandAllAccordionItems,
 }: AccordionItemProps) => {
   const [accordionOpen, setAccordionOpen] = useState(false);
@@ -23,8 +23,12 @@ const AccordionItem = ({
         onClick={() => setAccordionOpen(!accordionOpen)}
         className="flex w-full items-center justify-between"
       >
-        <span id="accordion-title" className="my-2">
-          {child.title}
+        <span
+          id="accordion-title"
+          className="my-2"
+          aria-label={`${item.title}`}
+        >
+          {item.title}
         </span>
         <span id="accordion-actions-icon">
           <ChevronDownIcon
@@ -37,7 +41,7 @@ const AccordionItem = ({
         className={`grid overflow-hidden transition-all duration-500 ease-in-out ${accordionOpen ? `grid-rows-[1fr] opacity-100` : `grid-rows-[0fr] opacity-0`}`}
       >
         <div id="accordion-content" className={`overflow-hidden`}>
-          {child.content}
+          {item.content}
         </div>
       </div>
     </div>
