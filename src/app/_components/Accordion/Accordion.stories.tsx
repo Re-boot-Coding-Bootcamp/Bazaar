@@ -23,7 +23,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    children: [
+    items: [
       {
         title: "Section 1",
         content: <div>This is the content of section 1.</div>,
@@ -36,9 +36,10 @@ export const Primary: Story = {
     expandAllOption: false,
   },
 };
+
 export const WithExpandAllOptions: Story = {
   args: {
-    children: [
+    items: [
       {
         title: "Section 1",
         content: <div>This is the content of section 1.</div>,

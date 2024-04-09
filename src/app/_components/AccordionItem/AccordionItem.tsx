@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import React, { ReactNode, useEffect, useState } from "react";
-import { AccordionChild } from "~/types";
+import React, { useEffect, useState } from "react";
+import type { AccordionChild } from "~/types";
 
 interface AccordionItemProps {
   child: AccordionChild;

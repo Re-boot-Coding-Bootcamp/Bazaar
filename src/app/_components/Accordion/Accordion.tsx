@@ -1,14 +1,14 @@
-import React, { ReactElement, ReactNode, useState } from "react";
+import React, { useState } from "react";
 import { AccordionItem } from "../AccordionItem";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
-import { AccordionChild } from "~/types";
+import type { AccordionChild } from "~/types";
 
 interface AccordionProps {
-  children: AccordionChild[];
+  items: AccordionChild[];
   expandAllOption?: boolean;
 }
 
-const Accordion = ({ expandAllOption, children, ...props }: AccordionProps) => {
+const Accordion = ({ expandAllOption, items, ...props }: AccordionProps) => {
   const [expandAllAccordionItems, setExpandAllAccordionItems] = useState(false);
 
   return (
@@ -31,10 +31,10 @@ const Accordion = ({ expandAllOption, children, ...props }: AccordionProps) => {
           </span>
         </button>
       )}
-      {children.map((child, index) => (
+      {items.map((item, index) => (
         <AccordionItem
           key={index}
-          child={child}
+          child={item}
           expandAllAccordionItems={expandAllAccordionItems}
         />
       ))}
