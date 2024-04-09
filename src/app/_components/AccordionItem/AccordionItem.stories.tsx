@@ -1,10 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Accordion } from "./Accordion";
-import Link from "next/link";
+import { AccordionItem } from "./AccordionItem";
 
 const meta = {
-  title: "Example/Accordion",
-  component: Accordion,
+  title: "Example/AccordionItem",
+  component: AccordionItem,
   parameters: {
     layout: "centered",
   },
@@ -17,7 +16,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Accordion>;
+} satisfies Meta<typeof AccordionItem>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -28,15 +27,6 @@ export const Primary: Story = {
       { title: "Section 1", content: <p>This is the content of section 1.</p> },
       { title: "Section 2", content: <p>This is the content of section 2.</p> },
     ],
-    expandAllOption: false,
-  },
-};
-export const WithExpandAllOptions: Story = {
-  args: {
-    children: [
-      { title: "Section 1", content: <p>This is the content of section 1.</p> },
-      { title: "Section 2", content: <p>This is the content of section 2.</p> },
-    ],
-    expandAllOption: true,
+    expandAllAccordionItems: false,
   },
 };
