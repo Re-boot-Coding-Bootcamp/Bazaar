@@ -45,7 +45,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <img
             src={selectedImage}
             alt="Selected"
-            className="h-full w-full rounded-md object-cover"
+            className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-150 "
           />
           <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
             <button
