@@ -32,13 +32,13 @@ const AccordionItem = ({
         </span>
         <span id="accordion-actions-icon">
           <ChevronDownIcon
-            className={`h-5 w-5 ${accordionOpen ? "rotate-180 transition-transform duration-500" : "rotate-0 transition-transform duration-300"}`}
+            className={`h-5 w-5 ${accordionOpen ? "rotate-180 transition-transform duration-200" : "rotate-0 transition-transform duration-200"}`}
           />
         </span>
       </button>
       <div
         id="accordion-content-container"
-        className={`grid overflow-hidden transition-all duration-500 ease-in-out ${accordionOpen ? `grid-rows-[1fr] opacity-100` : `grid-rows-[0fr] opacity-0`}`}
+        className={`grid overflow-hidden transition-all duration-200 ease-in-out ${accordionOpen ? `grid-rows-[1fr] opacity-100` : `grid-rows-[0fr] opacity-0`}`}
       >
         <div id="accordion-content" className={`overflow-hidden`}>
           {item.content}
