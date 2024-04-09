@@ -1,13 +1,10 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactElement, ReactNode, useState } from "react";
 import { AccordionItem } from "../AccordionItem";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
+import { AccordionChild } from "~/types";
 
-interface Child {
-  title: string;
-  content: ReactNode;
-}
 interface AccordionProps {
-  children: Child[];
+  children: AccordionChild[];
   expandAllOption?: boolean;
 }
 

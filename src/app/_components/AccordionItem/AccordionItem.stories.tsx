@@ -23,10 +23,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    children: [
-      { title: "Section 1", content: <p>This is the content of section 1.</p> },
-      { title: "Section 2", content: <p>This is the content of section 2.</p> },
-    ],
+    child: {
+      title: "Section 1",
+      content: <div>This is the content of section 1.</div>,
+    },
     expandAllAccordionItems: false,
   },
 };

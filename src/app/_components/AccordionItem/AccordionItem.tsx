@@ -1,15 +1,12 @@
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import React, {  ReactNode, useEffect, useState } from "react";
-
-interface Child {
-  title: string;
-  content: ReactNode;
-}
+import React, { ReactNode, useEffect, useState } from "react";
+import { AccordionChild } from "~/types";
 
 interface AccordionItemProps {
-  child: Child;
+  child: AccordionChild;
   expandAllAccordionItems: boolean;
 }
+
 const AccordionItem = ({
   child,
   expandAllAccordionItems,
@@ -37,7 +34,7 @@ const AccordionItem = ({
       </button>
       <div
         id="accordion-content-container"
-        className={`grid overflow-hidden text-sm text-slate-600 transition-all duration-500 ease-in-out ${accordionOpen ? `grid-rows-[1fr] opacity-100` : `grid-rows-[0fr] opacity-0`}`}
+        className={`grid overflow-hidden transition-all duration-500 ease-in-out ${accordionOpen ? `grid-rows-[1fr] opacity-100` : `grid-rows-[0fr] opacity-0`}`}
       >
         <div id="accordion-content" className={`overflow-hidden`}>
           {child.content}
