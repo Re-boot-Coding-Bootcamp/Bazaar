@@ -1,5 +1,5 @@
 import React from "react";
-import { PaperAirplaneIcon } from "@heroicons/react/24/solid";
+import { PaperAirplaneIcon } from "@heroicons/react/solid";
 
 const Sample = () => {
   return (
