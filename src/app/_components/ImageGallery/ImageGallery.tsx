@@ -11,6 +11,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const validImageUrls = Array.isArray(imageUrls) ? imageUrls : [];
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const clickLeft = () => {
     setSelectedImageIndex((prev) =>
@@ -22,6 +23,10 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
     setSelectedImageIndex((prevIndex) =>
       prevIndex === validImageUrls.length - 1 ? 0 : prevIndex + 1,
     );
+  };
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
   const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
@@ -45,8 +50,18 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <img
             src={selectedImage}
             alt="Selected"
-            className="h-full w-full rounded-md object-cover transition-transform duration-300 hover:scale-150 "
+            className="h-full w-full rounded-md object-cover"
+            onClick={toggleModal}
           />
+          {isModalOpen && (
+            <div
+              className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center "
+              onClick={toggleModal}
+            >
+              <img src={selectedImage} alt="Selected" />
+            </div>
+          )}
+
           <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
             <button
               className="rounded-full p-2 hover:bg-gray-200"
