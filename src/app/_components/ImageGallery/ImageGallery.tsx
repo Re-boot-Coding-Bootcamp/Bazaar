@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { ChevronLeftIcon } from "@heroicons/react/outline";
-import { ChevronRightIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
 
 type ImageGalleryProps = {
   imageUrls: string[];
@@ -13,13 +12,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const clickLeft = () => {
+  const clickLeft = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setSelectedImageIndex((prev) =>
       prev === 0 ? validImageUrls.length - 1 : prev - 1,
     );
   };
 
-  const clickRight = () => {
+  const clickRight = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setSelectedImageIndex((prevIndex) =>
       prevIndex === validImageUrls.length - 1 ? 0 : prevIndex + 1,
     );
@@ -27,6 +28,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
+  };
+
+  const closeModal = (e: React.MouseEvent<HTMLImageElement>) => {
+    if (isModalOpen) {
+      e.stopPropagation();
+      setIsModalOpen(false);
+    }
   };
 
   const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
@@ -58,28 +66,45 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
               className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center "
               onClick={toggleModal}
             >
-              <img
-                src={selectedImage}
-                alt="Selected"
-                className="max-w-screen max-h-screen"
-              />
+              <div className="max-w-screen flex max-h-screen items-center justify-center">
+                <button
+                  className="mr-2 rounded-full p-2 hover:bg-gray-200"
+                  onClick={clickLeft}
+                >
+                  <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
+                </button>
+                <img
+                  src={selectedImage}
+                  alt="Selected"
+                  className="max-w-screen max-h-screen"
+                  onClick={closeModal}
+                />
+                <button
+                  className="ml-2 rounded-full p-2 hover:bg-gray-200"
+                  onClick={clickRight}
+                >
+                  <ChevronRightIcon className="h-6 w-6 text-gray-800" />
+                </button>
+              </div>
             </div>
           )}
 
-          <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
-            <button
-              className="rounded-full p-2 hover:bg-gray-200"
-              onClick={clickLeft}
-            >
-              <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
-            </button>
-            <button
-              className="rounded-full p-2 hover:bg-gray-200"
-              onClick={clickRight}
-            >
-              <ChevronRightIcon className="h-6 w-6 text-gray-800" />
-            </button>
-          </div>
+          {!isModalOpen && (
+            <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
+              <button
+                className="rounded-full p-2 hover:bg-gray-200"
+                onClick={clickLeft}
+              >
+                <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
+              </button>
+              <button
+                className="rounded-full p-2 hover:bg-gray-200"
+                onClick={clickRight}
+              >
+                <ChevronRightIcon className="h-6 w-6 text-gray-800" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
