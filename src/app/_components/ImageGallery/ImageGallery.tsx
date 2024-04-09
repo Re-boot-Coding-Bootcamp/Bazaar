@@ -42,9 +42,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   return (
     <div className="flex h-screen items-center justify-center ">
       <div className="relative flex h-[669px] w-[728px] p-1">
-        <div className="mr-4 flex flex-col space-y-2.5 ">
+        <div
+          className="mr-4 flex flex-col space-y-3 overflow-y-auto"
+          style={{ height: "661" }}
+        >
           {validImageUrls.map((url, index) => (
             <img
+              loading="lazy"
               key={index}
               src={url}
               alt={`Thumbnail ${index + 1}`}
