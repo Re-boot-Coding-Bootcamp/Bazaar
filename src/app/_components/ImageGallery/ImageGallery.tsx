@@ -41,11 +41,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
 
   return (
     <div className="flex h-screen items-center justify-center ">
-      <div className="relative flex h-[669px] w-[728px] p-1">
-        <div
-          className="mr-4 flex flex-col space-y-3 overflow-y-auto"
-          style={{ height: "661" }}
-        >
+      <div className="relative flex h-[720px] w-[660px] p-1">
+        <div className="mr-3 flex flex-col space-y-3 overflow-y-auto">
           {validImageUrls.map((url, index) => (
             <img
               loading="lazy"
@@ -58,11 +55,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           ))}
         </div>
 
-        <div className="relative flex-grow">
+        <div className="relative flex-grow ">
           <img
             src={selectedImage}
             alt="Selected"
-            className="h-full w-full rounded-md object-cover"
+            className="rounded- h-full w-full rounded-lg object-contain"
             onClick={toggleModal}
           />
           {isModalOpen && (
@@ -94,15 +91,15 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           )}
 
           {!isModalOpen && (
-            <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
+            <div className="absolute bottom-0 right-0 flex space-x-2 p-6">
               <button
-                className="rounded-full p-2 hover:bg-gray-200"
+                className="rounded-full bg-gray-200 p-2 hover:bg-gray-400"
                 onClick={clickLeft}
               >
                 <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
               </button>
               <button
-                className="rounded-full p-2 hover:bg-gray-200"
+                className="rounded-full bg-gray-200 p-2 hover:bg-gray-400"
                 onClick={clickRight}
               >
                 <ChevronRightIcon className="h-6 w-6 text-gray-800" />
