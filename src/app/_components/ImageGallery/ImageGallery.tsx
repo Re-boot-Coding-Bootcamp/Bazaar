@@ -10,9 +10,21 @@ type ImageGalleryProps = {
 const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const validImageUrls = Array.isArray(imageUrls) ? imageUrls : [];
 
-  const [selectedImage, setSelectedImage] = useState<string>(
-    validImageUrls[0] ?? "defaultImageUrl",
-  );
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
+  const clickLeft = () => {
+    setSelectedImageIndex((prev) =>
+      prev === 0 ? validImageUrls.length - 1 : prev - 1,
+    );
+  };
+
+  const clickRight = () => {
+    setSelectedImageIndex((prevIndex) =>
+      prevIndex === validImageUrls.length - 1 ? 0 : prevIndex + 1,
+    );
+  };
+
+  const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
 
   return (
     <div className="flex h-screen items-center justify-center ">
@@ -24,7 +36,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
               src={url}
               alt={`Thumbnail ${index + 1}`}
               className="h-[60px] w-[60px] cursor-pointer rounded-md"
-              onClick={() => setSelectedImage(url)}
+              onClick={() => setSelectedImageIndex(index)}
             />
           ))}
         </div>
@@ -35,11 +47,17 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             alt="Selected"
             className="h-full w-full rounded-md object-cover"
           />
-          <div className="flex items-center justify-center">
-            <button className="rounded-full p-2 hover:bg-gray-200">
+          <div className="absolute bottom-0 right-0 flex space-x-2 p-4">
+            <button
+              className="rounded-full p-2 hover:bg-gray-200"
+              onClick={clickLeft}
+            >
               <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
             </button>
-            <button className="rounded-full p-2 hover:bg-gray-200">
+            <button
+              className="rounded-full p-2 hover:bg-gray-200"
+              onClick={clickRight}
+            >
               <ChevronRightIcon className="h-6 w-6 text-gray-800" />
             </button>
           </div>
