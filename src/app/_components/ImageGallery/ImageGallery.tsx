@@ -33,8 +33,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
 
   return (
     <div className="flex h-screen items-center justify-center ">
-      <div className="relative flex h-[669px] w-[728px]">
-        <div className="mr-4 flex flex-col space-y-2.5 pl-12">
+      <div className="relative flex h-[669px] w-[728px] p-1">
+        <div className="mr-4 flex flex-col space-y-2.5 ">
           {validImageUrls.map((url, index) => (
             <img
               key={index}
@@ -58,7 +58,11 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
               className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center "
               onClick={toggleModal}
             >
-              <img src={selectedImage} alt="Selected" />
+              <img
+                src={selectedImage}
+                alt="Selected"
+                className="max-w-screen max-h-screen"
+              />
             </div>
           )}
 
