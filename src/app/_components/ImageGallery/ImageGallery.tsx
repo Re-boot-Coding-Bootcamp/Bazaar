@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from "react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 type ImageGalleryProps = {
   imageUrls: string[];
@@ -59,12 +59,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <img
             src={selectedImage}
             alt="Selected"
-            className="rounded- h-full w-full rounded-lg object-contain"
+            className="h-full w-full rounded-lg object-contain"
             onClick={toggleModal}
+            style={{ cursor: "pointer" }}
           />
           {isModalOpen && (
             <div
-              className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center "
+              className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center"
               onClick={toggleModal}
             >
               <div className="max-w-screen flex max-h-screen items-center justify-center">
@@ -93,13 +94,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           {!isModalOpen && (
             <div className="absolute bottom-0 right-0 flex space-x-2 p-6">
               <button
-                className="rounded-full bg-gray-200 p-2 hover:bg-gray-400"
+                className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
                 onClick={clickLeft}
               >
                 <ChevronLeftIcon className="h-6 w-6 text-gray-800" />
               </button>
               <button
-                className="rounded-full bg-gray-200 p-2 hover:bg-gray-400"
+                className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
                 onClick={clickRight}
               >
                 <ChevronRightIcon className="h-6 w-6 text-gray-800" />
