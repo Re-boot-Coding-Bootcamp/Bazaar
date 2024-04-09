@@ -9,6 +9,13 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {},
+  decorators: [
+    (Story) => (
+      <div className="w-96">
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof Accordion>;
 
 export default meta;
