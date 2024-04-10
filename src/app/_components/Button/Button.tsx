@@ -28,13 +28,13 @@ const Button = ({
 }: buttonProps): JSX.Element => {
   return (
     <button
-      className={`duration-800 container flex h-11 w-fit cursor-pointer items-center rounded px-4 leading-loose ${buttonVariants[variant]} ${className}`}
+      className={`duration-800 container flex h-11 w-fit cursor-pointer items-center justify-center rounded px-4 leading-loose ${buttonVariants[variant]} ${className} `}
       {...props}
       onClick={disabled ? () => onClick : undefined}
     >
-      {startIcon && <span className="pr-1">{startIcon}</span>}
-      <span className="px-1">{children}</span>
-      {endIcon && <span className="pl-1">{endIcon}</span>}
+      {startIcon && <span className="h-5 w-5">{startIcon}</span>}
+      <span className="px-2">{children}</span>
+      {endIcon && <span className="h-5 w-5">{endIcon}</span>}
     </button>
   );
 };
