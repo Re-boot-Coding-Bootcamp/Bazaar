@@ -48,6 +48,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
         {validImageUrls.map((url, index) => (
           <img
+            loading="lazy"
             key={index}
             src={url}
             alt={`Thumbnail ${index + 1}`}
@@ -60,6 +61,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       {!isModalOpen && (
         <div className="relative md:m-0 md:max-h-[60vh] md:w-auto">
           <img
+            loading="lazy"
             src={selectedImage}
             alt="Selected"
             className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
@@ -95,6 +97,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
               <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
             </button>
             <img
+              loading="lazy"
               src={selectedImage}
               alt="Selected"
               className="max-w-screen max-h-screen"
