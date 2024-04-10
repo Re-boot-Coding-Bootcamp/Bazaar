@@ -25,7 +25,7 @@ const Button = ({
   disabled,
   onClick,
   ...props
-}: buttonProps) => {
+}: buttonProps): JSX.Element => {
   return (
     <button
       className={`duration-800 container flex h-11 w-fit cursor-pointer items-center rounded px-4 leading-loose ${buttonVariants[variant]} ${className}`}
