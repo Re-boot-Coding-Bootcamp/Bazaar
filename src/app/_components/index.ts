@@ -1,3 +1,4 @@
 export * from "./Sample";
 export * from "./Modal";
-export { Accordion } from "./Accordion";
+export * from "./ImageGallery"
+export * from "./Accordion";
