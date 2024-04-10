@@ -1,4 +1,4 @@
 export * from "./Sample";
 export * from "./Modal";
-
-export {ImageGallery} from "./ImageGallery"
+export * from "./ImageGallery"
+export * from "./Accordion";
