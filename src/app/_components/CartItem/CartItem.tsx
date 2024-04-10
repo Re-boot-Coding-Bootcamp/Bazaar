@@ -25,6 +25,8 @@ const CartItem: React.FC<{ product: Product }> = ({ product }) => {
     }
   };
 
+  const totalPrice = price * quantity;
+
   return (
     <div
       id="cart-item-container"
@@ -62,7 +64,7 @@ const CartItem: React.FC<{ product: Product }> = ({ product }) => {
                 type="number"
                 min={1}
                 max={10}
-                className="border border-y-black py-1"
+                className="border border-y-black py-1 text-center"
                 value={quantity}
               ></input>
               <button
@@ -77,7 +79,7 @@ const CartItem: React.FC<{ product: Product }> = ({ product }) => {
         </div>
         <div className="flex flex-col justify-between pl-10 pr-1 pt-1">
           <text className="py-1 pb-1 text-2xl font-black">
-            {price.toLocaleString("en-US", {
+            {totalPrice.toLocaleString("en-US", {
               style: "currency",
               currency: "USD",
             })}
