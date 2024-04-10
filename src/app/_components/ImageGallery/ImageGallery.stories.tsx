@@ -30,4 +30,19 @@ export const Default: Story = {
   args: {
     imageUrls,
   },
+  // decorators: [
+  //   (Story) => (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         alignItems: "center",
+  //         justifyContent: "center",
+  //         width: 700,
+  //         height: 640,
+  //       }}
+  //     >
+  //       <Story />
+  //     </div>
+  //   ),
+  // ],
 };
