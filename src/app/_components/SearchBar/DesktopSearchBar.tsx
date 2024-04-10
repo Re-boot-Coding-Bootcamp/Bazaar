@@ -35,4 +35,4 @@ const DesktopSearchBar = () => {
   );
 };
 
-export default DesktopSearchBar;
+export { DesktopSearchBar };

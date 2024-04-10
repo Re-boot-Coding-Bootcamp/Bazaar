@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import Modal from "../Modal";
+import { Modal } from "../Modal";
 
 const MobileSearchBar = () => {
   const [isOpen, setisOpen] = useState(false);
@@ -31,4 +31,4 @@ const MobileSearchBar = () => {
   );
 };
 
-export default MobileSearchBar;
+export { MobileSearchBar };
