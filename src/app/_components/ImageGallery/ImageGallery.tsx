@@ -37,27 +37,31 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
     }
   };
 
+  const handleThumbnailHover = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
   const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <div className="mr-3 flex max-h-[60vh] flex-col space-y-2 overflow-y-auto">
+    <div className="grid md:flex md:h-screen md:w-screen md:items-center md:justify-center">
+      <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
         {validImageUrls.map((url, index) => (
           <img
             key={index}
             src={url}
             alt={`Thumbnail ${index + 1}`}
-            className="h-[125px] w-[125px] cursor-pointer rounded-md md:h-[60px] md:w-[60px]"
-            onClick={() => setSelectedImageIndex(index)}
+            className="h-[125px] w-[125px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px]"
+            onMouseEnter={() => handleThumbnailHover(index)}
           />
         ))}
       </div>
 
-      <div className="relative">
+      <div className="md:relative">
         <img
           src={selectedImage}
           alt="Selected"
-          className="max-h-[60vh] w-auto cursor-pointer rounded-lg object-contain"
+          className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
           onClick={toggleModal}
         />
         {isModalOpen && (
