@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import DesktopSearchBar from "./DesktopSearchBar";
+import { DesktopSearchBar } from "./DesktopSearchBar";
 
 const meta = {
   title: "Example/DesktopSearchBar",

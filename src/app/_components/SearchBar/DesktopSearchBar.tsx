@@ -1,14 +1,11 @@
-import React, { HTMLInputAutoCompleteAttribute, useState } from "react";
+import React, { useState } from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { Modal } from "../Modal";
 
 const DesktopSearchBar = () => {
-  const [searchItem, setSearchItem] = useState("");
-
-  //   const handleChange = () => {
-  //     setSearchItem("");
-  //   };
-  //   const handleClear = () => {
-  //     setSearchItem("");
-  //   };
+  const onSubmit = () => {
+    alert("Submitting from modal");
+  };
 
   return (
     <div>
@@ -17,7 +14,14 @@ const DesktopSearchBar = () => {
         placeholder="Search Product"
         className=" w-fill hidden border-b-2 border-gray-200 px-7 py-3 md:flex"
       />
-      <svg
+      <button
+        type="submit"
+        className="absolute left-0 top-0 h-full px-2"
+        onClick={onSubmit}
+      >
+        <MagnifyingGlassIcon className="ml-2 h-4 w-4 cursor-pointer" />
+      </button>
+      {/* <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"
@@ -30,7 +34,7 @@ const DesktopSearchBar = () => {
           strokeLinejoin="round"
           d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
         />
-      </svg>
+      </svg> */}
     </div>
   );
 };
