@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 type ImageGalleryProps = {
@@ -11,23 +11,6 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const imageViewRef = useRef<HTMLImageElement>(null);
-  const thumbnailContainerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const adjustThumbnailHeight = () => {
-      const imageView = imageViewRef.current;
-      const thumbnailContainer = thumbnailContainerRef.current;
-      if (imageView && thumbnailContainer) {
-        thumbnailContainer.style.height = `${imageView.clientHeight}px`;
-      }
-    };
-
-    adjustThumbnailHeight();
-    window.addEventListener("resize", adjustThumbnailHeight);
-
-    return () => window.removeEventListener("resize", adjustThumbnailHeight);
-  }, [selectedImageIndex]);
 
   const clickLeft = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -57,38 +40,30 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center ">
-      <div
-        ref={thumbnailContainerRef}
-        className="mr-3 flex flex-col space-y-2 overflow-y-auto "
-      >
+    <div className="flex h-screen w-screen items-center justify-center">
+      <div className="mr-3 flex max-h-[60vh] flex-col space-y-2 overflow-y-auto">
         {validImageUrls.map((url, index) => (
           <img
-            id="thumbnail-container"
-            loading="lazy"
             key={index}
             src={url}
             alt={`Thumbnail ${index + 1}`}
-            className="h-[60px] w-[60px] cursor-pointer rounded-md"
+            className="h-[125px] w-[125px] cursor-pointer rounded-md md:h-[60px] md:w-[60px]"
             onClick={() => setSelectedImageIndex(index)}
           />
         ))}
       </div>
 
-      <div className="relative  ">
+      <div className="relative">
         <img
-          id="image-viewer"
-          ref={imageViewRef}
           src={selectedImage}
           alt="Selected"
-          className="max-h-[60vh] w-auto rounded-lg object-contain"
+          className="max-h-[60vh] w-auto cursor-pointer rounded-lg object-contain"
           onClick={toggleModal}
-          style={{ cursor: "pointer" }}
         />
         {isModalOpen && (
           <div
             className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center"
-            onClick={toggleModal}
+            onClick={() => setIsModalOpen(false)}
           >
             <div className="max-w-screen relative flex max-h-screen items-center justify-center">
               <button
