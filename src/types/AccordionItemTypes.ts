@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
 
 export type AccordionItemType = {
-  title: string;
+  title: ReactNode;
   content: ReactNode;
 };

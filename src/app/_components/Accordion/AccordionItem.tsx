@@ -26,7 +26,9 @@ const AccordionItem = ({
         <span
           id="accordion-title"
           className="my-2"
-          aria-label={`${item.title}`}
+          aria-label={
+            typeof item.title === "string" ? `${item.title}` : undefined
+          }
         >
           {item.title}
         </span>
