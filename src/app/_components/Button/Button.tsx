@@ -14,7 +14,7 @@ const buttonVariants = {
     "bg-[#1c1c1c] text-[#f8f8f8] hover:bg-[#525252] active:bg-[#525252]",
   outline:
     "bg-transparent hover:bg-[#f8f8f8] active:bg-[#f8f8f8] border border-black",
-  text: "bg-transparent hover:bg-[#f8f8f8] active:bg-[#f8f8f8] underline",
+  text: "bg-transparent hover:bg-red-600 active:bg-red-600 underline",
 };
 //${disabled ? "cursor-default bg-neutral-300  hover:bg-neutral-300 active:bg-neutral-300" : ""}
 const Button = ({
