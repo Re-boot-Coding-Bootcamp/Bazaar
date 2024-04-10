@@ -28,11 +28,11 @@ const ProductCard = ({
 
   return (
     <div
-      className={`max-w-${maxSize} overflow-hidden rounded-lg bg-white shadow transition-shadow duration-300 ease-in-out hover:shadow-md`}
+      className={`max-w-${maxSize} transform overflow-hidden rounded-lg bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl`}
       onClick={() => (window.location.href = productUrl)}
     >
       {isLoading && (
-        <div className={`${imageSizeClass} animate-pulse bg-gray-200`}></div>
+        <div className={`${imageSizeClass} animate-pulse bg-gray-300`}></div>
       )}
       <img
         ref={imageSizeRef}
@@ -50,7 +50,12 @@ const ProductCard = ({
         >
           {productName}
         </a>
-        <p className="mt-1 text-gray-800">${price.toFixed(2)}</p>
+        <div className="mt-2 flex items-center justify-between">
+          <span className="font-bold text-gray-800">${price.toFixed(2)}</span>
+          <span className="rounded-full bg-blue-500 px-2 py-1 text-xs font-semibold text-white">
+            NEW
+          </span>
+        </div>
       </div>
     </div>
   );

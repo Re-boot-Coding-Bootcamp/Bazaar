@@ -9,7 +9,7 @@ const meta: Meta<typeof ProductCard> = {
     layout: "centered",
   },
   args: {
-    productName: "ئاياق",
+    productName: "Shoes/ئاياق",
     price: 99.23,
     imageUrl: "https://images.unsplash.com/photo-1520256862855-398228c41684",
     productUrl: "#",
