@@ -57,58 +57,58 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
         ))}
       </div>
 
-      <div className="md:relative">
-        <img
-          src={selectedImage}
-          alt="Selected"
-          className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
-          onClick={toggleModal}
-        />
-        {isModalOpen && (
-          <div
-            className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center"
-            onClick={() => setIsModalOpen(false)}
-          >
-            <div className="max-w-screen relative flex max-h-screen items-center justify-center">
-              <button
-                className="absolute left-0 top-1/2 ml-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
-                onClick={clickLeft}
-              >
-                <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
-              </button>
-              <img
-                src={selectedImage}
-                alt="Selected"
-                className="max-w-screen max-h-screen"
-                onClick={closeModal}
-              />
-              <button
-                className="absolute right-0 top-1/2 mr-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
-                onClick={clickRight}
-              >
-                <ChevronRightIcon className="h-5 w-5 text-gray-800" />
-              </button>
-            </div>
-          </div>
-        )}
-
-        {!isModalOpen && (
-          <div className="absolute bottom-2 right-2 flex space-x-2 p-4">
+      {!isModalOpen && (
+        <div className="relative md:m-0 md:max-h-[60vh] md:w-auto">
+          <img
+            src={selectedImage}
+            alt="Selected"
+            className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
+            onClick={toggleModal}
+          />
+          <div className="absolute bottom-4 right-1 flex space-x-2 p-3 md:bottom-1">
             <button
               className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
               onClick={clickLeft}
             >
-              <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
+              <ChevronLeftIcon className="h-3 w-3 text-gray-800 md:h-5 md:w-5" />
             </button>
+
             <button
               className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
+              onClick={clickRight}
+            >
+              <ChevronRightIcon className="h-3 w-3 text-gray-800 md:h-5 md:w-5" />
+            </button>
+          </div>
+        </div>
+      )}
+      {isModalOpen && (
+        <div
+          className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-white"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div className="max-w-screen relative flex max-h-screen items-center justify-center">
+            <button
+              className="absolute left-0 top-1/2 ml-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
+              onClick={clickLeft}
+            >
+              <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
+            </button>
+            <img
+              src={selectedImage}
+              alt="Selected"
+              className="max-w-screen max-h-screen"
+              onClick={closeModal}
+            />
+            <button
+              className="absolute right-0 top-1/2 mr-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
               onClick={clickRight}
             >
               <ChevronRightIcon className="h-5 w-5 text-gray-800" />
             </button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
