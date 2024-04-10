@@ -12,18 +12,22 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const clickLeft = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setSelectedImageIndex((prev) =>
-      prev === 0 ? validImageUrls.length - 1 : prev - 1,
-    );
+  const navigateImage = (direction: "left" | "right") => {
+    setSelectedImageIndex((prev) => {
+      if (direction === "left") {
+        return prev === 0 ? validImageUrls.length - 1 : prev - 1;
+      } else {
+        return prev === validImageUrls.length - 1 ? 0 : prev + 1;
+      }
+    });
   };
 
-  const clickRight = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const clickHandler = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    direction: "left" | "right",
+  ) => {
     e.stopPropagation();
-    setSelectedImageIndex((prevIndex) =>
-      prevIndex === validImageUrls.length - 1 ? 0 : prevIndex + 1,
-    );
+    navigateImage(direction);
   };
 
   const toggleModal = () => {
@@ -70,14 +74,14 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <div className="absolute bottom-4 right-1 flex space-x-2 p-3 md:bottom-1">
             <button
               className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
-              onClick={clickLeft}
+              onClick={(e) => clickHandler(e, "left")}
             >
               <ChevronLeftIcon className="h-3 w-3 text-gray-800 md:h-5 md:w-5" />
             </button>
 
             <button
               className="rounded-full bg-gray-100 p-2 hover:bg-gray-300"
-              onClick={clickRight}
+              onClick={(e) => clickHandler(e, "right")}
             >
               <ChevronRightIcon className="h-3 w-3 text-gray-800 md:h-5 md:w-5" />
             </button>
@@ -92,7 +96,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
           <div className="max-w-screen relative flex max-h-screen items-center justify-center">
             <button
               className="absolute left-0 top-1/2 ml-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
-              onClick={clickLeft}
+              onClick={(e) => clickHandler(e, "left")}
             >
               <ChevronLeftIcon className="h-5 w-5 text-gray-800" />
             </button>
@@ -105,7 +109,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             />
             <button
               className="absolute right-0 top-1/2 mr-3 -translate-y-1/2 transform rounded-full bg-gray-100 p-2 opacity-80 hover:bg-gray-300"
-              onClick={clickRight}
+              onClick={(e) => clickHandler(e, "right")}
             >
               <ChevronRightIcon className="h-5 w-5 text-gray-800" />
             </button>
