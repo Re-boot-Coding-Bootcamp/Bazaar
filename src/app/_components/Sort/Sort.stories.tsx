@@ -3,7 +3,6 @@ import { Sort } from "./Sort";
 
 const meta = {
   title: "Component/Sort",
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   component: Sort,
   parameters: {
     layout: "centered",
