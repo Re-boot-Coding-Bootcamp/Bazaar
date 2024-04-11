@@ -1,60 +1,87 @@
-import React, { useState, useRef, ReactNode } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import React, { useRef, type ReactNode } from "react";
 
 interface ProductCardProps {
-  imageUrl: string;
-  productName: ReactNode;
-  price: number;
-  productUrl: string;
+  loadingOnly?: boolean;
+  imageUrl?: string;
+  productName?: ReactNode;
+  price?: number;
+  productUrl?: string;
   maxSize?: "sm" | "md" | "lg";
 }
 
 const ProductCard = ({
+  loadingOnly = false,
   imageUrl,
   productName,
   price,
   productUrl,
   maxSize = "md",
 }: ProductCardProps): JSX.Element => {
-  const [isLoading, setLoading] = useState(true);
   const imageSizeRef = useRef<HTMLImageElement>(null);
 
-  const imageSizeClass = {
-    sm: "h-48 w-full object-cover",
-    md: "h-56 w-full object-cover",
-    lg: "h-64 w-full object-cover",
+  const imageSize = {
+    sm: {
+      class: "h-48 w-48",
+      px: 192,
+    },
+    md: {
+      class: "h-56 w-56",
+      px: 224,
+    },
+    lg: {
+      class: "h-64 w-64",
+      px: 256,
+    },
   }[maxSize];
 
-  const handleImageLoad = () => setLoading(false);
-
   return (
-    <div
-      className={`max-w-${maxSize} transform overflow-hidden rounded-lg bg-gradient-to-r from-gray-50 to-gray-200 shadow-lg transition duration-300 ease-in-out hover:scale-105 hover:shadow-xl`}
-      onClick={() => (window.location.href = productUrl)}
+    <Link
+      href={productUrl ?? ""}
+      className={`${loadingOnly ? "cursor-default" : "cursor-pointer"}`}
     >
-      {isLoading && (
-        <div className={`${imageSizeClass} animate-pulse bg-gray-300`}></div>
-      )}
-      <img
-        ref={imageSizeRef}
-        src={imageUrl}
-        alt={String(productName)}
-        className={`${imageSizeClass} ${isLoading ? "hidden" : "block"}`}
-        onLoad={handleImageLoad}
-        style={{ cursor: "pointer" }}
-      />
-      <div className="p-4">
-        <a
-          href={productUrl}
-          className="text-lg font-semibold hover:underline"
-          style={{ display: "block", cursor: "pointer" }}
-        >
-          {productName}
-        </a>
-        <div className="mt-2 flex items-center justify-between">
-          <span className="font-bold text-gray-800">${price.toFixed(2)}</span>
+      <div
+        className={`${loadingOnly ? "animate-pulse" : "hover:scale-[1.01] hover:shadow-lg"} max-w-${maxSize} transform overflow-hidden rounded-lg shadow-md transition duration-300 ease-in-out`}
+      >
+        {loadingOnly ? (
+          <div className={`${imageSize.class} bg-gray-200`} />
+        ) : (
+          <Image
+            width={imageSize.px}
+            height={imageSize.px}
+            ref={imageSizeRef}
+            src={imageUrl ?? ""}
+            alt={String(productName)}
+            className={`${imageSize.class} w-full object-cover`}
+            style={{ cursor: "pointer" }}
+          />
+        )}
+
+        <div className="flex flex-col gap-2 p-4">
+          {loadingOnly ? (
+            <>
+              <div className="h-6 w-2/3 rounded bg-gray-200" />
+              <div className="h-6 w-1/3 rounded bg-gray-200" />
+            </>
+          ) : (
+            <>
+              <span
+                className="text-lg font-semibold hover:underline"
+                style={{ display: "block", cursor: "pointer" }}
+              >
+                {productName}
+              </span>
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-gray-800">
+                  ${price?.toFixed(2)}
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

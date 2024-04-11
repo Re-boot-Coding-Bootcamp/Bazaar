@@ -14,6 +14,7 @@ const meta: Meta<typeof ProductCard> = {
     imageUrl: "https://images.unsplash.com/photo-1520256862855-398228c41684",
     productUrl: "#",
     maxSize: "md",
+    loadingOnly: false,
   },
 };
 
@@ -28,7 +29,6 @@ export const SmallSize: Story = {
     ...meta.args,
     maxSize: "sm",
   },
-  name: "Small Size",
 };
 
 export const MediumSize: Story = {
@@ -36,7 +36,6 @@ export const MediumSize: Story = {
     ...meta.args,
     maxSize: "md",
   },
-  name: "Medium Size",
 };
 
 export const LargeSize: Story = {
@@ -44,5 +43,4 @@ export const LargeSize: Story = {
     ...meta.args,
     maxSize: "lg",
   },
-  name: "Large Size",
 };
