@@ -10,7 +10,7 @@ const DesktopSearchBar = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <input
         type="search"
         placeholder="Search Product"
