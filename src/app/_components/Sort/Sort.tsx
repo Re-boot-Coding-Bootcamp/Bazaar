@@ -28,7 +28,7 @@ const Sort = ({
       </label>
       <select
         id="sortOptions"
-        className=" block appearance-none bg-white px-1 focus:outline-none"
+        className="block appearance-none bg-white px-1 focus:outline-none"
         value={selectedSort}
         onChange={handleSortChange}
         aria-label="Sort by"
