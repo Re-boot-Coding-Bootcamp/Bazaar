@@ -1,3 +1,4 @@
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 
 interface ImageData {
@@ -32,6 +33,7 @@ const Carousel = ({
 
     const interval = setInterval(nextSlide, autoSlideInterval);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, isPaused, autoSlideInterval]);
 
   const handleMouseEnter = () => {
@@ -44,7 +46,7 @@ const Carousel = ({
 
   return (
     <div
-      className="relative max-w-screen-lg overflow-hidden"
+      className="relative w-full overflow-hidden"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -63,40 +65,14 @@ const Carousel = ({
         onClick={prevSlide}
         className="transform-translate-y-1/2 absolute left-5 top-1/2 cursor-pointer rounded-md bg-white p-2"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-6 w-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M15.75 19.5 8.25 12l7.5-7.5"
-          />
-        </svg>
+        <ChevronLeftIcon className="h-5 w-5" />
       </button>
 
       <button
         onClick={nextSlide}
         className="transform-translate-y-1/2 absolute right-5 top-1/2 cursor-pointer rounded-md bg-white p-2"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="h-6 w-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m8.25 4.5 7.5 7.5-7.5 7.5"
-          />
-        </svg>
+        <ChevronRightIcon className="h-5 w-5" />
       </button>
       <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 transform cursor-pointer space-x-2 pb-2">
         {images.map((image, position) => (
