@@ -1,30 +1,35 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
-const DesktopSearchBar = () => {
-  const onSubmit = () => {
-    alert("Submitting from modal");
-  };
-  const handlerFuntion = () => {
-    alert("Submitting from modal");
+interface DesktopSearchBarProps {
+  onSubmit: (searchTerm: string) => void;
+}
+
+const DesktopSearchBar = ({ onSubmit }: DesktopSearchBarProps): JSX.Element => {
+  const [searchFieldValue, setSearchFieldValue] = useState("");
+
+  const handleSubmit = () => {
+    onSubmit(searchFieldValue);
+    setSearchFieldValue("");
   };
 
   return (
-    <div className="relative">
+    <div className="relative mr-1.5 w-full">
       <input
-        type="search"
-        placeholder="Search Product"
-        className=" w-fill hidden border-b-2 border-gray-200 px-7 py-3 md:flex"
+        name="search-field"
+        className="w-full rounded border border-black pl-7 pr-2 focus:outline-none"
         onKeyDown={(e) => {
-          if (e.key === "Enter") handlerFuntion();
+          if (e.key === "Enter") handleSubmit();
         }}
+        value={searchFieldValue}
+        onChange={(e) => setSearchFieldValue(e.target.value)}
       />
       <button
         type="submit"
         className="absolute left-0 top-0 h-full px-2"
-        onClick={onSubmit}
+        onClick={handleSubmit}
       >
-        <MagnifyingGlassIcon className="ml-2 h-4 w-4 cursor-pointer" />
+        <MagnifyingGlassIcon className="h-4 w-4 cursor-pointer" />
       </button>
     </div>
   );
