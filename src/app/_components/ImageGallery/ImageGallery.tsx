@@ -7,17 +7,15 @@ type ImageGalleryProps = {
 };
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
-  const validImageUrls = Array.isArray(imageUrls) ? imageUrls : [];
-
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigateImage = (direction: "left" | "right") => {
     setSelectedImageIndex((prev) => {
       if (direction === "left") {
-        return prev === 0 ? validImageUrls.length - 1 : prev - 1;
+        return prev === 0 ? imageUrls.length - 1 : prev - 1;
       } else {
-        return prev === validImageUrls.length - 1 ? 0 : prev + 1;
+        return prev === imageUrls.length - 1 ? 0 : prev + 1;
       }
     });
   };
@@ -45,12 +43,12 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
     setSelectedImageIndex(index);
   };
 
-  const selectedImage = validImageUrls[selectedImageIndex] ?? "defaultImageUrl";
+  const selectedImage = imageUrls[selectedImageIndex] ?? "defaultImageUrl";
 
   return (
     <div className="grid md:flex md:h-screen md:w-screen md:items-center md:justify-center">
       <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
-        {validImageUrls.map((url, index) => (
+        {imageUrls.map((url, index) => (
           <img
             loading="lazy"
             key={index}
