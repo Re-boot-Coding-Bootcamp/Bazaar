@@ -3,7 +3,7 @@ import { Button } from "./Button";
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const meta = {
-  title: "Example/Button",
+  title: "Components/Button",
   component: Button,
   parameters: {
     layout: "centered",
