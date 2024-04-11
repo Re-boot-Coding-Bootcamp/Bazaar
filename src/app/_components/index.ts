@@ -6,3 +6,4 @@ export * from "./Sort";
 export * from "./SearchBar";
 export * from "./Button";
 export * from "./ProductCard";
+export * from "./Footer";
