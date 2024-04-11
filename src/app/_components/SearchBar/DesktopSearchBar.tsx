@@ -5,6 +5,9 @@ const DesktopSearchBar = () => {
   const onSubmit = () => {
     alert("Submitting from modal");
   };
+  const handlerFuntion = () => {
+    alert("Submitting from modal");
+  };
 
   return (
     <div>
@@ -12,6 +15,9 @@ const DesktopSearchBar = () => {
         type="search"
         placeholder="Search Product"
         className=" w-fill hidden border-b-2 border-gray-200 px-7 py-3 md:flex"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") handlerFuntion();
+        }}
       />
       <button
         type="submit"

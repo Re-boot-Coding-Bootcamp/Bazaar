@@ -8,6 +8,9 @@ const MobileSearchBar = () => {
   const onSubmit = () => {
     alert("Submitting from modal");
   };
+  const handlerFuntion = () => {
+    alert("Submitting from modal");
+  };
 
   return (
     <>
@@ -19,6 +22,9 @@ const MobileSearchBar = () => {
             <input
               name="search-field"
               className="w-full rounded border border-black pl-7 pr-2 focus:outline-none"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handlerFuntion();
+              }}
             />
             <button
               type="submit"
