@@ -7,7 +7,6 @@ interface buttonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   endIcon?: ReactNode;
   iconSize?: "sm" | "md" | "lg";
   children?: ReactNode;
-  disabled?: boolean;
 }
 
 const iconSizes = {
@@ -43,17 +42,13 @@ const Button = ({
       {...props}
     >
       {startIcon && (
-        <span
-          className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}
-        >
+        <span className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}>
           {startIcon}
         </span>
       )}
       {children && <span className="mx-1">{children}</span>}
       {endIcon && (
-        <span
-          className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}
-        >
+        <span className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}>
           {endIcon}
         </span>
       )}
