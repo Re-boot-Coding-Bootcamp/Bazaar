@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from "@storybook/react";
-// import { Sample } from "./MobileSearchBar";
 import { MobileSearchBar } from "./MobileSearchBar";
 
 const meta = {
