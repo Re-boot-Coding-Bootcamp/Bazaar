@@ -1,13 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 
-interface ImageData {
-  name: string;
-  url: string;
-}
-
 interface CarouselProps {
-  images: ImageData[];
+  images: string[];
   autoSlideInterval?: number;
 }
 
@@ -55,8 +50,16 @@ const Carousel = ({
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
         {images.map((image, position) => (
-          <div key={position} className="relative w-full flex-shrink-0">
-            <img src={image.url} alt={image.name} />
+          <div
+            key={position}
+            className="relative flex w-full flex-shrink-0 items-center justify-center"
+            style={{ height: "500px" }}
+          >
+            <img
+              src={image}
+              alt={`Slide ${index}`}
+              className="object-cover object-center"
+            />
           </div>
         ))}
       </div>
