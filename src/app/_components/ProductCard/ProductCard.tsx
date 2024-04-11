@@ -52,9 +52,6 @@ const ProductCard = ({
         </a>
         <div className="mt-2 flex items-center justify-between">
           <span className="font-bold text-gray-800">${price.toFixed(2)}</span>
-          <span className="rounded-full bg-blue-500 px-2 py-1 text-xs font-semibold text-white">
-            NEW
-          </span>
         </div>
       </div>
     </div>
