@@ -1,41 +1,62 @@
 import React, { type ReactNode } from "react";
 
-interface buttonProps {
+interface buttonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   variant?: "standard" | "outline" | "text";
   startIcon?: ReactNode;
   endIcon?: ReactNode;
-  onClick?: () => void;
+  iconSize?: "sm" | "md" | "lg";
   children?: ReactNode;
   disabled?: boolean;
 }
+
+const iconSizes = {
+  sm: 4,
+  md: 5,
+  lg: 6,
+};
 const buttonVariants = {
   standard:
-    "bg-[#1c1c1c] text-[#f8f8f8] hover:bg-[#525252] active:bg-[#525252]",
+    "bg-black text-white hover:bg-gray-900 active:bg-gray-900 h-11 px-2",
   outline:
-    "bg-transparent hover:text-[#f8f8f8] active:hover:text-[#f8f8f8] hover:bg-[#1c1c1c] active:bg-[#1c1c1c] border border-black",
-  text: "bg-transparent hover:bg-red-600 active:bg-red-600 underline",
+    "bg-transparent hover:bg-gray-100 active:bg-gray-100 border border-black h-11 px-2",
+  text: "bg-transparent hover:text-red-700 active:text-red-700 underline",
 };
-//${disabled ? "cursor-default bg-neutral-300  hover:bg-neutral-300 active:bg-neutral-300" : ""}
+
 const Button = ({
   variant = "standard",
   className,
   startIcon,
   endIcon,
+  iconSize = "md",
   children,
-  disabled,
-  onClick,
   ...props
 }: buttonProps): JSX.Element => {
+  const disabledStyling =
+    variant === "text"
+      ? "disabled:cursor-not-allowed disabled:text-gray-500 disabled:no-underline"
+      : "disabled:cursor-not-allowed disabled:border-0 disabled:bg-gray-200 disabled:text-white";
+
   return (
     <button
-      className={`duration-800 container flex h-11 w-fit cursor-pointer items-center justify-center rounded px-4 leading-loose ${buttonVariants[variant]} ${className} `}
+      className={`duration-800 flex cursor-pointer items-center justify-center rounded leading-loose ${disabledStyling} ${buttonVariants[variant]} ${className}`}
       {...props}
-      onClick={disabled ? () => onClick : undefined}
     >
-      {startIcon && <span className="h-5 w-5">{startIcon}</span>}
-      <span className="px-2">{children}</span>
-      {endIcon && <span className="h-5 w-5">{endIcon}</span>}
+      {startIcon && (
+        <span
+          className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}
+        >
+          {startIcon}
+        </span>
+      )}
+      {children && <span className="mx-1">{children}</span>}
+      {endIcon && (
+        <span
+          className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}
+        >
+          {endIcon}
+        </span>
+      )}
     </button>
   );
 };
