@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 
-import Modal from "./Modal";
+import { Modal } from "./Modal";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 const meta: Meta<typeof Modal> = {
