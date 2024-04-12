@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Disclosure } from "@headlessui/react";
+import { Dialog, Disclosure } from "@headlessui/react";
 import {
   ChevronUpIcon,
   AdjustmentsHorizontalIcon,
@@ -74,6 +74,7 @@ const initialFilters = [
 const Filter = () => {
   const [filters, setFilters] = useState(initialFilters);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -86,7 +87,7 @@ const Filter = () => {
     };
   }, []);
 
-  const handleFilterChange = (filterId: string, optionValue: string): void => {
+  const handleFilterChange = (filterId: string, optionValue: string) => {
     const newFilters = filters.map((filter) => {
       if (filter.id === filterId) {
         return {
@@ -108,9 +109,75 @@ const Filter = () => {
     setFilters(initialFilters);
   };
 
+  const toggleDialog = () => {
+    setIsDialogOpen(!isDialogOpen);
+  };
+
   return (
     <div className="p-4">
-      <div className="mx-auto max-w-7xl">
+      {isMobile ? (
+        <>
+          <button
+            onClick={toggleDialog}
+            className="fixed right-4 top-4 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95"
+          >
+            <AdjustmentsHorizontalIcon
+              className="mr-2 h-6 w-6"
+              aria-hidden="true"
+            />
+            Filter
+          </button>
+
+          <Dialog
+            as="div"
+            className="relative z-10 "
+            open={isDialogOpen}
+            onClose={toggleDialog}
+          >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-4 text-center">
+                <Dialog.Panel
+                  className=" w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                  style={{ fontFamily: "roboto" }}
+                >
+                  {renderFilters()}
+                  <div className="mx-5 flex items-center justify-center gap-12  ">
+                    <button
+                      onClick={resetFilters}
+                      className="mt-4 w-[140px] rounded-full bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
+                    >
+                      Reset Filters
+                    </button>
+                    <button
+                      onClick={resetFilters}
+                      className="mt-4 w-[140px] rounded-full border-2 border-gray-900 px-3 py-1 font-extrabold text-gray-700 active:scale-95"
+                    >
+                      Apply Filters
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </div>
+            </div>
+          </Dialog>
+        </>
+      ) : (
+        <>
+          {renderFilters()}
+          <button
+            onClick={resetFilters}
+            className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-sm text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
+          >
+            Reset Filters
+          </button>
+        </>
+      )}
+    </div>
+  );
+
+  function renderFilters() {
+    return (
+      <>
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Categories</h1>
         <div>
           <ul className="mb-6 list-none pl-1 font-bold">
@@ -125,11 +192,11 @@ const Filter = () => {
           <Disclosure
             key={index}
             as="div"
-            className="border-t border-gray-200  py-4"
+            className="border-t border-gray-200 py-4"
           >
             {({ open }) => (
               <>
-                <Disclosure.Button className="text-md text-md flex w-full justify-between px-4 py-2 font-bold text-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{filter.name}</span>
                   <ChevronUpIcon
                     style={{
@@ -160,26 +227,9 @@ const Filter = () => {
             )}
           </Disclosure>
         ))}
-        {isMobile && (
-          <button className="fixed right-4 top-4 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95">
-            <AdjustmentsHorizontalIcon
-              className="mr-2 h-6 w-6"
-              aria-hidden="true"
-            />
-            Filter
-          </button>
-        )}
-
-        <button
-          onClick={resetFilters}
-          type="button"
-          className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-sm text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
-        >
-          Reset Filters
-        </button>
-      </div>
-    </div>
-  );
+      </>
+    );
+  }
 };
 
 export { Filter };
