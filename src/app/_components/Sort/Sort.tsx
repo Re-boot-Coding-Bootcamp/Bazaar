@@ -31,7 +31,6 @@ const Sort = ({
         className="block appearance-none px-1 focus:outline-none"
         value={selectedSort}
         onChange={handleSortChange}
-        aria-label="Sort by"
       >
         {sortOptions.map((option) => (
           <option key={option.value} value={option.value}>
