@@ -1,4 +1,18 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+
+interface FilterOption {
+  value: string;
+  lable: string;
+  checked: boolean;
+}
+
+interface Filter {
+  id: string;
+  name: string;
+  options: FilterOption[];
+}
 
 const subCategories = [
   { name: "Clothes" },
@@ -6,24 +20,64 @@ const subCategories = [
   { name: "Accessories" },
 ];
 
-const filters = [
+const initialFilters = [
   {
+    id: "color",
     name: "Color",
-    options: ["White", "Beige", "Blue", "Brown", "Green", "Orange"],
+    options: [
+      { value: "White", label: "white", checked: false },
+      { value: "Beige", label: "Beige", checked: false },
+      { value: "Blue", label: "Blue", checked: false },
+      { value: "Green", label: "Green", checked: false },
+      { value: "Orange", label: "Orange", checked: false },
+    ],
   },
   {
+    id: "category",
     name: "Category",
-    options: ["Women", "Men", "Kids", "Little Kids"],
+    options: [
+      { value: "Women", label: "women", checked: false },
+      { value: "Men", label: "men", checked: false },
+      { value: "Kids", label: "kids", checked: false },
+      { value: "Little Kids", label: "little kids", checked: false },
+    ],
   },
   {
+    id: "Size",
     name: "Size",
-    options: ["S", "M", "L", "XL", "2XL"],
+    options: [
+      { value: "S", label: "s", checked: false },
+      { value: "M", label: "m", checked: false },
+      { value: "L", label: "l", checked: false },
+      { value: "XL", label: "xl", checked: false },
+      { value: "2XL", label: "2xl", checked: false },
+    ],
   },
 ];
 
 const Filter = () => {
+  const [filters, setFilters] = useState(initialFilters);
+
+  const handleFilterChange = (filterId: string, optionValue: string): void => {
+    const newFilters = filters.map((filter) => {
+      if (filter.id === filterId) {
+        return {
+          ...filter,
+          options: filter.options.map((option) => {
+            if (option.value === optionValue) {
+              return { ...option, checked: !option.checked };
+            }
+            return option;
+          }),
+        };
+      }
+      return filter;
+    });
+    setFilters(newFilters);
+  };
+
   return (
-    <div className="bg-white p-4">
+    <div className="p-4">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Filters</h1>
         <div>
@@ -44,7 +98,15 @@ const Filter = () => {
             <ul className="list-disc pl-5">
               {filter.options.map((option, idx) => (
                 <li key={idx} className="text-gray-700">
-                  {option}
+                  <input
+                    type="checkbox"
+                    checked={option.checked}
+                    onChange={() => handleFilterChange(filter.id, option.value)}
+                    id={`${filter.id}-${idx}`}
+                  />
+                  <label htmlFor={`${filter.id}-${idx}`} className="ml-2">
+                    {option.label}
+                  </label>
                 </li>
               ))}
             </ul>
