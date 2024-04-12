@@ -1,8 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Disclosure } from "@headlessui/react";
-import { ChevronUpIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronUpIcon,
+  AdjustmentsHorizontalIcon,
+} from "@heroicons/react/24/outline";
 
 interface FilterOption {
   value: string;
@@ -70,6 +73,18 @@ const initialFilters = [
 
 const Filter = () => {
   const [filters, setFilters] = useState(initialFilters);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleFilterChange = (filterId: string, optionValue: string): void => {
     const newFilters = filters.map((filter) => {
@@ -96,10 +111,9 @@ const Filter = () => {
   return (
     <div className="p-4">
       <div className="mx-auto max-w-7xl">
-        <h1 className="mb-4 text-2xl font-bold text-gray-900">Filters</h1>
+        <h1 className="mb-4 text-2xl font-bold text-gray-900">Categories</h1>
         <div>
-          <h2 className="text-lg font-semibold text-gray-800">Categories</h2>
-          <ul className="mb-6 list-none pl-1">
+          <ul className="mb-6 list-none pl-1 font-bold">
             {subCategories.map((category, index) => (
               <li key={index} className="text-gray-700">
                 {category.name}
@@ -108,13 +122,20 @@ const Filter = () => {
           </ul>
         </div>
         {filters.map((filter, index) => (
-          <Disclosure key={index}>
+          <Disclosure
+            key={index}
+            as="div"
+            className="border-t border-gray-200  py-4"
+          >
             {({ open }) => (
               <>
-                <Disclosure.Button className="flex w-full justify-between bg-gray-100 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                <Disclosure.Button className="text-md text-md flex w-full justify-between px-4 py-2 font-bold text-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{filter.name}</span>
                   <ChevronUpIcon
-                    className={`${open ? "rotate-180 transform" : ""} h-5 w-5 text-gray-500`}
+                    style={{
+                      transform: open ? "rotate(-180deg)" : "rotate(0deg)",
+                    }}
+                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
                   />
                 </Disclosure.Button>
                 <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-gray-500">
@@ -139,10 +160,20 @@ const Filter = () => {
             )}
           </Disclosure>
         ))}
+        {isMobile && (
+          <button className="fixed right-4 top-4 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95">
+            <AdjustmentsHorizontalIcon
+              className="mr-2 h-6 w-6"
+              aria-hidden="true"
+            />
+            Filter
+          </button>
+        )}
+
         <button
           onClick={resetFilters}
           type="button"
-          className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
+          className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-sm text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
         >
           Reset Filters
         </button>
