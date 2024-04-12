@@ -3,6 +3,7 @@ export * from "./Modal";
 export * from "./ImageGallery";
 export * from "./Accordion";
 export * from "./Sort";
+export * from "./BreadCrumb";
 export * from "./Carousel";
 export * from "./SearchBar";
 export * from "./Button";
