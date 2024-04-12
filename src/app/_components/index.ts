@@ -9,7 +9,11 @@ export * from "./SearchBar";
 export * from "./Button";
 export * from "./ProductCard";
 export * from "./Footer";
+<<<<<<< HEAD
 export * from "./Navbar";
 export * from "./Favorites";
 export * from "./ProductGrid";
 export * from "./CartIcon";
+=======
+export * from "./Filter";
+>>>>>>> bceb869 (initial setup)
