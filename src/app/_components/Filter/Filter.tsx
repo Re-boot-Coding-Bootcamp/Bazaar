@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/24/outline";
 
 interface FilterOption {
   value: string;
@@ -33,8 +35,8 @@ const initialFilters = [
     ],
   },
   {
-    id: "category",
-    name: "Category",
+    id: "gender",
+    name: "Gender",
     options: [
       { value: "women", label: "Women", checked: false },
       { value: "men", label: "Men", checked: false },
@@ -43,7 +45,7 @@ const initialFilters = [
     ],
   },
   {
-    id: "Size",
+    id: "size",
     name: "Size",
     options: [
       { value: "s", label: "S", checked: false },
@@ -51,6 +53,17 @@ const initialFilters = [
       { value: "l", label: "L", checked: false },
       { value: "xl", label: "XL", checked: false },
       { value: "2xl", label: "2XL", checked: false },
+    ],
+  },
+  {
+    id: "shop by price",
+    name: "Shop by Price",
+    options: [
+      { value: "$0 - $25", label: "$0 - $25", checked: false },
+      { value: "$25 - $50", label: "$25 - $50", checked: false },
+      { value: "$50 - $100", label: "$50 - $100", checked: false },
+      { value: "$100 - $150", label: "$100 - $150", checked: false },
+      { value: "Over $150", label: "Over $150", checked: false },
     ],
   },
 ];
@@ -86,7 +99,7 @@ const Filter = () => {
         <h1 className="mb-4 text-2xl font-bold text-gray-900">Filters</h1>
         <div>
           <h2 className="text-lg font-semibold text-gray-800">Categories</h2>
-          <ul className="mb-6 list-disc pl-5">
+          <ul className="mb-6 list-none pl-1">
             {subCategories.map((category, index) => (
               <li key={index} className="text-gray-700">
                 {category.name}
@@ -95,31 +108,41 @@ const Filter = () => {
           </ul>
         </div>
         {filters.map((filter, index) => (
-          <div key={index} className="mb-4">
-            <h3 className="text-lg font-semibold text-gray-800">
-              {filter.name}
-            </h3>
-            <ul className="list-disc pl-5">
-              {filter.options.map((option, idx) => (
-                <li key={idx} className="text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={option.checked}
-                    onChange={() => handleFilterChange(filter.id, option.value)}
-                    id={`${filter.id}-${idx}`}
+          <Disclosure key={index}>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between bg-gray-100 px-4 py-2 text-left text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{filter.name}</span>
+                  <ChevronUpIcon
+                    className={`${open ? "rotate-180 transform" : ""} h-5 w-5 text-gray-500`}
                   />
-                  <label htmlFor={`${filter.id}-${idx}`} className="ml-2">
-                    {option.label}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
+                </Disclosure.Button>
+                <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-gray-500">
+                  {filter.options.map((option, idx) => (
+                    <div key={idx} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={option.checked}
+                        onChange={() =>
+                          handleFilterChange(filter.id, option.value)
+                        }
+                        id={`${filter.id}-${idx}`}
+                        className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <label htmlFor={`${filter.id}-${idx}`}>
+                        {option.label}
+                      </label>
+                    </div>
+                  ))}
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
         ))}
         <button
           onClick={resetFilters}
           type="button"
-          className="relative overflow-hidden rounded-full bg-gray-700 px-5 py-2.5 text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
+          className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
         >
           Reset Filters
         </button>
