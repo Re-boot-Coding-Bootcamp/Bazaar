@@ -1,5 +1,7 @@
+"use client";
+
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-import Image from "next/image";
+// import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface CarouselProps {
@@ -58,11 +60,11 @@ const Carousel = ({
             className="relative flex w-full flex-shrink-0 items-center justify-center"
             style={{ height: height }}
           >
-            <Image
+            <img
               src={image}
               alt={`Slide ${index}`}
               className="object-cover object-center"
-              fill={true}
+              // fill={true}
             />
           </div>
         ))}

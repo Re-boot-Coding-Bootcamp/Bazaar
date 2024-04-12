@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useState } from "react";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";

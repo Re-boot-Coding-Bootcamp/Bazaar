@@ -1,4 +1,6 @@
-import React, { use, useState } from "react";
+"use client";
+
+import React, { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 interface DesktopSearchBarProps {

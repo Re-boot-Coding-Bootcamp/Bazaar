@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/solid";
 import type { AccordionItemType } from "~/types";

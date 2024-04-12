@@ -1,24 +1,19 @@
 "use client";
 
-import { api } from "~/trpc/react";
+import { Carousel } from "./_components";
 
-export default function Home() {
-  const { data: categories, isFetching } =
-    api.category.getAllCategories.useQuery();
-
-  if (isFetching) {
-    return <div>Fetching for categories, hold on...</div>;
-  }
-
-  if (!categories) {
-    return <div>No categories found.</div>;
-  }
-
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      {categories.map((category) => (
-        <div key={category.id}>{category.name}</div>
-      ))}
-    </main>
+    <>
+      <Carousel
+        height="80vh"
+        images={[
+          "https://www.stuttcars.com/wp-content/uploads/2020/07/2019-Porsche-911-GT3-RS-003-1600.jpeg",
+          "https://s3-prod.autonews.com/s3fs-public/MCLAREN-MAIN_i_9.jpg",
+          "https://images2.alphacoders.com/103/1038563.jpg",
+          "https://www.supercars.net/blog/wp-content/uploads/2023/02/2015-Lamborghini-Veneno-Roadster844812_-scaled.jpg",
+        ]}
+      />
+    </>
   );
 }

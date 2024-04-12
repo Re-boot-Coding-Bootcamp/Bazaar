@@ -1,3 +1,5 @@
+"use client";
+
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import React, { useEffect, useState } from "react";
 import type { AccordionItemType } from "~/types";
