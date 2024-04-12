@@ -17,10 +17,10 @@ export default meta;
 export const Default: StoryObj<typeof BreadCrumb> = {
   args: {
     items: [
-      { name: "Home", href: "/home" },
-      { name: "Kids", href: "/home/kids" },
-      { name: "Shoes", href: "/home/kids/shoes" },
-      { name: "Boy", current: true },
+      { text: "Home", href: "/home" },
+      { text: "Kids", href: "/home/kids" },
+      { text: "Shoes", href: "/home/kids/shoes" },
+      { text: "Boy" },
     ],
   },
 };
