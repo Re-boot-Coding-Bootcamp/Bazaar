@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 interface FilterOption {
   value: string;
-  lable: string;
+  label: string;
   checked: boolean;
 }
 
@@ -25,32 +25,32 @@ const initialFilters = [
     id: "color",
     name: "Color",
     options: [
-      { value: "White", label: "white", checked: false },
-      { value: "Beige", label: "Beige", checked: false },
-      { value: "Blue", label: "Blue", checked: false },
-      { value: "Green", label: "Green", checked: false },
-      { value: "Orange", label: "Orange", checked: false },
+      { value: "white", label: "White", checked: false },
+      { value: "beige", label: "Beige", checked: false },
+      { value: "blue", label: "Blue", checked: false },
+      { value: "green", label: "Green", checked: false },
+      { value: "orange", label: "Orange", checked: false },
     ],
   },
   {
     id: "category",
     name: "Category",
     options: [
-      { value: "Women", label: "women", checked: false },
-      { value: "Men", label: "men", checked: false },
-      { value: "Kids", label: "kids", checked: false },
-      { value: "Little Kids", label: "little kids", checked: false },
+      { value: "women", label: "Women", checked: false },
+      { value: "men", label: "Men", checked: false },
+      { value: "kids", label: "Kids", checked: false },
+      { value: "little kids", label: "Little Kids", checked: false },
     ],
   },
   {
     id: "Size",
     name: "Size",
     options: [
-      { value: "S", label: "s", checked: false },
-      { value: "M", label: "m", checked: false },
-      { value: "L", label: "l", checked: false },
-      { value: "XL", label: "xl", checked: false },
-      { value: "2XL", label: "2xl", checked: false },
+      { value: "s", label: "S", checked: false },
+      { value: "m", label: "M", checked: false },
+      { value: "l", label: "L", checked: false },
+      { value: "xl", label: "XL", checked: false },
+      { value: "2xl", label: "2XL", checked: false },
     ],
   },
 ];
@@ -74,6 +74,10 @@ const Filter = () => {
       return filter;
     });
     setFilters(newFilters);
+  };
+
+  const resetFilters = () => {
+    setFilters(initialFilters);
   };
 
   return (
@@ -112,6 +116,13 @@ const Filter = () => {
             </ul>
           </div>
         ))}
+        <button
+          onClick={resetFilters}
+          type="button"
+          className="relative overflow-hidden rounded-full bg-gray-700 px-5 py-2.5 text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
+        >
+          Reset Filters
+        </button>
       </div>
     </div>
   );
