@@ -1,14 +1,17 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
 interface CarouselProps {
   images: string[];
   autoSlideInterval?: number;
+  height?: string;
 }
 
 const Carousel = ({
   images,
-  autoSlideInterval = 5000,
+  autoSlideInterval = 5,
+  height = "500px",
 }: CarouselProps): JSX.Element => {
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -26,7 +29,7 @@ const Carousel = ({
       return;
     }
 
-    const interval = setInterval(nextSlide, autoSlideInterval);
+    const interval = setInterval(nextSlide, autoSlideInterval * 1000);
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, isPaused, autoSlideInterval]);
@@ -53,12 +56,13 @@ const Carousel = ({
           <div
             key={position}
             className="relative flex w-full flex-shrink-0 items-center justify-center"
-            style={{ height: "500px" }}
+            style={{ height: height }}
           >
-            <img
+            <Image
               src={image}
               alt={`Slide ${index}`}
               className="object-cover object-center"
+              fill={true}
             />
           </div>
         ))}
