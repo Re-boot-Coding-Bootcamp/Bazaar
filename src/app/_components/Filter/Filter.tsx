@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, Disclosure } from "@headlessui/react";
 import {
-  ChevronUpIcon,
+  ChevronDownIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 
@@ -11,6 +11,16 @@ interface FilterOption {
   value: string;
   label: string;
   checked: boolean;
+}
+
+interface ColorFilterOption extends FilterOption {
+  color: string;
+}
+
+function isColorFilterOption(
+  option: FilterOption,
+): option is ColorFilterOption {
+  return "color" in option;
 }
 
 interface Filter {
@@ -30,11 +40,11 @@ const initialFilters = [
     id: "color",
     name: "Color",
     options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "orange", label: "Orange", checked: false },
+      { value: "white", label: "White", checked: false, color: "#FFFFFF" },
+      { value: "beige", label: "Beige", checked: false, color: "#F5F5DC" },
+      { value: "blue", label: "Blue", checked: false, color: "#0000FF" },
+      { value: "green", label: "Green", checked: false, color: "#008000" },
+      { value: "orange", label: "Orange", checked: false, color: "#FFA500" },
     ],
   },
   {
@@ -145,13 +155,13 @@ const Filter = () => {
                   <div className="mx-5 flex items-center justify-center gap-12  ">
                     <button
                       onClick={resetFilters}
-                      className="mt-4 w-[140px] rounded-full bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
+                      className="mt-4 w-[120px] rounded-lg bg-gray-700 px-4 py-2 text-sm text-white  active:scale-95 "
                     >
                       Reset Filters
                     </button>
                     <button
                       onClick={resetFilters}
-                      className="mt-4 w-[140px] rounded-full border-2 border-gray-900 px-3 py-1 font-extrabold text-gray-700 active:scale-95"
+                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1  text-gray-700 active:scale-95"
                     >
                       Apply Filters
                     </button>
@@ -164,9 +174,10 @@ const Filter = () => {
       ) : (
         <>
           {renderFilters()}
+
           <button
             onClick={resetFilters}
-            className="relative mt-5 overflow-hidden rounded-full bg-gray-700 px-4 py-2 text-sm text-white transition-all duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:-translate-y-1 active:scale-x-90 active:scale-y-110"
+            className="relative ml-1 mt-10 h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800"
           >
             Reset Filters
           </button>
@@ -196,32 +207,67 @@ const Filter = () => {
           >
             {({ open }) => (
               <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-800 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{filter.name}</span>
-                  <ChevronUpIcon
+                  <ChevronDownIcon
                     style={{
-                      transform: open ? "rotate(-180deg)" : "rotate(0deg)",
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
                     }}
-                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
                   />
                 </Disclosure.Button>
-                <Disclosure.Panel className="px-4 pb-2 pt-4 text-sm text-gray-500">
-                  {filter.options.map((option, idx) => (
-                    <div key={idx} className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={option.checked}
-                        onChange={() =>
-                          handleFilterChange(filter.id, option.value)
-                        }
-                        id={`${filter.id}-${idx}`}
-                        className="mr-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <label htmlFor={`${filter.id}-${idx}`}>
-                        {option.label}
-                      </label>
-                    </div>
-                  ))}
+                <Disclosure.Panel className="w-[280px] px-7 pb-2 pt-4 text-sm text-gray-500">
+                  <div className="grid grid-cols-3 ">
+                    {filter.options.map((option, idx) => {
+                      if (isColorFilterOption(option)) {
+                        return (
+                          <div
+                            key={idx}
+                            className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
+                          >
+                            <div
+                              className="h-7 w-7 cursor-pointer rounded-full"
+                              style={{
+                                backgroundColor: option.color,
+                                border: "1px solid #ccc",
+                              }}
+                              onClick={() =>
+                                handleFilterChange(filter.id, option.value)
+                              }
+                            />
+                            <label
+                              htmlFor={`${filter.id}-${idx}`}
+                              className="mt-2 text-center"
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div key={idx} className="flex flex-col items-center">
+                            <input
+                              type="checkbox"
+                              checked={option.checked}
+                              onChange={() =>
+                                handleFilterChange(filter.id, option.value)
+                              }
+                              id={`${filter.id}-${idx}`}
+                              className="mb-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
+                            />
+                            <label
+                              htmlFor={`${filter.id}-${idx}`}
+                              className="text-center"
+                            >
+                              {option.label}
+                            </label>
+                          </div>
+                        );
+                      }
+                    })}
+                  </div>
                 </Disclosure.Panel>
               </>
             )}
