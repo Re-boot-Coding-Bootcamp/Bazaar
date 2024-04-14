@@ -149,7 +149,7 @@ const Filter = () => {
               <div className="flex min-h-full items-center justify-center p-4 text-center">
                 <Dialog.Panel
                   className=" w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
-                  style={{ fontFamily: "roboto" }}
+                  // style={{ fontFamily: "roboto" }}
                 >
                   {renderFilters()}
                   <div className="mx-5 flex items-center justify-center gap-12  ">
