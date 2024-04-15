@@ -11,7 +11,7 @@ const meta = {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="w-full">
+      <div className="w-[768px]">
         <Story />
       </div>
     ),
