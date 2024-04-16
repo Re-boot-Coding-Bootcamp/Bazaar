@@ -6,6 +6,8 @@ import { MobileSearchBar } from "../../SearchBar";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
+import { Favorites } from "../../Favorites";
+import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 
 const MobileNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -17,11 +19,28 @@ const MobileNavbar = () => {
           alert(`Searching for ${searchTerm}...`);
         }}
       />
-      <Logo />
-      <Bars3Icon
-        className="h-6 w-6 cursor-pointer"
-        onClick={() => setDrawerOpen(true)}
-      />
+      <Link href="/" id="logo-container" className="ml-20">
+        <Image src={LogoImage} alt={"bazaar-logo"} width={100} height={100} />
+      </Link>
+      <div
+        id="right-side-actions-container"
+        className="flex items-center justify-center gap-4"
+      >
+        <Favorites />
+        <Link href="/cart" className="">
+          <div
+            id="cart-icon-container"
+            className="rounded p-1 hover:bg-gray-100"
+          >
+            <ShoppingCartIcon className="h-8 w-8" />
+          </div>
+        </Link>
+        <Bars3Icon
+          className="h-6 w-6 cursor-pointer"
+          onClick={() => setDrawerOpen(true)}
+        />
+      </div>
+
       <div
         id="mobile-drawer"
         className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform bg-slate-600 bg-white shadow-lg transition-all duration-500 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
@@ -30,25 +49,24 @@ const MobileNavbar = () => {
           id="header"
           className="flex items-center justify-center border-b border-black"
         >
-          <Logo />
+          <Link href="/" id="logo-container">
+            <Image
+              src={LogoImage}
+              alt={"bazaar-logo"}
+              width={100}
+              height={100}
+            />
+          </Link>
+          <button
+            onClick={() => setDrawerOpen(false)}
+            className="fixed right-4 top-6 rounded p-1 hover:bg-gray-100"
+          >
+            <XMarkIcon className="h-8 w-8" />
+          </button>
         </div>
-        <button
-          onClick={() => setDrawerOpen(false)}
-          className="fixed right-4 top-6 rounded p-1 hover:bg-gray-100"
-        >
-          <XMarkIcon className="h-8 w-8" />
-        </button>
       </div>
     </nav>
   );
 };
 
 export { MobileNavbar };
-
-const Logo = () => {
-  return (
-    <Link href="/" id="logo-container">
-      <Image src={LogoImage} alt={"bazaar-logo"} width={100} height={100} />
-    </Link>
-  );
-};
