@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { MobileSearchBar } from "../SearchBar";
+import { MobileSearchBar } from "../../SearchBar";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 
