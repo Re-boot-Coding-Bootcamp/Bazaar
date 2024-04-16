@@ -18,29 +18,29 @@ const MobileNavbar = ({ categories }: MobileNavbarProps): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <nav className="flex w-full items-center justify-between px-4 text-black shadow-md lg:hidden ">
+    <nav className="flex w-full items-center justify-between px-4 text-black shadow-md lg:hidden">
       <MobileSearchBar
         onSubmit={(searchTerm: string) => {
           alert(`Searching for ${searchTerm}...`);
         }}
       />
-      <Link href="/" id="logo-container" className="ml-20">
+      <Link href="/" id="logo-container" className="ml-[84px]">
         <Image
           src={LogoImage}
           alt={"bazaar-logo"}
-          width={100}
-          height={100}
+          width={60}
+          height={60}
           onClick={() => setDrawerOpen(false)}
         />
       </Link>
       <div
         id="right-side-actions-container"
-        className="flex items-center justify-center gap-4"
+        className="flex items-center justify-center gap-1"
       >
         <Favorites />
         <CartIcon />
         <Bars3Icon
-          className="h-10 w-10 cursor-pointer rounded p-1 hover:bg-gray-100"
+          className="h-8 w-8 cursor-pointer rounded p-1 hover:bg-gray-100 md:h-10 md:w-10"
           onClick={() => setDrawerOpen(true)}
         />
       </div>
@@ -65,18 +65,18 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
   return (
     <div
       id="mobile-drawer"
-      className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform shadow-lg transition-all duration-1000 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
+      className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
     >
       <div
         id="header"
         className="flex items-center justify-center border-b border-black"
       >
         <Link href="/" id="logo-container" onClick={() => setDrawerOpen(false)}>
-          <Image src={LogoImage} alt={"bazaar-logo"} width={100} height={100} />
+          <Image src={LogoImage} alt={"bazaar-logo"} width={60} height={60} />
         </Link>
         <button
           onClick={() => setDrawerOpen(false)}
-          className="fixed right-4 top-6 rounded p-1 hover:bg-gray-100"
+          className="fixed right-4 top-3 rounded p-1 hover:bg-gray-100"
         >
           <XMarkIcon className="h-8 w-8" />
         </button>

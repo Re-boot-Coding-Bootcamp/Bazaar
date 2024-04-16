@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Favorites } from "./Favorites";
 
 const meta: Meta<typeof Favorites> = {
-  title: "Component/Favorites",
+  title: "Components/Favorites",
   component: Favorites,
   tags: ["autodocs"],
   argTypes: {

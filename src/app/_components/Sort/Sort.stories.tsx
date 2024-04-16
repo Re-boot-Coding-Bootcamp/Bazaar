@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Sort } from "./Sort";
 
 const meta = {
-  title: "Component/Sort",
+  title: "Components/Sort",
   component: Sort,
   parameters: {
     layout: "centered",
