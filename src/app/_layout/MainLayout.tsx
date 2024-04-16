@@ -14,7 +14,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <div id="navbar-container" className="w-full">
-        <MobileNavbar />
+        <MobileNavbar categories={categories} />
         <DesktopNavbar categories={categories} />
       </div>
       <div id="content-container" className="w-full">
