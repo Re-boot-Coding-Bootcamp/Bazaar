@@ -52,7 +52,7 @@ const MobileSearchBar = ({ onSubmit }: MobileSearchBarProps): JSX.Element => {
           setisOpen(true);
           setTimeout(() => searchFieldRef.current?.focus(), 0);
         }}
-        className="h-5 w-5 cursor-pointer"
+        className="h-7 w-7  cursor-pointer"
       />
     </>
   );
