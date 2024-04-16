@@ -7,7 +7,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import Image from "next/image";
 import { Favorites } from "../../Favorites";
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
+import { CartIcon } from "../../CartIcon";
 
 const MobileNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -27,23 +27,16 @@ const MobileNavbar = () => {
         className="flex items-center justify-center gap-4"
       >
         <Favorites />
-        <Link href="/cart" className="">
-          <div
-            id="cart-icon-container"
-            className="rounded p-1 hover:bg-gray-100"
-          >
-            <ShoppingCartIcon className="h-8 w-8" />
-          </div>
-        </Link>
+        <CartIcon />
         <Bars3Icon
-          className="h-6 w-6 cursor-pointer"
+          className="h-10 w-10 cursor-pointer rounded p-1 hover:bg-gray-100"
           onClick={() => setDrawerOpen(true)}
         />
       </div>
 
       <div
         id="mobile-drawer"
-        className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform bg-slate-600 bg-white shadow-lg transition-all duration-500 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
+        className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform shadow-lg transition-all duration-500 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
       >
         <div
           id="header"
