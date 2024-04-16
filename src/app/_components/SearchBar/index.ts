@@ -1,3 +1,2 @@
 export * from "./DesktopSearchBar";
-export * from "./MobileSearchBar"
-
+export * from "./MobileSearchBar";

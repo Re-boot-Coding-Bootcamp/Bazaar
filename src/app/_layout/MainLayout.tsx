@@ -1,15 +1,20 @@
+"use server";
+
 import React from "react";
-import { Footer } from "../_components";
+import { DesktopNavbar, Footer } from "../_components";
+import { api } from "~/trpc/server";
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = async ({ children }: MainLayoutProps) => {
+  const categories = await api.category.getAllCategories();
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <div id="navbar-container" className="w-full">
-        <div className="h-28 w-full bg-black text-white">Fake Navbar</div>
+        <DesktopNavbar categories={categories} />
       </div>
       <div id="content-container" className="w-full">
         {children}

@@ -16,10 +16,10 @@ const DesktopSearchBar = ({ onSubmit }: DesktopSearchBarProps): JSX.Element => {
   };
 
   return (
-    <div className="relative mr-1.5 w-full">
+    <div id="desktop-search-container" className="relative w-full">
       <input
         name="search-field"
-        className="w-full rounded border border-black pl-7 pr-2 focus:outline-none"
+        className="w-full rounded border border-black py-1 pl-7 pr-2 focus:outline-none"
         onKeyDown={(e) => {
           if (e.key === "Enter") handleSubmit();
         }}
