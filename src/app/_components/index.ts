@@ -11,4 +11,5 @@ export * from "./ProductCard";
 export * from "./Footer";
 export * from "./Navbar";
 export * from "./Favorites";
+export * from "./ProductGrid";
 export * from "./CartIcon";
