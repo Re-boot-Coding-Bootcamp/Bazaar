@@ -2,7 +2,7 @@ import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
 
-const CartIcon = () => {
+const CartIcon = (): JSX.Element => {
   // needs to get the cart id and check how many items are in the items array probably an api call here
   const cart = { id: "csvsedsrsergfswe", items: ["1", "2", "3", "4"] };
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

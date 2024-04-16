@@ -10,11 +10,11 @@ import { Favorites } from "../../Favorites";
 import { CartIcon } from "../../CartIcon";
 import type { Category } from "@prisma/client";
 
-interface MobileNavbarPropos {
+interface MobileNavbarProps {
   categories: Category[];
 }
 
-const MobileNavbar = ({ categories }: MobileNavbarPropos) => {
+const MobileNavbar = ({ categories }: MobileNavbarProps): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
@@ -87,7 +87,7 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
           onClick={() => setDrawerOpen(false)}
           href={`/product-list/${category.id}`}
         >
-          <div className="border-b border-black p-4 font-medium text-lg">
+          <div className="border-b border-black p-4 text-lg font-medium">
             {category.name}
           </div>
         </Link>
