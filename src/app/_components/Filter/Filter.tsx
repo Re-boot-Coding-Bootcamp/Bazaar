@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import { Dialog, Disclosure } from "@headlessui/react";
 import {
@@ -20,7 +18,7 @@ interface ColorFilterOption extends FilterOption {
 function isColorFilterOption(
   option: FilterOption,
 ): option is ColorFilterOption {
-  return "color" in option;
+  return (option as ColorFilterOption).color !== undefined;
 }
 
 interface Filter {
@@ -45,6 +43,13 @@ const initialFilters = [
       { value: "blue", label: "Blue", checked: false, color: "#0000FF" },
       { value: "green", label: "Green", checked: false, color: "#008000" },
       { value: "orange", label: "Orange", checked: false, color: "#FFA500" },
+      { value: "red", label: "Red", checked: false, color: "#C63333" },
+      { value: "purple", label: "Purple", checked: false, color: "#6E20E1" },
+      { value: "yellow", label: "Yellow", checked: false, color: "#FFC300" },
+      { value: "pink", label: "Pink", checked: false, color: "#F463EC" },
+      { value: "brown", label: "Brown", checked: false, color: "#814427" },
+      { value: "grey", label: "Grey", checked: false, color: "#727272" },
+      { value: "black", label: "Black", checked: false, color: "#000" },
     ],
   },
   {
@@ -123,6 +128,153 @@ const Filter = () => {
     setIsDialogOpen(!isDialogOpen);
   };
 
+  function renderFilters() {
+    const colorFilters = filters.find((filter) => filter.id === "color");
+    const otherFilters = filters.filter((filter) => filter.id !== "color");
+
+    return (
+      <>
+        <h1 className="mb-4 text-2xl font-bold text-gray-900">Categories</h1>
+        <div>
+          <ul className="mb-6 list-none pl-1 font-bold">
+            {subCategories.map((category, index) => (
+              <li key={index} className="text-gray-700">
+                {category.name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        {colorFilters && (
+          <Disclosure as="div" className="border-t border-gray-200 py-4">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{colorFilters.name}</span>
+                  <ChevronDownIcon
+                    style={{
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
+                    }}
+                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className=" pb-2 pt-4 text-sm text-gray-500">
+                  <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
+                    {colorFilters.options.map((option, idx) => (
+                      <div
+                        key={idx}
+                        className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
+                      >
+                        {isColorFilterOption(option) && (
+                          <>
+                            <div
+                              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full"
+                              style={{
+                                backgroundColor: option.color,
+                                border: "1px solid #ccc",
+                              }}
+                              onClick={() =>
+                                handleFilterChange(
+                                  colorFilters.id,
+                                  option.value,
+                                )
+                              }
+                            >
+                              {option.checked && (
+                                <svg
+                                  className="h-6 w-6 fill-current text-white"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    fill={
+                                      [
+                                        "white",
+                                        "beige",
+                                        "orange",
+                                        "yellow",
+                                      ].includes(option.value)
+                                        ? "black"
+                                        : "currentColor"
+                                    }
+                                    d="M5.293 8.293a1 1 0 011.414 0L10 11.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
+                            <label
+                              htmlFor={`${colorFilters.id}-${idx}`}
+                              className="mt-2 text-center"
+                            >
+                              {option.label}
+                            </label>
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        )}
+        {otherFilters.map((filter, index) => (
+          <Disclosure
+            key={index}
+            as="div"
+            className="border-t border-gray-200 py-4"
+          >
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{filter.name}</span>
+                  <ChevronDownIcon
+                    style={{
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
+                    }}
+                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                  <div>
+                    {filter.options.map((option, idx) => (
+                      <div
+                        key={idx}
+                        className="ml-5 flex items-center justify-start space-x-3 py-0.5"
+                        style={{ color: "grey" }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={option.checked}
+                          onChange={() =>
+                            handleFilterChange(filter.id, option.value)
+                          }
+                          id={`${filter.id}-${idx}`}
+                          className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
+                        />
+                        <label
+                          htmlFor={`${filter.id}-${idx}`}
+                          className="text-center"
+                        >
+                          {option.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        ))}
+      </>
+    );
+  }
+
   return (
     <div className="p-4">
       {isMobile ? (
@@ -149,7 +301,7 @@ const Filter = () => {
               <div className="flex min-h-full items-center justify-center p-4 text-center">
                 <Dialog.Panel
                   className=" w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
-                  // style={{ fontFamily: "roboto" }}
+                  style={{ fontFamily: "roboto" }}
                 >
                   {renderFilters()}
                   <div className="mx-5 flex items-center justify-center gap-12  ">
@@ -185,97 +337,6 @@ const Filter = () => {
       )}
     </div>
   );
-
-  function renderFilters() {
-    return (
-      <>
-        <h1 className="mb-4 text-2xl font-bold text-gray-900">Categories</h1>
-        <div>
-          <ul className="mb-6 list-none pl-1 font-bold">
-            {subCategories.map((category, index) => (
-              <li key={index} className="text-gray-700">
-                {category.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        {filters.map((filter, index) => (
-          <Disclosure
-            key={index}
-            as="div"
-            className="border-t border-gray-200 py-4"
-          >
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{filter.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className="w-[280px] px-7 pb-2 pt-4 text-sm text-gray-500">
-                  <div className="grid grid-cols-3 ">
-                    {filter.options.map((option, idx) => {
-                      if (isColorFilterOption(option)) {
-                        return (
-                          <div
-                            key={idx}
-                            className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
-                          >
-                            <div
-                              className="h-7 w-7 cursor-pointer rounded-full"
-                              style={{
-                                backgroundColor: option.color,
-                                border: "1px solid #ccc",
-                              }}
-                              onClick={() =>
-                                handleFilterChange(filter.id, option.value)
-                              }
-                            />
-                            <label
-                              htmlFor={`${filter.id}-${idx}`}
-                              className="mt-2 text-center"
-                            >
-                              {option.label}
-                            </label>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <div key={idx} className="flex flex-col items-center">
-                            <input
-                              type="checkbox"
-                              checked={option.checked}
-                              onChange={() =>
-                                handleFilterChange(filter.id, option.value)
-                              }
-                              id={`${filter.id}-${idx}`}
-                              className="mb-2 h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
-                            />
-                            <label
-                              htmlFor={`${filter.id}-${idx}`}
-                              className="text-center"
-                            >
-                              {option.label}
-                            </label>
-                          </div>
-                        );
-                      }
-                    })}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </>
-    );
-  }
 };
 
 export { Filter };

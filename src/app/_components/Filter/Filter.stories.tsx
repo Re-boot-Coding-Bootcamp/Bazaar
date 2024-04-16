@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Filter } from "./Filter";
 
 const meta: Meta = {
-  title: "Component/Filter",
+  title: "Components/Filter",
   component: Filter,
   tags: ["autodocs"],
 };
