@@ -1,4 +1,4 @@
-export default function ProductDetailsPage({
+export default function ProductListForCategoryPage({
   params,
 }: {
   params: { categoryId: string };
