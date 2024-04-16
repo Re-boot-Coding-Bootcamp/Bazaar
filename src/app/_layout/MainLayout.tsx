@@ -1,7 +1,7 @@
 "use server";
 
 import React from "react";
-import { DesktopNavbar, Footer } from "../_components";
+import { DesktopNavbar, Footer, MobileNavbar } from "../_components";
 import { api } from "~/trpc/server";
 
 interface MainLayoutProps {
@@ -14,7 +14,8 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
       <div id="navbar-container" className="w-full">
-        <DesktopNavbar categories={categories} />
+        <MobileNavbar />
+        {/* <DesktopNavbar categories={categories} /> */}
       </div>
       <div id="content-container" className="w-full">
         {children}
