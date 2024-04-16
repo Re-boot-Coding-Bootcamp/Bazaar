@@ -1,6 +1,5 @@
 "use client";
 
-import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -10,6 +9,7 @@ import { DesktopSearchBar } from "~/app/_components/SearchBar";
 import { Favorites } from "~/app/_components/Favorites";
 import NavItem from "./NavItem";
 import type { Category } from "@prisma/client";
+import { CartIcon } from "../../CartIcon";
 
 interface DesktopNavbarProps {
   categories: Category[];
@@ -19,7 +19,7 @@ const DesktopNavbar = ({ categories }: DesktopNavbarProps) => {
   return (
     <div
       id="navbar-container"
-      className="mx-auto flex w-full justify-center bg-white p-4 text-black shadow-md"
+      className="mx-auto hidden w-full justify-center bg-white p-4 text-black shadow-md lg:flex"
     >
       <div
         id="xl-container"
@@ -44,14 +44,7 @@ const DesktopNavbar = ({ categories }: DesktopNavbarProps) => {
               }}
             />
             <Favorites />
-            <Link href="/cart" className="">
-              <div
-                id="cart-icon-container"
-                className="rounded p-1 hover:bg-gray-100"
-              >
-                <ShoppingCartIcon className="h-8 w-8" />
-              </div>
-            </Link>
+            <CartIcon />
           </div>
         </div>
       </div>
