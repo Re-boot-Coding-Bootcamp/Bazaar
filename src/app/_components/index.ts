@@ -9,3 +9,5 @@ export * from "./SearchBar";
 export * from "./Button";
 export * from "./ProductCard";
 export * from "./Footer";
+export * from "./Navbar";
+export * from "./Favorites";

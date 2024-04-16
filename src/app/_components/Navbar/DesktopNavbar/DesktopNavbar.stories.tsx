@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import DesktopNavbar from "./DesktopNavbar";
+import { DesktopNavbar } from "./DesktopNavbar";
 
 const meta = {
   title: "Components/DesktopNavbar",
@@ -8,7 +8,7 @@ const meta = {
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="w-full">
+      <div className="w-screen border border-black">
         <Story />
       </div>
     ),
