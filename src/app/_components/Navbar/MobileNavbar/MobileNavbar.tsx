@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
+import LogoImage from "~/assets/logo/bazaar-logo.png";
 import { MobileSearchBar } from "../../SearchBar";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import Link from "next/link";
+import Image from "next/image";
 
 const MobileNavbar = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -14,14 +16,9 @@ const MobileNavbar = () => {
             alert(`Searching for ${searchTerm}...`);
           }}
         />
-        <Link href="" id="logo-container">
-          <img
-            alt="logo"
-            className="h-11 w-96 object-contain"
-            src="https://imageio.forbes.com/specials-images/imageserve/5d35eacaf1176b0008974b54/2020-Chevrolet-Corvette-Stingray/0x0.jpg"
-          />
-        </Link>
-
+        {/* <Link href="/" id="logo-container">
+          <Image src={LogoImage} alt={"bazaar-logo"} width={100} height={100} />
+        </Link> */}
         <Bars3Icon
           className="h-5 w-5 cursor-pointer"
           onClick={() => setDrawerOpen(true)}
