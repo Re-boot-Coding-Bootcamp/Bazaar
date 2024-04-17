@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import React, { Fragment, useEffect, useState } from "react";
@@ -84,137 +85,156 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
     const otherFilters = filters.filter((filter) => filter.id !== "color");
 
     return (
-      <>
-        <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">Filter</h1>
-
-        {colorFilters && (
-          <Disclosure as="div" className="border-t border-gray-200 py-4">
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{colorFilters.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className=" pb-2 pt-4 text-sm text-gray-500">
-                  <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
-                    {colorFilters.options.map((option, idx) => (
-                      <div
-                        key={idx}
-                        className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
-                      >
-                        {isColorFilterOption(option) && (
-                          <>
-                            <div
-                              className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full"
-                              style={{
-                                backgroundColor: option.color,
-                                border: "1px solid #ccc",
-                              }}
-                              onClick={() =>
-                                handleFilterChange(
-                                  colorFilters.id,
-                                  option.value,
-                                )
-                              }
-                            >
-                              {option.checked && (
-                                <svg
-                                  className="h-6 w-6 fill-current text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 2 18 20"
+      <main className="mx-auto max-w-7xl px-4 ">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
+          {/* Filter Section */}
+          <div className="col-span-1">
+            <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">
+              Filter
+            </h1>
+            {colorFilters && (
+              <Disclosure as="div" className="border-t border-gray-200 py-4">
+                {({ open }) => (
+                  <>
+                    <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                      <span>{colorFilters.name}</span>
+                      <ChevronDownIcon
+                        style={{
+                          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 0.2s ease, color 0.2s ease",
+                          color: open ? "red" : "gray",
+                        }}
+                        className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                      />
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                      <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
+                        {colorFilters.options.map((option, idx) => (
+                          <div
+                            key={idx}
+                            className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
+                          >
+                            {isColorFilterOption(option) && (
+                              <>
+                                <div
+                                  className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
+                                  style={{
+                                    backgroundColor: option.color,
+                                    border: "1px solid #ccc",
+                                  }}
+                                  onClick={() =>
+                                    handleFilterChange(
+                                      colorFilters.id,
+                                      option.value,
+                                    )
+                                  }
                                 >
-                                  <path
-                                    fillRule="evenodd"
-                                    fill={
-                                      [
-                                        "white",
-                                        "beige",
-                                        "orange",
-                                        "yellow",
-                                      ].includes(option.value)
-                                        ? "black"
-                                        : "currentColor"
-                                    }
-                                    d="M5 11l2 2 6-6 2 2-8 8-4-4"
-                                    clipRule="evenodd"
-                                  />
-                                </svg>
-                              )}
-                            </div>
+                                  {option.checked && (
+                                    <svg
+                                      className="h-6 w-6 fill-current text-white"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      viewBox="0 2 18 20"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        fill={
+                                          [
+                                            "white",
+                                            "beige",
+                                            "orange",
+                                            "yellow",
+                                          ].includes(option.value)
+                                            ? "black"
+                                            : "currentColor"
+                                        }
+                                        d="M5 11l2 2 6-6 2 2-8 8-4-4"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                  )}
+                                </div>
+                                <label
+                                  htmlFor={`${colorFilters.id}-${idx}`}
+                                  className="mt-2 text-center"
+                                >
+                                  {option.label}
+                                </label>
+                              </>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </Disclosure.Panel>
+                  </>
+                )}
+              </Disclosure>
+            )}
+            {otherFilters.map((filter, index) => (
+              <Disclosure
+                key={index}
+                as="div"
+                className="border-t border-gray-200 py-4"
+              >
+                {({ open }) => (
+                  <>
+                    <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                      <span>{filter.name}</span>
+                      <ChevronDownIcon
+                        style={{
+                          transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                          transition: "transform 0.2s ease, color 0.2s ease",
+                          color: open ? "red" : "gray",
+                        }}
+                        className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                      />
+                    </Disclosure.Button>
+                    <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                      <div>
+                        {filter.options.map((option, idx) => (
+                          <div
+                            key={idx}
+                            className="ml-5 flex items-center justify-start space-x-3 py-0.5"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={option.checked}
+                              onChange={() =>
+                                handleFilterChange(filter.id, option.value)
+                              }
+                              id={`${filter.id}-${idx}`}
+                              className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
+                            />
                             <label
-                              htmlFor={`${colorFilters.id}-${idx}`}
-                              className="mt-2 text-center"
+                              htmlFor={`${filter.id}-${idx}`}
+                              className="text-center"
                             >
                               {option.label}
                             </label>
-                          </>
-                        )}
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        )}
-        {otherFilters.map((filter, index) => (
-          <Disclosure
-            key={index}
-            as="div"
-            className="border-t border-gray-200 py-4"
-          >
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{filter.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className=" h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
-                </Disclosure.Button>
-                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                  <div>
-                    {filter.options.map((option, idx) => (
-                      <div
-                        key={idx}
-                        className="ml-5 flex items-center justify-start space-x-3 py-0.5"
-                        style={{ color: "grey" }}
-                      >
-                        <input
-                          type="checkbox"
-                          checked={option.checked}
-                          onChange={() =>
-                            handleFilterChange(filter.id, option.value)
-                          }
-                          id={`${filter.id}-${idx}`}
-                          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
-                        />
-                        <label
-                          htmlFor={`${filter.id}-${idx}`}
-                          className="text-center"
-                        >
-                          {option.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-      </>
+                    </Disclosure.Panel>
+                  </>
+                )}
+              </Disclosure>
+            ))}
+            <button
+              onClick={resetFilters}
+              className="relative ml-2.5 mt-10 h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800"
+            >
+              Reset
+            </button>
+          </div>
+
+          {/* product list section */}
+          <div className="lg:col-span-3">
+            <img
+              src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/abfbb7a9-0adb-498d-b582-58ab8a356222/air-jordan-5-retro-se-mens-shoes-gKlWtk.png"
+              alt="test-img"
+            />
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -286,16 +306,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
           </Transition.Root>
         </>
       ) : (
-        <>
-          {renderFilters()}
-
-          <button
-            onClick={resetFilters}
-            className="relative ml-1 mt-10 h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800"
-          >
-            Reset Filters
-          </button>
-        </>
+        <>{renderFilters()}</>
       )}
     </div>
   );
