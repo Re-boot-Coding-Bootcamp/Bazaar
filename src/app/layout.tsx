@@ -4,6 +4,7 @@ import { Roboto } from "next/font/google";
 
 import { TRPCReactProvider } from "~/trpc/react";
 import { MainLayout } from "./_layout";
+import StoreProvider from "./_providers/StoreProvider";
 
 const roboto = Roboto({
   weight: "400",
@@ -24,9 +25,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <TRPCReactProvider>
-          <MainLayout>{children}</MainLayout>
-        </TRPCReactProvider>
+        <StoreProvider>
+          <TRPCReactProvider>
+            <MainLayout>{children}</MainLayout>
+          </TRPCReactProvider>
+        </StoreProvider>
       </body>
     </html>
   );
