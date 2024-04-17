@@ -14,7 +14,7 @@ export const cartRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const productToAddToCart = await ctx.db.productVariant.findUnique({
         where: { id: input.productVariantId },
-        include: { stock: true },
+        select: { stock: true },
       });
 
       if (!productToAddToCart) {
