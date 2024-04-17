@@ -12,19 +12,27 @@ const initialState: CartSliceState = {
   items: [],
 };
 
+interface UpdateCartInput {
+  id?: string;
+  items?: CartItem[];
+}
+
 export const cartSlice = createAppSlice({
   name: "cart",
   initialState,
   reducers: (create) => ({
-    initializeCart: create.reducer((state) => {
-      console.log("[RTK]", "initializeCart");
-      // check in the local storage if there is a cart id
-      // 1, if there is, set it to the state
-      //    fetch for cart from backend
-      //    once we get the cart detail, update the state
-      // 2, if there is no cart id, create a new cart
-      //    save the cart id to the local storage
-    }),
+    updateCart: create.reducer(
+      (state, action: PayloadAction<UpdateCartInput>) => {
+        console.log("[RTK]", "updateCart");
+        if (action.payload.id) {
+          state.id = action.payload.id;
+        }
+
+        if (action.payload.items) {
+          state.items = action.payload.items;
+        }
+      },
+    ),
     addToCart: create.reducer((state, action: PayloadAction) => {
       console.log("[RTK]", "addToCart");
       // add productVariant to the cart
@@ -38,5 +46,5 @@ export const cartSlice = createAppSlice({
   },
 });
 
-export const { initializeCart, addToCart } = cartSlice.actions;
+export const { updateCart, addToCart } = cartSlice.actions;
 export const { selectId, selectItems } = cartSlice.selectors;
