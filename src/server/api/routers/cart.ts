@@ -16,15 +16,12 @@ export const cartRouter = createTRPCRouter({
         where: { id: input.productVariantId },
         select: { stock: true },
       });
-
       if (!productToAddToCart) {
         throw new Error("Product variant not found");
       }
-
       if (productToAddToCart.stock <= 0) {
         throw new Error("Product out of stock");
       }
-
       await ctx.db.cartItem.create({
         data: {
           cartId: input.cartId,
@@ -32,7 +29,6 @@ export const cartRouter = createTRPCRouter({
           quantity: 1,
         },
       });
-
       return await ctx.db.cart.findUnique({
         where: { id: input.cartId },
       });
