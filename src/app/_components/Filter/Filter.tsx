@@ -40,16 +40,12 @@ function isColorFilterOption(
 const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
   return (
     <ChevronDownIcon
-      style={{
-        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-        transition: "transform 0.2s ease, color 0.2s ease",
-        color: isOpen ? "red" : "gray",
-      }}
-      className="h-5 w-5 text-gray-500 transition-transform duration-200"
+      className={`h-5 w-5 transition-transform duration-200 ${
+        isOpen ? "rotate-180 text-red-500" : "rotate-0 text-gray-500"
+      }`}
     />
   );
 };
-
 const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
