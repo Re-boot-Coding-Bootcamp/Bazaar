@@ -12,6 +12,7 @@ interface Product {
   color: string;
   size: string;
 }
+
 const CartItem: React.FC<{ product: Product }> = ({ product }) => {
   const { name, image, price, color, size } = product;
   const [quantity, setQuantity] = useState(product.quantity);

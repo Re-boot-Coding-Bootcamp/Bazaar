@@ -14,3 +14,4 @@ export * from "./Favorites";
 export * from "./ProductGrid";
 export * from "./CartIcon";
 export * from "./Filter";
+export * from "./OrderSummary";

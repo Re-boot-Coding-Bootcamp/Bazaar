@@ -9,6 +9,13 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {},
+  decorators: [
+    (Story) => (
+      <div style={{ width: "300px" }}>
+        <Story />
+      </div>
+    ),
+  ],
 } satisfies Meta<typeof OrderSummary>;
 
 export default meta;
@@ -16,10 +23,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    price: {
-      subtotal: 550.0,
-      tax: 0,
-      total: 555,
-    },
+    subtotal: 95.0,
   },
 };
