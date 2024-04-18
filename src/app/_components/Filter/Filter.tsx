@@ -46,6 +46,7 @@ const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
     />
   );
 };
+
 const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -92,10 +93,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
     );
 
     return (
-      // main container; takes 1/4 of screen for filter orientation
-      <main
-        className={`md:w-1/4 ${isDialogOpen ? "block" : "hidden md:block"}`}
-      >
+      <div className={`${isDialogOpen ? "block" : "hidden md:block"}`}>
         <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">Filter</h1>
 
         {/* colorFilter  */}
@@ -273,7 +271,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
         >
           Reset
         </button>
-      </main>
+      </div>
     );
   }
 
