@@ -39,6 +39,7 @@ const initialFilters = [
       { value: "little kids", label: "Little Kids", checked: false },
     ],
   },
+
   {
     id: "size",
     name: "Size",
@@ -51,8 +52,21 @@ const initialFilters = [
     ],
   },
   {
-    id: "shop by price",
-    name: "Shop by Price",
+    id: "shoes size",
+    name: "Shoes Size",
+    options: [
+      { value: "6", label: "6", checked: false },
+      { value: "7", label: "7", checked: false },
+      { value: "8", label: "8", checked: false },
+      { value: "9", label: "9", checked: false },
+      { value: "10", label: "10", checked: false },
+      { value: "11", label: "11", checked: false },
+      { value: "12", label: "12", checked: false },
+    ],
+  },
+  {
+    id: "by price",
+    name: "By Price",
     options: [
       { value: "$0 - $25", label: "$0 - $25", checked: false },
       { value: "$25 - $50", label: "$25 - $50", checked: false },
@@ -66,5 +80,6 @@ const initialFilters = [
 export const Default: Story = {
   args: {
     filters: initialFilters,
+    category: "Shoes",
   },
 };

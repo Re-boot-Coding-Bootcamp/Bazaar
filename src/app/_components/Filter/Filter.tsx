@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { Dialog, Disclosure, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -32,23 +31,15 @@ interface Filter {
 
 interface FilterProps {
   filters: Filter[];
+  category: string;
 }
 
-const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
-  const [filters, setFilters] = useState(initialFilters);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+const Filter: React.FC<FilterProps> = ({
+  filters: initialFilters,
+  category,
+}) => {
+  const [filters, setFilters] = React.useState(initialFilters);
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const handleFilterChange = (filterId: string, optionValue: string) => {
     const newFilters = filters.map((filter) => {
@@ -82,232 +73,260 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
   function renderFilters() {
     const colorFilters = filters.find((filter) => filter.id === "color");
-    const otherFilters = filters.filter((filter) => filter.id !== "color");
+    const shoesSizeFilters = filters.find(
+      (filter) => filter.id === "shoes size",
+    );
+    const otherFilters = filters.filter(
+      (filter) => filter.id !== "color" && filter.id !== "shoes size",
+    );
 
     return (
-      <main className="mx-auto max-w-7xl px-4 ">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-          {/* Filter Section */}
-          <div className="col-span-1">
-            <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">
-              Filter
-            </h1>
-            {colorFilters && (
-              <Disclosure as="div" className="border-t border-gray-200 py-4">
-                {({ open }) => (
-                  <>
-                    <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                      <span>{colorFilters.name}</span>
-                      <ChevronDownIcon
-                        style={{
-                          transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                          transition: "transform 0.2s ease, color 0.2s ease",
-                          color: open ? "red" : "gray",
-                        }}
-                        className="h-5 w-5 text-gray-500 transition-transform duration-200"
-                      />
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                      <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
-                        {colorFilters.options.map((option, idx) => (
-                          <div
-                            key={idx}
-                            className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
-                          >
-                            {isColorFilterOption(option) && (
-                              <>
-                                <div
-                                  className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
-                                  style={{
-                                    backgroundColor: option.color,
-                                    border: "1px solid #ccc",
-                                  }}
-                                  onClick={() =>
-                                    handleFilterChange(
-                                      colorFilters.id,
-                                      option.value,
-                                    )
-                                  }
-                                >
-                                  {option.checked && (
-                                    <svg
-                                      className="h-6 w-6 fill-current text-white"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      viewBox="0 2 18 20"
-                                    >
-                                      <path
-                                        fillRule="evenodd"
-                                        fill={
-                                          [
-                                            "white",
-                                            "beige",
-                                            "orange",
-                                            "yellow",
-                                          ].includes(option.value)
-                                            ? "black"
-                                            : "currentColor"
-                                        }
-                                        d="M5 11l2 2 6-6 2 2-8 8-4-4"
-                                        clipRule="evenodd"
-                                      />
-                                    </svg>
-                                  )}
-                                </div>
-                                <label
-                                  htmlFor={`${colorFilters.id}-${idx}`}
-                                  className="mt-2 text-center"
-                                >
-                                  {option.label}
-                                </label>
-                              </>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
-            )}
-            {otherFilters.map((filter, index) => (
-              <Disclosure
-                key={index}
-                as="div"
-                className="border-t border-gray-200 py-4"
-              >
-                {({ open }) => (
-                  <>
-                    <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                      <span>{filter.name}</span>
-                      <ChevronDownIcon
-                        style={{
-                          transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                          transition: "transform 0.2s ease, color 0.2s ease",
-                          color: open ? "red" : "gray",
-                        }}
-                        className="h-5 w-5 text-gray-500 transition-transform duration-200"
-                      />
-                    </Disclosure.Button>
-                    <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                      <div>
-                        {filter.options.map((option, idx) => (
-                          <div
-                            key={idx}
-                            className="ml-5 flex items-center justify-start space-x-3 py-0.5"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={option.checked}
-                              onChange={() =>
-                                handleFilterChange(filter.id, option.value)
+      <main
+        className={`md:w-1/4 ${isDialogOpen ? "block" : "hidden md:block"}`}
+      >
+        <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">
+          {category}
+        </h1>
+
+        {colorFilters && (
+          <Disclosure as="div" className="border-t border-gray-200 py-4">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{colorFilters.name}</span>
+                  <ChevronDownIcon
+                    style={{
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
+                    }}
+                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                  <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
+                    {colorFilters.options.map((option, idx) => (
+                      <div
+                        key={idx}
+                        className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
+                      >
+                        {isColorFilterOption(option) && (
+                          <>
+                            <div
+                              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
+                              style={{
+                                backgroundColor: option.color,
+                                border: "1px solid #ccc",
+                              }}
+                              onClick={() =>
+                                handleFilterChange(
+                                  colorFilters.id,
+                                  option.value,
+                                )
                               }
-                              id={`${filter.id}-${idx}`}
-                              className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
-                            />
+                            >
+                              {option.checked && (
+                                <svg
+                                  className="h-6 w-6 fill-current text-white"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 2 18 20"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    fill={
+                                      [
+                                        "white",
+                                        "beige",
+                                        "orange",
+                                        "yellow",
+                                      ].includes(option.value)
+                                        ? "black"
+                                        : "currentColor"
+                                    }
+                                    d="M5 11l2 2 6-6 2 2-8 8-4-4"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </div>
                             <label
-                              htmlFor={`${filter.id}-${idx}`}
-                              className="text-center"
+                              htmlFor={`${colorFilters.id}-${idx}`}
+                              className="mt-2 text-center"
                             >
                               {option.label}
                             </label>
-                          </div>
-                        ))}
+                          </>
+                        )}
                       </div>
-                    </Disclosure.Panel>
-                  </>
-                )}
-              </Disclosure>
-            ))}
-            <button
-              onClick={resetFilters}
-              className="relative ml-2.5 mt-10 h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800"
-            >
-              Reset
-            </button>
-          </div>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        )}
 
-          {/* product list section */}
-          <div className="lg:col-span-3">
-            <img
-              src="https://static.nike.com/a/images/t_PDP_1728_v1/f_auto,q_auto:eco,u_126ab356-44d8-4a06-89b4-fcdcc8df0245,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/abfbb7a9-0adb-498d-b582-58ab8a356222/air-jordan-5-retro-se-mens-shoes-gKlWtk.png"
-              alt="test-img"
-            />
-          </div>
-        </div>
+        {otherFilters.map((filter, index) => (
+          <Disclosure
+            key={index}
+            as="div"
+            className="border-t border-gray-200 py-4"
+          >
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{filter.name}</span>
+                  <ChevronDownIcon
+                    style={{
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
+                    }}
+                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                  <div>
+                    {filter.options.map((option, idx) => (
+                      <div
+                        key={idx}
+                        className="ml-5 flex items-center justify-start space-x-3 py-1"
+                        style={{ color: "grey" }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={option.checked}
+                          onChange={() =>
+                            handleFilterChange(filter.id, option.value)
+                          }
+                          id={`${filter.id}-${idx}`}
+                          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
+                        />
+                        <label
+                          htmlFor={`${filter.id}-${idx}`}
+                          className="text-center"
+                        >
+                          {option.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        ))}
+        {shoesSizeFilters && (
+          <Disclosure as="div" className="border-t border-gray-200 py-4">
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{shoesSizeFilters.name}</span>
+                  <ChevronDownIcon
+                    style={{
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.2s ease, color 0.2s ease",
+                      color: open ? "red" : "gray",
+                    }}
+                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
+                  />
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
+                  <div className="grid grid-cols-3 gap-2 px-4">
+                    {shoesSizeFilters.options.map((option, idx) => (
+                      <button
+                        key={idx}
+                        className={`rounded-md border px-4 py-2 ${
+                          option.checked ? "bg-gray-700 text-white" : "bg-white"
+                        }`}
+                        onClick={() =>
+                          handleFilterChange(shoesSizeFilters.id, option.value)
+                        }
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        )}
+        <button
+          onClick={resetFilters}
+          className={`relative ml-2.5 mt-10 hidden h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800 md:block`}
+        >
+          Reset
+        </button>
       </main>
     );
   }
 
   return (
     <div className="p-4">
-      {isMobile ? (
-        <>
-          <button
-            onClick={toggleDialog}
-            className="fixed right-4 top-4 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95"
+      <button
+        onClick={toggleDialog}
+        className="fixed right-4 top-8 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95 md:hidden"
+      >
+        <AdjustmentsHorizontalIcon
+          className="mr-2 h-6 w-6"
+          aria-hidden="true"
+        />
+        Filter
+      </button>
+      <Transition.Root show={isDialogOpen} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={toggleDialog}
+          style={{ fontFamily: "roboto" }}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="transition-opacity ease-linear duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="transition-opacity ease-linear duration-300"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            <AdjustmentsHorizontalIcon
-              className="mr-2 h-6 w-6"
-              aria-hidden="true"
-            />
-            Filter
-          </button>
-          <Transition.Root show={isDialogOpen} as={Fragment}>
-            <Dialog
-              as="div"
-              className="relative z-10"
-              onClose={toggleDialog}
-              style={{ fontFamily: "roboto" }}
-            >
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
               <Transition.Child
                 as={Fragment}
-                enter="transition-opacity ease-linear duration-300"
-                enterFrom="opacity-0"
-                enterTo="opacity-100"
-                leave="transition-opacity ease-linear duration-300"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
+                enter="transition ease-in-out duration-300 transform"
+                enterFrom="translate-x-full"
+                enterTo="translate-x-0"
+                leave="transition ease-in-out duration-300 transform"
+                leaveFrom="translate-x-0"
+                leaveTo="translate-x-full"
               >
-                <div className="fixed inset-0 bg-black bg-opacity-25" />
+                <Dialog.Panel className="relative ml-auto flex h-[90vh] w-screen max-w-sm flex-col overflow-y-auto rounded-lg bg-white px-2 py-4 shadow-xl">
+                  {renderFilters()}
+                  <div className="mx-5 flex items-center justify-center gap-12">
+                    <button
+                      onClick={resetFilters}
+                      className="mt-4 w-[120px] rounded-lg bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
+                    >
+                      Reset
+                    </button>
+                    <button
+                      onClick={applyFiltersAndCloseDrawer}
+                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-gray-700 active:scale-95"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </Dialog.Panel>
               </Transition.Child>
-
-              <div className="fixed inset-0 overflow-y-auto">
-                <div className="flex min-h-full items-center justify-center p-4 text-center">
-                  <Transition.Child
-                    as={Fragment}
-                    enter="transition ease-in-out duration-300 transform"
-                    enterFrom="translate-y-full"
-                    enterTo="translate-y-0"
-                    leave="transition ease-in-out duration-300 transform"
-                    leaveFrom="translate-y-0"
-                    leaveTo="translate-y-full"
-                  >
-                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                      {renderFilters()}
-                      <div className="mx-5 flex items-center justify-center gap-12">
-                        <button
-                          onClick={resetFilters}
-                          className="mt-4 w-[120px] rounded-lg bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
-                        >
-                          Reset
-                        </button>
-                        <button
-                          onClick={applyFiltersAndCloseDrawer}
-                          className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-gray-700 active:scale-95"
-                        >
-                          Apply
-                        </button>
-                      </div>
-                    </Dialog.Panel>
-                  </Transition.Child>
-                </div>
-              </div>
-            </Dialog>
-          </Transition.Root>
-        </>
-      ) : (
-        <>{renderFilters()}</>
-      )}
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
+      {!isDialogOpen && <>{renderFilters()}</>}
     </div>
   );
 };
