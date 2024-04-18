@@ -96,11 +96,13 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
     );
 
     return (
+      // main container; takes 1/4 of screen for filter orientation
       <main
         className={`md:w-1/4 ${isDialogOpen ? "block" : "hidden md:block"}`}
       >
         <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">Filter</h1>
 
+        {/* colorFilter  */}
         {colorFilters && (
           <Disclosure as="div" className="border-t border-gray-200 py-4">
             {({ open }) => (
@@ -118,6 +120,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                       >
                         {isColorFilterOption(option) && (
                           <>
+                            {/* circled color options */}
                             <div
                               className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full`}
                               style={{
@@ -131,6 +134,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                                 )
                               }
                             >
+                              {/* custom checkmark */}
                               {option.checked && (
                                 <svg
                                   className="h-6 w-6 fill-current text-white"
@@ -172,9 +176,10 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
           </Disclosure>
         )}
 
-        {otherFilters.map((filter, index) => (
+        {/* filter for category, gender, size, by price */}
+        {otherFilters.map((filter, idx) => (
           <Disclosure
-            key={index}
+            key={idx}
             as="div"
             className="border-t border-gray-200 py-4"
           >
@@ -204,6 +209,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                           htmlFor={`${filter.id}-${option.value}-${idx}`}
                           className="flex cursor-pointer items-center"
                         >
+                          {/* custom checkbox */}
                           <span
                             className={`mr-2 flex h-5 w-5 items-center justify-center rounded border-2 ${
                               option.checked
@@ -231,6 +237,8 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
             )}
           </Disclosure>
         ))}
+
+        {/* shoes size filter */}
         {shoesSizeFilters && (
           <Disclosure as="div" className="border-t border-gray-200 py-4">
             {({ open }) => (
@@ -242,6 +250,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                 <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
                   <div className="grid grid-cols-3 gap-2 px-4">
                     {shoesSizeFilters.options.map((option, idx) => (
+                      // custom checkbox
                       <button
                         key={idx}
                         className={`rounded-md border px-4 py-2 ${
@@ -260,6 +269,8 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
             )}
           </Disclosure>
         )}
+
+        {/* reset button for desktop */}
         <button
           onClick={resetFilters}
           className={`relative ml-2.5 mt-10 hidden h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800 md:block`}
@@ -270,8 +281,10 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
     );
   }
 
+  // mobile UI
   return (
     <div className="p-4">
+      {/* filter button for mobile */}
       <button
         onClick={toggleDialog}
         className="fixed right-4 top-8 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95 md:hidden"
@@ -282,6 +295,8 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
         />
         Filter
       </button>
+
+      {/* drawer effect  */}
       <Transition.Root show={isDialogOpen} as={Fragment}>
         <Dialog
           as="div"
