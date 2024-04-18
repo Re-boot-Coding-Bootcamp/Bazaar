@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
@@ -18,7 +19,10 @@ export const cartRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       if (input.quantity > 10) {
-        throw new Error("Quantity added cannot be over 10");
+        throw new TRPCError({
+          message: "Quantity added cannot be over 10",
+          code: "BAD_REQUEST",
+        });
       }
       if (input.quantity > 0 && input.quantity <= 10) {
         await ctx.db.cartItem.update({
@@ -30,5 +34,35 @@ export const cartRouter = createTRPCRouter({
         await ctx.db.cartItem.delete({ where: { id: input.cartItemId } });
       }
       return await ctx.db.cart.findUnique({ where: { id: input.cartId } });
+    }),
+  addProductToCart: publicProcedure
+    .input(z.object({ productVariantId: z.string(), cartId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const productToAddToCart = await ctx.db.productVariant.findUnique({
+        where: { id: input.productVariantId },
+        select: { stock: true },
+      });
+      if (!productToAddToCart) {
+        throw new TRPCError({
+          message: "Product variant not found",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+      if (productToAddToCart.stock <= 0) {
+        throw new TRPCError({
+          message: "Product out of stock",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+      await ctx.db.cartItem.create({
+        data: {
+          cartId: input.cartId,
+          productVariantId: input.productVariantId,
+          quantity: 1,
+        },
+      });
+      return await ctx.db.cart.findUnique({
+        where: { id: input.cartId },
+      });
     }),
 });
