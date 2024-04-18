@@ -12,6 +12,26 @@ type Story = StoryObj<typeof meta>;
 
 const initialFilters = [
   {
+    id: "category",
+    name: "Category",
+    options: [
+      { value: "tops", label: "Tops" },
+      { value: "bottoms", label: "Bottoms" },
+      { value: "shoes", label: "Shoes" },
+      { value: "accessories", label: "Accessories" },
+    ],
+  },
+  {
+    id: "gender",
+    name: "Gender",
+    options: [
+      { value: "women", label: "Women", checked: false },
+      { value: "men", label: "Men", checked: false },
+      { value: "kids", label: "Kids", checked: false },
+      { value: "little kids", label: "Little Kids", checked: false },
+    ],
+  },
+  {
     id: "color",
     name: "Color",
     options: [
@@ -27,16 +47,6 @@ const initialFilters = [
       { value: "brown", label: "Brown", checked: false, color: "#814427" },
       { value: "grey", label: "Grey", checked: false, color: "#727272" },
       { value: "black", label: "Black", checked: false, color: "#000" },
-    ],
-  },
-  {
-    id: "gender",
-    name: "Gender",
-    options: [
-      { value: "women", label: "Women", checked: false },
-      { value: "men", label: "Men", checked: false },
-      { value: "kids", label: "Kids", checked: false },
-      { value: "little kids", label: "Little Kids", checked: false },
     ],
   },
 

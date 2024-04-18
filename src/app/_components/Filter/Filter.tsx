@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useCallback } from "react";
 import { Dialog, Disclosure, Transition } from "@headlessui/react";
 import {
   ChevronDownIcon,
@@ -17,12 +17,6 @@ interface ColorFilterOption extends FilterOption {
   color: string;
 }
 
-function isColorFilterOption(
-  option: FilterOption,
-): option is ColorFilterOption {
-  return (option as ColorFilterOption).color !== undefined;
-}
-
 interface Filter {
   id: string;
   name: string;
@@ -31,37 +25,58 @@ interface Filter {
 
 interface FilterProps {
   filters: Filter[];
-  category: string;
 }
 
-const Filter: React.FC<FilterProps> = ({
-  filters: initialFilters,
-  category,
-}) => {
-  const [filters, setFilters] = React.useState(initialFilters);
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+interface ChevronIconProps {
+  isOpen: boolean;
+}
 
-  const handleFilterChange = (filterId: string, optionValue: string) => {
-    const newFilters = filters.map((filter) => {
-      if (filter.id === filterId) {
-        return {
-          ...filter,
-          options: filter.options.map((option) => {
-            if (option.value === optionValue) {
-              return { ...option, checked: !option.checked };
-            }
-            return option;
-          }),
-        };
-      }
-      return filter;
-    });
-    setFilters(newFilters);
-  };
+function isColorFilterOption(
+  option: FilterOption,
+): option is ColorFilterOption {
+  return "color" in option;
+}
 
-  const resetFilters = () => {
+const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
+  return (
+    <ChevronDownIcon
+      style={{
+        transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+        transition: "transform 0.2s ease, color 0.2s ease",
+        color: isOpen ? "red" : "gray",
+      }}
+      className="h-5 w-5 text-gray-500 transition-transform duration-200"
+    />
+  );
+};
+
+const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
+  const [filters, setFilters] = useState(initialFilters);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleFilterChange = useCallback(
+    (filterId: string, optionValue: string) => {
+      setFilters((currentFilters) =>
+        currentFilters.map((filter) =>
+          filter.id === filterId
+            ? {
+                ...filter,
+                options: filter.options.map((option) =>
+                  option.value === optionValue
+                    ? { ...option, checked: !option.checked }
+                    : option,
+                ),
+              }
+            : filter,
+        ),
+      );
+    },
+    [],
+  );
+
+  const resetFilters = useCallback(() => {
     setFilters(initialFilters);
-  };
+  }, [initialFilters]);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -84,9 +99,7 @@ const Filter: React.FC<FilterProps> = ({
       <main
         className={`md:w-1/4 ${isDialogOpen ? "block" : "hidden md:block"}`}
       >
-        <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">
-          {category}
-        </h1>
+        <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">Filter</h1>
 
         {colorFilters && (
           <Disclosure as="div" className="border-t border-gray-200 py-4">
@@ -94,17 +107,10 @@ const Filter: React.FC<FilterProps> = ({
               <>
                 <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{colorFilters.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
+                  <ChevronIcon isOpen={open} />
                 </Disclosure.Button>
                 <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                  <div className="justify-content-start ml-5 grid grid-cols-3 gap-1">
+                  <div className="ml-2 grid grid-cols-3 gap-1">
                     {colorFilters.options.map((option, idx) => (
                       <div
                         key={idx}
@@ -113,7 +119,7 @@ const Filter: React.FC<FilterProps> = ({
                         {isColorFilterOption(option) && (
                           <>
                             <div
-                              className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full"
+                              className={`flex h-6 w-6 cursor-pointer items-center justify-center rounded-full`}
                               style={{
                                 backgroundColor: option.color,
                                 border: "1px solid #ccc",
@@ -133,6 +139,8 @@ const Filter: React.FC<FilterProps> = ({
                                 >
                                   <path
                                     fillRule="evenodd"
+                                    d="M5 11l2 2 6-6 2 2-8 8-4-4"
+                                    clipRule="evenodd"
                                     fill={
                                       [
                                         "white",
@@ -143,14 +151,12 @@ const Filter: React.FC<FilterProps> = ({
                                         ? "black"
                                         : "currentColor"
                                     }
-                                    d="M5 11l2 2 6-6 2 2-8 8-4-4"
-                                    clipRule="evenodd"
                                   />
                                 </svg>
                               )}
                             </div>
                             <label
-                              htmlFor={`${colorFilters.id}-${idx}`}
+                              htmlFor={`${colorFilters.id}-${option.value}-${idx}`}
                               className="mt-2 text-center"
                             >
                               {option.label}
@@ -176,22 +182,14 @@ const Filter: React.FC<FilterProps> = ({
               <>
                 <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{filter.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
+                  <ChevronIcon isOpen={open} />
                 </Disclosure.Button>
                 <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
                   <div>
                     {filter.options.map((option, idx) => (
                       <div
                         key={idx}
-                        className="ml-5 flex items-center justify-start space-x-3 py-1"
-                        style={{ color: "grey" }}
+                        className="ml-2 flex items-center justify-start space-x-3 py-1"
                       >
                         <input
                           type="checkbox"
@@ -199,13 +197,30 @@ const Filter: React.FC<FilterProps> = ({
                           onChange={() =>
                             handleFilterChange(filter.id, option.value)
                           }
-                          id={`${filter.id}-${idx}`}
-                          className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 "
+                          id={`${filter.id}-${option.value}-${idx}`}
+                          className="hidden"
                         />
                         <label
-                          htmlFor={`${filter.id}-${idx}`}
-                          className="text-center"
+                          htmlFor={`${filter.id}-${option.value}-${idx}`}
+                          className="flex cursor-pointer items-center"
                         >
+                          <span
+                            className={`mr-2 flex h-5 w-5 items-center justify-center rounded border-2 ${
+                              option.checked
+                                ? "border-gray-700 bg-gray-700"
+                                : "border border-gray-400 bg-white"
+                            }`}
+                          >
+                            {option.checked && (
+                              <svg
+                                className="h-6 w-6 fill-current text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="1 2 15 20"
+                              >
+                                <path d="M5 11l2 2 6-6 2 2-8 8-4-4" />
+                              </svg>
+                            )}
+                          </span>
                           {option.label}
                         </label>
                       </div>
@@ -222,14 +237,7 @@ const Filter: React.FC<FilterProps> = ({
               <>
                 <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{shoesSizeFilters.name}</span>
-                  <ChevronDownIcon
-                    style={{
-                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s ease, color 0.2s ease",
-                      color: open ? "red" : "gray",
-                    }}
-                    className="h-5 w-5 text-gray-500 transition-transform duration-200"
-                  />
+                  <ChevronIcon isOpen={open} />
                 </Disclosure.Button>
                 <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
                   <div className="grid grid-cols-3 gap-2 px-4">
