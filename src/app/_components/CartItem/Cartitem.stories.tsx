@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { CartItem } from "./CartItem";
 
 const meta = {
-  title: "Component/CartItem",
+  title: "Components/CartItem",
   component: CartItem,
   parameters: {
     layout: "centered",

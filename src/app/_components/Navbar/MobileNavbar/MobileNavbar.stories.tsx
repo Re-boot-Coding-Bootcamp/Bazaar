@@ -1,19 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { DesktopNavbar } from "./DesktopNavbar";
+import { MobileNavbar } from "./MobileNavbar";
 
 const meta = {
-  title: "Components/DesktopNavbar",
-  component: DesktopNavbar,
+  title: "Components/MobileNavbar",
+  component: MobileNavbar,
+  parameters: {
+    layout: "centered",
+  },
   tags: ["autodocs"],
   argTypes: {},
   decorators: [
     (Story) => (
-      <div className="w-screen border border-black">
+      <div className="w-[768px]">
         <Story />
       </div>
     ),
   ],
-} satisfies Meta<typeof DesktopNavbar>;
+} satisfies Meta<typeof MobileNavbar>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
