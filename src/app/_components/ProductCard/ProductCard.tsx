@@ -87,4 +87,4 @@ const ProductCard = ({
   );
 };
 
-export default ProductCard;
+export { ProductCard };

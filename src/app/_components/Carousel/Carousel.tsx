@@ -1,29 +1,40 @@
 "use client";
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/solid";
-// import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import React, { type ReactNode, useEffect, useState } from "react";
+
+interface CarouselData {
+  image: string;
+  overlayText: ReactNode;
+  overlayPosition:
+    | "left-top"
+    | "left-bottom"
+    | "right-top"
+    | "right-bottom"
+    | "center-top"
+    | "center-bottom"
+    | "center";
+}
 
 interface CarouselProps {
-  images: string[];
+  data: CarouselData[];
   autoSlideInterval?: number;
-  height?: string;
 }
 
 const Carousel = ({
-  images,
+  data,
   autoSlideInterval = 5,
-  height = "500px",
 }: CarouselProps): JSX.Element => {
   const [index, setIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   const nextSlide = () => {
-    setIndex((prev) => (prev + 1) % images.length);
+    setIndex((prev) => (prev + 1) % data.length);
   };
 
   const prevSlide = () => {
-    setIndex((prev) => (prev - 1 + images.length) % images.length);
+    setIndex((prev) => (prev - 1 + data.length) % data.length);
   };
 
   useEffect(() => {
@@ -51,20 +62,33 @@ const Carousel = ({
       onMouseLeave={handleMouseLeave}
     >
       <div
+        id="text-overlay-container"
+        className={`absolute inset-0 z-10 flex w-full justify-center bg-black bg-opacity-40 ${data[index]?.overlayPosition.endsWith("top") ? "items-start" : data[index]?.overlayPosition.endsWith("bottom") ? "items-end" : "items-center"}`}
+      >
+        <div
+          id="text-content-container"
+          className={`flex w-full max-w-screen-xl ${data[index]?.overlayPosition.startsWith("left") ? "justify-start" : data[index]?.overlayPosition.startsWith("right") ? "justify-end" : "justify-center"}`}
+        >
+          <div className="my-8 w-fit rounded-xl bg-black bg-opacity-60 p-4 text-3xl text-white">
+            {data[index]?.overlayText}
+          </div>
+        </div>
+      </div>
+
+      <div
         className="flex transition-transform duration-700 ease-in-out"
         style={{ transform: `translateX(-${index * 100}%)` }}
       >
-        {images.map((image, position) => (
+        {data.map((item, position) => (
           <div
             key={position}
-            className="relative flex w-full flex-shrink-0 items-center justify-center"
-            style={{ height: height }}
+            className={`relative flex h-[450px] w-full flex-shrink-0 items-center justify-center md:h-[800px]`}
           >
-            <img
-              src={image}
+            <Image
+              src={item.image}
               alt={`Slide ${index}`}
-              className="object-cover object-center"
-              // fill={true}
+              className="aspect-square object-cover object-center"
+              fill={true}
             />
           </div>
         ))}
@@ -72,19 +96,19 @@ const Carousel = ({
 
       <button
         onClick={prevSlide}
-        className="transform-translate-y-1/2 absolute left-5 top-1/2 cursor-pointer rounded-md bg-white p-2"
+        className="transform-translate-y-1/2 absolute left-5 top-1/2 z-20 cursor-pointer rounded-md bg-white p-2"
       >
         <ChevronLeftIcon className="h-5 w-5" />
       </button>
 
       <button
         onClick={nextSlide}
-        className="transform-translate-y-1/2 absolute right-5 top-1/2 cursor-pointer rounded-md bg-white p-2"
+        className="transform-translate-y-1/2 absolute right-5 top-1/2 z-20 cursor-pointer rounded-md bg-white p-2"
       >
         <ChevronRightIcon className="h-5 w-5" />
       </button>
-      <div className="absolute bottom-0 left-1/2 flex -translate-x-1/2 transform cursor-pointer space-x-2 pb-2">
-        {images.map((image, position) => (
+      <div className="absolute bottom-0 left-1/2 z-20 flex -translate-x-1/2 transform cursor-pointer space-x-2 pb-2">
+        {data.map((_, position) => (
           <span
             key={position}
             className={`block h-2 w-2 rounded-full ${position === index ? `bg-blue-500` : "bg-white"} cursor-pointer`}

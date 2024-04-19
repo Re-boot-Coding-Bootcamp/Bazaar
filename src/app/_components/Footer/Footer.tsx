@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const currentYear = new Date().getFullYear();
@@ -8,9 +9,9 @@ const Footer = () => {
       <div className="mx-auto flex w-full max-w-screen-xl items-center justify-center gap-2 p-4">
         <span className="text-sm text-gray-500 sm:text-center">
           © {currentYear}{" "}
-          <a href="/" className="hover:underline">
+          <Link href="/" className="hover:underline">
             Bazaar
-          </a>
+          </Link>
           . All Rights Reserved.
         </span>
       </div>

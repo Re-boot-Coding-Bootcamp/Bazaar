@@ -65,7 +65,7 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
   return (
     <div
       id="mobile-drawer"
-      className={`fixed right-0 top-0 z-10 min-h-dvh w-full transform shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
+      className={`fixed right-0 top-0 z-30 min-h-dvh w-full transform shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
     >
       <div
         id="header"

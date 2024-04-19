@@ -51,8 +51,9 @@ model ProductVariant {
     images    Image[]
     createdAt DateTime @default(now())
 
-    product  Product    @relation(fields: [productId], references: [id])
-    CartItem CartItem[]
+    product   Product     @relation(fields: [productId], references: [id])
+    CartItem  CartItem[]
+    TopSeller TopSeller[]
 
     @@index([productId])
 }
@@ -72,5 +73,15 @@ model CartItem {
     productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
 
     @@index([cartId])
+    @@index([productVariantId])
+}
+
+model TopSeller {
+    id               String @id @default(cuid())
+    productVariantId String
+    quantitySold     Int
+
+    productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+
     @@index([productVariantId])
 }
