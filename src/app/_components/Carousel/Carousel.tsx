@@ -63,19 +63,16 @@ const Carousel = ({
     >
       <div
         id="text-overlay-container"
-        className={`absolute inset-0 z-10 flex w-full items-end justify-center bg-black bg-opacity-40 ${data[index]?.overlayPosition.endsWith("top") ? "md:items-start" : data[index]?.overlayPosition.endsWith("bottom") ? "md:items-end" : ""}`}
+        className={`absolute inset-0 z-10 flex w-full items-end justify-center bg-black bg-opacity-40 ${data[index]?.overlayPosition.endsWith("top") ? "md:items-start" : data[index]?.overlayPosition.endsWith("bottom") ? "md:items-end" : "md:items-center"}`}
       >
-        {" "}
         <div
           id="text-content-container"
-          className={`flex w-full max-w-screen-xl justify-center ${data[index]?.overlayPosition.startsWith("left") ? "md:justify-start" : data[index]?.overlayPosition.startsWith("right") ? "md:justify-end" : ""}`}
+          className={`flex w-full max-w-screen-xl justify-center ${data[index]?.overlayPosition.startsWith("left") ? "md:justify-start" : data[index]?.overlayPosition.startsWith("right") ? "md:justify-end" : "md:justify-center"}`}
         >
-          {" "}
-          <div className="my-8 w-fit rounded-xl bg-black bg-opacity-60 p-4 text-3xl text-white">
-            {" "}
-            {data[index]?.overlayText}{" "}
-          </div>{" "}
-        </div>{" "}
+          <div className="my-8 w-fit rounded-xl bg-white bg-opacity-20 p-4 text-3xl text-white">
+            {data[index]?.overlayText}
+          </div>
+        </div>
       </div>
 
       <div
