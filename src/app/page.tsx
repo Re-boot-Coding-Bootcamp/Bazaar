@@ -9,46 +9,73 @@ export default function HomePage() {
         data={[
           {
             image:
-              "https://www.stuttcars.com/wp-content/uploads/2020/07/2019-Porsche-911-GT3-RS-003-1600.jpeg",
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-2.png",
             overlayText: (
               <>
-                <h1>First Image</h1>
-                <p>Get 50% off on all shoes</p>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
               </>
             ),
             overlayPosition: "left-top",
           },
           {
             image:
-              "https://s3-prod.autonews.com/s3fs-public/MCLAREN-MAIN_i_9.jpg",
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-3.png",
             overlayText: (
               <>
-                <h1>Second Image</h1>
-                <p>Get 50% off on all shoes</p>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
               </>
             ),
             overlayPosition: "right-top",
           },
           {
-            image: "https://images2.alphacoders.com/103/1038563.jpg",
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-4.png",
             overlayText: (
               <>
-                <h1>Third Image</h1>
-                <p>Get 50% off on all shoes</p>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
               </>
             ),
             overlayPosition: "left-bottom",
           },
           {
             image:
-              "https://www.supercars.net/blog/wp-content/uploads/2023/02/2015-Lamborghini-Veneno-Roadster844812_-scaled.jpg",
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-5.png",
             overlayText: (
               <>
-                <h1>Fourth Image</h1>
-                <p>Get 50% off on all shoes</p>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
               </>
             ),
             overlayPosition: "right-bottom",
+          },
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-1.png",
+            overlayText: (
+              <>
+                <p className="w-96 md:w-full">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "center",
           },
         ]}
       />
