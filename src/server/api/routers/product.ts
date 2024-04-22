@@ -22,25 +22,21 @@ export const productRouter = createTRPCRouter({
           .optional(),
       }),
     )
-    .query(async ({ ctx, input }) => {
+    .query(({ ctx, input: { categoryId, size, color, price } }) => {
       const productFilters = {
-        ...(input.categoryId && { categoryId: input.categoryId }),
-        ...(input.size && { size: input.size }),
-        ...(input.color && { color: input.color }),
-        ...(input.price && {
+        ...(categoryId && { categoryId }),
+        ...(size && { size }),
+        ...(color && { color }),
+        ...(price && {
           price: {
-            gte: input.price.min,
-            lte: input.price.max,
+            gte: price.min,
+            lte: price.max,
           },
         }),
       };
 
-      const applyFilters = Object.keys(productFilters).length > 0;
-
-      const products = await ctx.db.product.findMany({
-        where: applyFilters ? productFilters : {},
+      return ctx.db.product.findMany({
+        where: productFilters,
       });
-
-      return products;
     }),
 });
