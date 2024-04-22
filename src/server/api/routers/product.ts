@@ -5,7 +5,7 @@ import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
   getTopSeller: publicProcedure.query(async ({ ctx }) => {
-    const topSellers = await ctx.db.topSeller.findMany({
+    const allProductVariantsAndQuantitySold = await ctx.db.topSeller.findMany({
       orderBy: { quantitySold: "desc" },
     });
     if (!allProductVariantsAndQuantitySold) {
