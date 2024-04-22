@@ -65,4 +65,12 @@ export const cartRouter = createTRPCRouter({
         where: { id: input.cartId },
       });
     }),
+  getCart: publicProcedure
+    .input(z.object({ cartId: z.string() }))
+    .query(({ ctx, input: { cartId } }) => {
+      return ctx.db.cart.findUnique({
+        where: { id: cartId },
+        include: { items: true },
+      });
+    }),
 });
