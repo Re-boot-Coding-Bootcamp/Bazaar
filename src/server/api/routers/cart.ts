@@ -67,21 +67,10 @@ export const cartRouter = createTRPCRouter({
     }),
   getCart: publicProcedure
     .input(z.object({ cartId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const { cartId } = input;
-      const cart = await ctx.db.cart.findUnique({ where: { id: cartId } });
-      if (!cart) {
-        throw new TRPCError({
-          message: "Cart not found",
-          code: "INTERNAL_SERVER_ERROR",
-        });
-      }
-      const cartItems = await ctx.db.cartItem.findMany({ where: { cartId } });
-      return {
-        cart: {
-          id: cart.id,
-          items: cartItems,
-        },
-      };
+    .query(({ ctx, input: { cartId } }) => {
+      return ctx.db.cart.findUnique({
+        where: { id: cartId },
+        include: { items: true },
+      });
     }),
 });
