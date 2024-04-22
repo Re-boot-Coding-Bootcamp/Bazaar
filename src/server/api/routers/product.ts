@@ -1,13 +1,13 @@
+import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
   getTopSeller: publicProcedure.query(async ({ ctx }) => {
-    const allProductVariantsAndQuantitySold = await ctx.db.topSeller
-      .findMany({
-        orderBy: { quantitySold: "desc" },
-      });
+    const topSellers = await ctx.db.topSeller.findMany({
+      orderBy: { quantitySold: "desc" },
+    });
     if (!allProductVariantsAndQuantitySold) {
       throw new TRPCError({
         message: "Top Sellers can't be found",
