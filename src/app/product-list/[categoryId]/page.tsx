@@ -1,5 +1,4 @@
-import { uniqBy } from "lodash";
-import { ProductCard } from "~/app/_components";
+import { ProductGrid } from "~/app/_components";
 import { api } from "~/trpc/server";
 
 export default async function ProductListForCategoryPage({
@@ -12,27 +11,11 @@ export default async function ProductListForCategoryPage({
     categoryId: categoryId === "all" ? undefined : categoryId,
   });
 
-  const productVariants = products.flatMap((product) => {
-    return uniqBy(product.variants, "color").map((variant) => ({
-      ...variant,
-      productName: product.name,
-    }));
-  });
-
   return (
     <div className="flex w-full flex-col items-center px-4">
       <p>ProductListPage - Shop all</p>
-      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {productVariants.map((productVariant) => (
-          <ProductCard
-            key={productVariant.id}
-            imageUrl={productVariant.images[0]?.url}
-            productName={productVariant.productName}
-            price={productVariant.price}
-            productUrl={`/product/${productVariant.id}`}
-            maxSize="md"
-          />
-        ))}
+      <div className="w-full max-w-screen-xl" id="product-grid-container">
+        <ProductGrid products={products} />
       </div>
     </div>
   );

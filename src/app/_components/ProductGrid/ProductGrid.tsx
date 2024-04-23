@@ -1,43 +1,41 @@
-"use client";
-
 import React from "react";
 import { ProductCard } from "../ProductCard/ProductCard";
-
-interface Product {
-  id: string;
-  imageUrl: string;
-  name: string;
-  price: number;
-  url: string;
-}
+import type { ProductGridItemType } from "~/types";
+import { uniqBy } from "lodash";
 
 interface ProductGridProps {
-  products: Product[];
-  isLoading: boolean;
+  products: ProductGridItemType[];
+  isLoading?: boolean;
 }
 
 const ProductGrid = ({
   products,
-  isLoading,
+  isLoading = false,
 }: ProductGridProps): JSX.Element => {
+  const productVariants = products.flatMap((product) => {
+    return uniqBy(product.variants, "color").map((variant) => ({
+      ...variant,
+      productName: product.name,
+    }));
+  });
+
   return (
-    <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 items-stretch justify-stretch gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {isLoading
         ? Array.from({ length: 8 }, (_, index) => (
-            <ProductCard key={index} loadingOnly={true} maxSize="md" />
+            <ProductCard key={index} loadingOnly={true} />
           ))
-        : products.map((product) => (
+        : productVariants.map((productVariant) => (
             <ProductCard
-              key={product.id}
-              imageUrl={product.imageUrl}
-              productName={product.name}
-              price={product.price}
-              productUrl={product.url}
-              maxSize="md"
+              key={productVariant.id}
+              imageUrl={productVariant.images[0]?.url}
+              productName={productVariant.productName}
+              price={productVariant.price}
+              productUrl={`/product/${productVariant.id}`}
             />
           ))}
     </div>
   );
 };
 
-export default ProductGrid;
+export { ProductGrid };

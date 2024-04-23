@@ -1,17 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-
-import type { Decimal } from "@prisma/client/runtime/library";
 import Link from "next/link";
-import React, { useRef, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 
 interface ProductCardProps {
   loadingOnly?: boolean;
   imageUrl?: string;
   productName?: ReactNode;
-  price?: Decimal;
+  price?: number;
   productUrl?: string;
-  maxSize?: "sm" | "md" | "lg";
 }
 
 const ProductCard = ({
@@ -20,25 +16,7 @@ const ProductCard = ({
   productName,
   price,
   productUrl,
-  maxSize = "md",
 }: ProductCardProps): JSX.Element => {
-  const imageSizeRef = useRef<HTMLImageElement>(null);
-
-  const imageSize = {
-    sm: {
-      class: "h-48 w-48",
-      px: 192,
-    },
-    md: {
-      class: "h-56 w-56",
-      px: 224,
-    },
-    lg: {
-      class: "h-64 w-64",
-      px: 256,
-    },
-  }[maxSize];
-
   return (
     <Link
       href={productUrl ?? ""}
@@ -47,19 +25,16 @@ const ProductCard = ({
       <div
         className={`${
           loadingOnly ? "animate-pulse" : "hover:scale-[1.01] hover:shadow-lg"
-        } max-w-${maxSize} transform overflow-hidden rounded-lg shadow-md transition duration-300 ease-in-out`}
+        } h-full w-full transform rounded-lg shadow-md transition duration-300 ease-in-out`}
       >
         {loadingOnly ? (
-          <div className={`${imageSize.class} bg-gray-200`} />
+          <div className={`aspect-square w-full bg-gray-200`} />
         ) : (
-          <div className={`${imageSize.class} h-full w-full`}>
-            <img
-              src={imageUrl ?? ""}
-              alt={String(productName)}
-              ref={imageSizeRef}
-              className="object-contain"
-            />
-          </div>
+          <img
+            src={imageUrl ?? ""}
+            alt={String(productName)}
+            className="aspect-square w-full object-contain"
+          />
         )}
 
         <div className="flex flex-col gap-2 p-4">
@@ -77,7 +52,13 @@ const ProductCard = ({
                 {productName}
               </span>
               <div className="flex items-center justify-between">
-                <span className="font-bold text-gray-800">{`$${price?.toString()}`}</span>
+                <span className="font-bold text-gray-800">
+                  $
+                  {price?.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
               </div>
             </>
           )}
