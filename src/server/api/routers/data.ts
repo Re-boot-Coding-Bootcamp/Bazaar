@@ -1,21 +1,20 @@
-import { TRPCError } from "@trpc/server";
-import { url } from "inspector";
-import { z } from "zod";
-
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 const colors = ["Black", "White", "Gray", "Blue"];
+const poloColors = ["Green", "Black", "Light Gray", "Dark Gray", "White"];
 const colors2 = ["Green", "Black", "Light Gray", "Dark Gray"];
 const colors3 = ["Black", "Light Gray", "Dark Gray"];
 const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
-// const colorAndImageUrl: Record<string, string> = {
-//   Black:
-//     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/4-simple-t-shirt-black.png",
-//   White:
-//     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/5-simple-t-shirt-white.png",
-//   Gray: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/6-simple-t-shirt-gray.png",
-//   Blue: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/7-simple-t-shirt-blue.png",
-// };
+
+const colorAndImageUrl: Record<string, string> = {
+  Black:
+    "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/4-simple-t-shirt-black.png",
+  White:
+    "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/5-simple-t-shirt-white.png",
+  Gray: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/6-simple-t-shirt-gray.png",
+  Blue: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/7-simple-t-shirt-blue.png",
+};
+
 const colorAndImageUrlWaterBottles: Record<string, string> = {
   Black:
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/11-water-bottle-black.png",
@@ -24,6 +23,7 @@ const colorAndImageUrlWaterBottles: Record<string, string> = {
   Gray: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/14-water-bottle-gray.png",
   Blue: "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/12-water-bottle-blue.png",
 };
+
 const colorAndImageUrlPolos: Record<string, string> = {
   Green:
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/15-polo-green.png",
@@ -33,7 +33,10 @@ const colorAndImageUrlPolos: Record<string, string> = {
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/17-polo-light-gray.png",
   "Dark Gray":
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/18-polo-dark-gray.png",
+  White:
+    "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/19-polo-white.png",
 };
+
 const colorAndImageUrlHoodies: Record<string, string> = {
   Green:
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/20-hoodie-green.png",
@@ -44,6 +47,7 @@ const colorAndImageUrlHoodies: Record<string, string> = {
   "Dark Gray":
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/22-hoodie-charcoal.png",
 };
+
 const colorAndImageUrlPuffer: Record<string, string> = {
   Black:
     "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/23-puffer-jacket-black.png",
@@ -59,42 +63,41 @@ export const dataRouter = createTRPCRouter({
     // productId: clvblrnru0008m8nus9mah2w6
     // price: 32.99
     // stock: 99
-    // const variantData = colors.flatMap((color) => {
-    //   return sizes.map((size) => {
-    //     return {
-    //       productId: "clvblrnru0008m8nus9mah2w6",
-    //       price: 32.99,
-    //       stock: 99,
-    //       color,
-    //       size,
-    //     };
-    //   });
-    // });
-    // return ctx.db.productVariant.createMany({
-    //   data: variantData,
-    // });
+    const variantData = colors.flatMap((color) => {
+      return sizes.map((size) => {
+        return {
+          productId: "clvblrnru0008m8nus9mah2w6",
+          price: 32.99,
+          stock: 99,
+          color,
+          size,
+        };
+      });
+    });
+    await ctx.db.productVariant.createMany({
+      data: variantData,
+    });
     // ----------------------------------------
     // 2, create image for each productVariant
     // fetch for all the productVariants, with the productId of "clvblrnru0008m8nus9mah2w6"
     // loop through the productVariants and create an image for each
     // use the colorAndImageUrl mapping to get the image url
-    // const tShirtVariants = await ctx.db.productVariant.findMany({
-    //   where: { productId: "clvblrnru0008m8nus9mah2w6" },
-    // });
-    // const imageData = tShirtVariants.map((variant) => {
-    //   return {
-    //     productVariantId: variant.id,
-    //     url: colorAndImageUrl[variant.color] ?? "",
-    //   };
-    // });
-    // return ctx.db.image.createMany({
-    //   data: imageData,
-    // });
+    const tShirtVariants = await ctx.db.productVariant.findMany({
+      where: { productId: "clvblrnru0008m8nus9mah2w6" },
+    });
+    const imageData = tShirtVariants.map((variant) => {
+      return {
+        productVariantId: variant.id,
+        url: colorAndImageUrl[variant.color] ?? "",
+      };
+    });
+    await ctx.db.image.createMany({
+      data: imageData,
+    });
 
     // create variant for tote bag using product ID clvcrgsgl00009lgjm5kpuysy
     // price $28.99 size OSFA color white stock 99
-
-    await ctx.db.productVariant.create({
+    const toteVariant = await ctx.db.productVariant.create({
       data: {
         productId: "clvcrgsgl00009lgjm5kpuysy",
         price: 28.99,
@@ -104,10 +107,6 @@ export const dataRouter = createTRPCRouter({
       },
     });
 
-    //create Image for tote bag variant image: https://murad-public-files.s3.amazonaws.com/bazaar/product-images/8-cotton-tote-bag.png
-    const toteVariant = await ctx.db.productVariant.findUnique({
-      where: { id: "clvcrgsgl00009lgjm5kpuysy" },
-    });
     await ctx.db.image.create({
       data: {
         productVariantId: toteVariant?.id ?? "",
@@ -122,7 +121,7 @@ export const dataRouter = createTRPCRouter({
         price: 19.99,
         stock: 99,
         color,
-        size: "L", // no idea about water bottle size
+        size: "OSFA",
       };
     });
     await ctx.db.productVariant.createMany({
@@ -142,7 +141,7 @@ export const dataRouter = createTRPCRouter({
     await ctx.db.image.createMany({ data: waterBottleImageData });
 
     // polo variants productId: clvcvt7d600029lgjhymeqbdy
-    const poloProductVariantData = colors2.flatMap((color) => {
+    const poloProductVariantData = poloColors.flatMap((color) => {
       return sizes.map((size) => {
         return {
           productId: "clvcvt7d600029lgjhymeqbdy",
