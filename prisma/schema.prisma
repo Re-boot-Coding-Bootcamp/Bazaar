@@ -44,7 +44,7 @@ model Product {
 model ProductVariant {
     id        String   @id @default(cuid())
     productId String
-    price     Decimal  @db.Decimal(10, 2)
+    price     Float
     size      String
     color     String
     stock     Int
