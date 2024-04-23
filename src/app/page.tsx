@@ -92,10 +92,10 @@ export default function HomePage() {
           className="grid max-w-screen-xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           {[
-            "https://static.nike.com/a/images/f_auto,cs_srgb/w_1536,c_limit/g1ljiszo4qhthfpluzbt/nike-joyride.jpg",
-            "https://www.rollingstone.com/wp-content/uploads/2020/09/Screen-Shot-2020-09-12-at-3.20.08-PM-e1599938476848.png",
-            "https://reviewed-com-res.cloudinary.com/image/fetch/s--iL3VTYYE--/b_white,c_fill,cs_srgb,f_auto,fl_progressive.strip_profile,g_auto,h_729,q_auto,w_972/https://reviewed-production.s3.amazonaws.com/1686778972972/nike-sneakers-hero.jpg",
-            "https://cloudfront-us-east-1.images.arcpublishing.com/coindesk/XUM5G4JKNBCLRAB262V7UZ5T7A.jpg",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/1-white-hat.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/7-simple-t-shirt-blue.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/9-pen.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/20-hoodie-green.png",
           ].map((imageUrl, index) => (
             <ProductCard
               key={`top-seller-${index + 1}`}

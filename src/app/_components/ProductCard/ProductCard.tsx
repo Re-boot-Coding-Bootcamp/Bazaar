@@ -1,7 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import type { Decimal } from "@prisma/client/runtime/library";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, type ReactNode } from "react";
 
@@ -45,20 +45,21 @@ const ProductCard = ({
       className={`${loadingOnly ? "cursor-default" : "cursor-pointer"}`}
     >
       <div
-        className={`${loadingOnly ? "animate-pulse" : "hover:scale-[1.01] hover:shadow-lg"} max-w-${maxSize} transform overflow-hidden rounded-lg shadow-md transition duration-300 ease-in-out`}
+        className={`${
+          loadingOnly ? "animate-pulse" : "hover:scale-[1.01] hover:shadow-lg"
+        } max-w-${maxSize} transform overflow-hidden rounded-lg shadow-md transition duration-300 ease-in-out`}
       >
         {loadingOnly ? (
           <div className={`${imageSize.class} bg-gray-200`} />
         ) : (
-          <Image
-            width={imageSize.px}
-            height={imageSize.px}
-            ref={imageSizeRef}
-            src={imageUrl ?? ""}
-            alt={String(productName)}
-            className={`${imageSize.class} w-full object-cover`}
-            style={{ cursor: "pointer" }}
-          />
+          <div className={`${imageSize.class} h-full w-full`}>
+            <img
+              src={imageUrl ?? ""}
+              alt={String(productName)}
+              ref={imageSizeRef}
+              className="object-contain"
+            />
+          </div>
         )}
 
         <div className="flex flex-col gap-2 p-4">
