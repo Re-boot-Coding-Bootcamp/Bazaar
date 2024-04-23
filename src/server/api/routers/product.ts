@@ -23,20 +23,35 @@ export const productRouter = createTRPCRouter({
       }),
     )
     .query(({ ctx, input: { categoryId, size, color, price } }) => {
-      const productFilters = {
-        ...(categoryId && { categoryId }),
-        ...(size && { size }),
-        ...(color && { color }),
-        ...(price && {
-          price: {
-            gte: price.min,
-            lte: price.max,
-          },
-        }),
-      };
-
       return ctx.db.product.findMany({
-        where: productFilters,
+        where: {
+          categoryId: categoryId,
+        },
+        include: {
+          variants: {
+            where: {
+              size: size,
+              color: color,
+              price: {
+                gte: price?.min,
+                lte: price?.max,
+              },
+            },
+            select: {
+              id: true,
+              price: true,
+              color: true,
+              size: true,
+              stock: true,
+              images: {
+                select: {
+                  url: true,
+                },
+                take: 1,
+              },
+            },
+          },
+        },
       });
     }),
 });

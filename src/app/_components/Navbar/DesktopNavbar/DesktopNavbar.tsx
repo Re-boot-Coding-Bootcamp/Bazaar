@@ -10,6 +10,7 @@ import { Favorites } from "~/app/_components/Favorites";
 import NavItem from "./NavItem";
 import type { Category } from "@prisma/client";
 import { CartIcon } from "../../CartIcon";
+import ShopAll from "./ShopAll";
 
 interface DesktopNavbarProps {
   categories: Category[];
@@ -30,6 +31,7 @@ const DesktopNavbar = ({ categories }: DesktopNavbarProps) => {
         </Link>
         <div className="mb-2 flex w-full justify-between text-lg font-bold">
           <div id="nav-items-container" className="flex items-center gap-4">
+            <ShopAll />
             {categories.map((category) => (
               <NavItem category={category} key={category.id} />
             ))}

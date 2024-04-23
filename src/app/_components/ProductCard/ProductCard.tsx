@@ -1,5 +1,6 @@
 "use client";
 
+import type { Decimal } from "@prisma/client/runtime/library";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, type ReactNode } from "react";
@@ -8,7 +9,7 @@ interface ProductCardProps {
   loadingOnly?: boolean;
   imageUrl?: string;
   productName?: ReactNode;
-  price?: number;
+  price?: Decimal;
   productUrl?: string;
   maxSize?: "sm" | "md" | "lg";
 }
@@ -75,9 +76,7 @@ const ProductCard = ({
                 {productName}
               </span>
               <div className="flex items-center justify-between">
-                <span className="font-bold text-gray-800">
-                  ${price?.toFixed(2)}
-                </span>
+                <span className="font-bold text-gray-800">{`$${price?.toString()}`}</span>
               </div>
             </>
           )}

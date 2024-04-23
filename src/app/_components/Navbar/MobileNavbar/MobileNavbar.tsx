@@ -81,6 +81,11 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
           <XMarkIcon className="h-8 w-8" />
         </button>
       </div>
+      <Link onClick={() => setDrawerOpen(false)} href={`/product-list/all`}>
+        <div className="border-b border-black p-4 text-lg font-medium">
+          Shop All
+        </div>
+      </Link>
       {categories.map((category) => (
         <Link
           key={category.id}
