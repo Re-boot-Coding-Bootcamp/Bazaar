@@ -21,7 +21,7 @@ const BreadCrumb = ({ items }: BreadCrumbProps) => (
             <li key={`${item.text}-${index}`} className="flex items-center">
               <Link
                 href={item.href ?? "#"}
-                className={`pointer text-sm font-medium ${isLastItem ? "pointer-events-none text-gray-500" : "cursor-pointer font-semibold text-gray-950 underline-offset-2 hover:underline"}`}
+                className={`pointer font-medium ${isLastItem ? "pointer-events-none text-gray-500" : "cursor-pointer font-semibold text-gray-950 underline-offset-2 hover:underline"}`}
                 aria-current={isLastItem ? "page" : undefined}
                 aria-label={!isLastItem ? `Go to ${item.text}` : undefined}
               >

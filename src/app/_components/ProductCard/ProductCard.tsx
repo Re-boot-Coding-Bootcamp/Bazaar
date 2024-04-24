@@ -53,7 +53,6 @@ const ProductCard = ({
               </span>
               <div className="flex items-center justify-between">
                 <span className="font-bold text-gray-800">
-                  $
                   {price?.toLocaleString("en-US", {
                     style: "currency",
                     currency: "USD",

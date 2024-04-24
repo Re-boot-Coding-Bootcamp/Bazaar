@@ -7,34 +7,25 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 
-interface FilterOption {
+export interface FilterOption {
   value: string;
   label: string;
   checked: boolean;
+  color?: string;
 }
 
-interface ColorFilterOption extends FilterOption {
-  color: string;
-}
-
-interface Filter {
+export interface ProductFilter {
   id: string;
   name: string;
   options: FilterOption[];
 }
 
 interface FilterProps {
-  filters: Filter[];
+  filters: ProductFilter[];
 }
 
 interface ChevronIconProps {
   isOpen: boolean;
-}
-
-function isColorFilterOption(
-  option: FilterOption,
-): option is ColorFilterOption {
-  return "color" in option;
 }
 
 const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
@@ -47,7 +38,7 @@ const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
   );
 };
 
-const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
+export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -94,7 +85,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
     return (
       <div className={`${isDialogOpen ? "block" : "hidden md:block"}`}>
-        <h1 className="mb-4 ml-3.5 text-xl font-bold text-gray-900">Filter</h1>
+        <h1 className="mb-4 text-xl font-bold text-gray-900">Filter</h1>
 
         {/* colorFilter  */}
         {colorFilters && (
@@ -112,7 +103,7 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                         key={idx}
                         className="mb-2 flex flex-col items-center justify-center hover:opacity-70"
                       >
-                        {isColorFilterOption(option) && (
+                        {option.color && (
                           <>
                             {/* circled color options */}
                             <div
@@ -277,10 +268,11 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
   // mobile UI
   return (
-    <div className="p-4">
+    <div>
       {/* filter button for mobile */}
       <button
         onClick={toggleDialog}
+        id="filter-button"
         className="fixed right-4 top-8 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95 md:hidden"
       >
         <AdjustmentsHorizontalIcon
@@ -347,5 +339,3 @@ const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
     </div>
   );
 };
-
-export { Filter };

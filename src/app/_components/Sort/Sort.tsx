@@ -10,25 +10,22 @@ const sortOptions = [
   { value: "customer-reviews", label: "Customer Reviews" },
 ];
 
-const Sort = ({
-  handleSort,
-}: {
-  handleSort: (selectedOption: string) => void;
-}) => {
+const Sort = () => {
   const [selectedSort, setSelectedSort] = useState(sortOptions[0]?.value);
 
   const handleSortChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const selectedOption = e.target.value;
     setSelectedSort(selectedOption);
-    handleSort(selectedOption);
+    // TODOL we will use redux to handle sort
+    // handleSort(selectedOption);
   };
 
   return (
-    <div className="flex w-fit cursor-pointer items-center gap-1 border-black underline-offset-4 hover:border-b">
+    <div className="flex w-fit cursor-pointer items-center gap-1 border-b border-transparent  hover:border-black">
       <div className="font-bold">Sort:</div>
       <select
         id="sortOptions"
-        className="block w-fit appearance-none focus:outline-none"
+        className="block w-fit cursor-pointer appearance-none focus:outline-none"
         value={selectedSort}
         onChange={handleSortChange}
       >
