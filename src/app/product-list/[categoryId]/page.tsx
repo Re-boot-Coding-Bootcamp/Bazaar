@@ -26,12 +26,12 @@ export default async function ProductListForCategoryPage({
     <div className="flex max-w-screen-xl flex-col gap-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
-        className="ml-4 flex justify-between md:ml-0"
+        className="ml-4 flex items-center justify-between md:ml-0"
       >
         <BreadCrumb
           items={[{ text: "Home", href: "/" }, { text: categoryName }]}
         />
-        <div className="flex items-center justify-center gap-4">
+        <div className="mr-1 flex gap-4">
           <Filter filters={FilterOptions} mobileButton={true} />
           <Sort />
         </div>
@@ -41,7 +41,7 @@ export default async function ProductListForCategoryPage({
         className="flex min-h-screen md:gap-4"
       >
         <div className="sticky top-0 max-h-[calc(100vh-20px)] overflow-y-auto md:min-w-[200px]">
-          <Filter filters={FilterOptions} mobileButton={true} />
+          <Filter filters={FilterOptions} />
         </div>
         <div className="h-fit px-2 md:px-0">
           <ProductGrid products={products} />
