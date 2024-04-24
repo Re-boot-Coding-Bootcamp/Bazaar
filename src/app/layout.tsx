@@ -13,8 +13,8 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Re:boot Bazaar",
-  description: "Re:boot Bazaar",
+  title: "Bazaar",
+  description: "Re:boot Bazaar for custom merchandise",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
