@@ -58,16 +58,6 @@ const FilterOptions: ProductFilter[] = [
       { value: "stationary", label: "Stationary", checked: false },
     ],
   },
-  // {
-  //   id: "gender",
-  //   name: "Gender",
-  //   options: [
-  //     { value: "women", label: "Women", checked: false },
-  //     { value: "men", label: "Men", checked: false },
-  //     { value: "kids", label: "Kids", checked: false },
-  //     { value: "little kids", label: "Little Kids", checked: false },
-  //   ],
-  // },
   {
     id: "color",
     name: "Color",
@@ -77,26 +67,25 @@ const FilterOptions: ProductFilter[] = [
       { value: "green", label: "Green", checked: false, color: "#4CB82A" },
       {
         value: "lightgray",
-        label: "L. Gray",
+        label: "Light Gray",
         checked: false,
-        color: "#D7D7D7 ",
+        color: "#D7D7D7",
       },
       { value: "gray", label: "Gray", checked: false, color: "#A0A0A0" },
       {
         value: "darkgray",
-        label: "D. Gray",
+        label: "Dark Gray",
         checked: false,
         color: "#5D5D5D",
       },
       { value: "black", label: "Black", checked: false, color: "#000" },
     ],
   },
-
   {
     id: "size",
     name: "Size",
     options: [
-      { value: "Xs", label: "XS", checked: false },
+      { value: "xs", label: "XS", checked: false },
       { value: "s", label: "S", checked: false },
       { value: "m", label: "M", checked: false },
       { value: "l", label: "L", checked: false },
@@ -105,19 +94,6 @@ const FilterOptions: ProductFilter[] = [
       { value: "3xl", label: "3XL", checked: false },
     ],
   },
-  // {
-  //   id: "shoes size",
-  //   name: "Shoes Size",
-  //   options: [
-  //     { value: "6", label: "6", checked: false },
-  //     { value: "7", label: "7", checked: false },
-  //     { value: "8", label: "8", checked: false },
-  //     { value: "9", label: "9", checked: false },
-  //     { value: "10", label: "10", checked: false },
-  //     { value: "11", label: "11", checked: false },
-  //     { value: "12", label: "12", checked: false },
-  //   ],
-  // },
   {
     id: "by price",
     name: "By Price",

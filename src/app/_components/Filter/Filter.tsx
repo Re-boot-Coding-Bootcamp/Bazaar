@@ -154,37 +154,6 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
           </Disclosure>
         ))}
 
-        {/* shoes size filter */}
-        {shoesSizeFilters && (
-          <Disclosure as="div" className="border-t border-gray-200 py-4">
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-black hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{shoesSizeFilters.name}</span>
-                  <ChevronIcon isOpen={open} />
-                </Disclosure.Button>
-                <Disclosure.Panel className="pb-2 pt-4 text-sm text-black">
-                  <div className="grid grid-cols-3 gap-2 px-4">
-                    {shoesSizeFilters.options.map((option, idx) => (
-                      // custom checkbox
-                      <button
-                        key={idx}
-                        className={`rounded-md border px-4 py-2 ${
-                          option.checked ? "bg-black text-white" : "bg-white"
-                        }`}
-                        onClick={() =>
-                          handleFilterChange(shoesSizeFilters.id, option.value)
-                        }
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        )}
         {colorFilters && (
           <Disclosure as="div" className="border-t border-gray-200 py-4">
             {({ open }) => (
@@ -194,7 +163,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
                   <ChevronIcon isOpen={open} />
                 </Disclosure.Button>
                 <Disclosure.Panel className="pb-2 pt-4 text-sm text-black">
-                  <div className="ml-2 grid grid-cols-3 gap-1">
+                  <div className="ml-2 grid grid-cols-2 gap-1">
                     {colorFilters.options.map((option, idx) => (
                       <div
                         key={idx}
