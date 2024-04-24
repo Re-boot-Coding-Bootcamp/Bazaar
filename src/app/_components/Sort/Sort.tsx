@@ -36,7 +36,7 @@ const Sort = () => {
           onClick={toggleMobileSort}
         />
         {mobileSortOpen && (
-          <div className="absolute right-2 top-full z-10 mt-2 w-[170px] rounded-lg border bg-white shadow-xl">
+          <div className="absolute right-1 top-full z-10 mt-4 w-[170px] rounded-lg border bg-white shadow-xl">
             {sortOptions.map((option) => (
               <div
                 key={option.value}

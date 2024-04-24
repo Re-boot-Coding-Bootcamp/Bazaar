@@ -312,13 +312,13 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
                   <div className="mx-5 flex items-center justify-center gap-12">
                     <button
                       onClick={resetFilters}
-                      className="mt-4 w-[120px] rounded-lg bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
+                      className="mt-4 w-[120px] rounded-lg bg-black px-4 py-2 text-sm text-white active:scale-95"
                     >
                       Reset
                     </button>
                     <button
                       onClick={applyFiltersAndCloseDrawer}
-                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-gray-700 active:scale-95"
+                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-black active:scale-95"
                     >
                       Apply
                     </button>
