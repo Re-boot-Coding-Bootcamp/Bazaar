@@ -66,7 +66,16 @@ export const productRouter = createTRPCRouter({
           id: input.productId,
         },
         include: {
-          variants: true,
+          variants: {
+            include: {
+              images: {
+                select: {
+                  url: true,
+                },
+                take: 1,
+              },
+            },
+          },
         },
       });
     }),
