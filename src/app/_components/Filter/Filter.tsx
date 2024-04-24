@@ -275,7 +275,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
       {mobileButton && (
         <button onClick={toggleDialog} id="filter-button" className="md:hidden">
           <AdjustmentsHorizontalIcon
-            className="h-6 w-6 hover:text-gray-400"
+            className="h-7 w-7 hover:text-gray-400"
             aria-hidden="true"
           />
         </button>

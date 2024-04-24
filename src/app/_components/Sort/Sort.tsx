@@ -1,7 +1,7 @@
 "use client";
 
 import React, { type ChangeEvent, useState } from "react";
-import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
+import { ArrowsUpDownIcon } from "@heroicons/react/24/outline";
 
 const sortOptions = [
   { value: "price-low", label: "Price Low to High" },
@@ -31,8 +31,8 @@ const Sort = () => {
     <div className="flex w-fit cursor-pointer items-center gap-1 hover:border-black md:border-b  md:border-transparent">
       <div className="hidden font-bold md:flex">Sort:</div>
       <div className="relative md:hidden">
-        <EllipsisHorizontalCircleIcon
-          className="mr-2 h-6 w-6 hover:text-gray-400"
+        <ArrowsUpDownIcon
+          className="mr-2 h-7 w-7 hover:text-gray-400"
           onClick={toggleMobileSort}
         />
         {mobileSortOpen && (
