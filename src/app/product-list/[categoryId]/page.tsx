@@ -23,7 +23,7 @@ export default async function ProductListForCategoryPage({
     : (await api.category.getCategoryById({ id: categoryId }))?.name ?? "";
 
   return (
-    <div className="flex max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full max-w-screen-xl flex-col gap-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
         className="ml-4 flex items-center justify-between md:ml-0"
@@ -36,11 +36,8 @@ export default async function ProductListForCategoryPage({
           <Sort />
         </div>
       </div>
-      <div
-        id="product-grid-and-filter-container"
-        className="flex min-h-screen md:gap-4"
-      >
-        <div className="sticky top-0 max-h-[calc(100vh-120px)] overflow-y-auto md:min-w-[200px]">
+      <div id="product-grid-and-filter-container" className="flex md:gap-4">
+        <div className="sticky top-[148px] h-full md:min-w-[200px]">
           <Filter filters={FilterOptions} />
         </div>
         <div className="h-fit px-2 md:px-0">

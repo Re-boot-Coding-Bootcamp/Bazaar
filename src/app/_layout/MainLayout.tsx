@@ -13,7 +13,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
 
   return (
     <main id="main-container" className="flex min-h-screen flex-col">
-      <div id="navbar-container" className="w-full">
+      <div id="navbar-container" className="sticky top-0 z-20 h-full w-full">
         <MobileNavbar categories={categories} />
         <DesktopNavbar categories={categories} />
       </div>
