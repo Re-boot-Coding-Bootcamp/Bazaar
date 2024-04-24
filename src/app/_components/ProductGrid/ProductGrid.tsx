@@ -20,7 +20,7 @@ const ProductGrid = ({
   });
 
   return (
-    <div className="grid grid-cols-1 items-stretch justify-stretch gap-4 p-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {isLoading
         ? Array.from({ length: 8 }, (_, index) => (
             <ProductCard key={index} loadingOnly={true} />

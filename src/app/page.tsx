@@ -89,7 +89,7 @@ export default function HomePage() {
 
         <div
           id="top-sellers"
-          className="grid max-w-screen-xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+          className="grid max-w-screen-xl grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
           {[
             "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/1-white-hat.png",

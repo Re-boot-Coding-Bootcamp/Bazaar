@@ -12,12 +12,15 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
   const categories = await api.category.getAllCategories();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main id="main-container" className="flex min-h-screen flex-col">
       <div id="navbar-container" className="w-full">
         <MobileNavbar categories={categories} />
         <DesktopNavbar categories={categories} />
       </div>
-      <div id="content-container" className="w-full">
+      <div
+        id="content-container"
+        className="flex w-full flex-grow flex-col items-center"
+      >
         {children}
       </div>
       <div id="footer-container" className="w-full">

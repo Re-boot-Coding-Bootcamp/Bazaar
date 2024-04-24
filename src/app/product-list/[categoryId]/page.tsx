@@ -12,7 +12,7 @@ export default async function ProductListForCategoryPage({
   });
 
   return (
-    <div className="flex w-full flex-col items-center px-4">
+    <div className="max-w-screen-xl">
       <p>ProductListPage - Shop all</p>
       <div className="w-full max-w-screen-xl" id="product-grid-container">
         <ProductGrid products={products} />
