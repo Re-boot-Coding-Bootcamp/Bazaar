@@ -1,65 +1,111 @@
-import Link from "next/link";
+"use client";
 
-import { CreatePost } from "~/app/_components/create-post";
-import { api } from "~/trpc/server";
+import { Carousel, ProductCard } from "./_components";
 
-export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
-        <div className="flex flex-col items-center gap-2">
-          <p className="text-2xl text-white">
-            {hello ? hello.greeting : "Loading tRPC query..."}
-          </p>
+    <>
+      <Carousel
+        data={[
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-2.png",
+            overlayText: (
+              <>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "left-top",
+          },
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-3.png",
+            overlayText: (
+              <>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "right-top",
+          },
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-4.png",
+            overlayText: (
+              <>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "left-bottom",
+          },
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-5.png",
+            overlayText: (
+              <>
+                <p className="w-96">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "right-bottom",
+          },
+          {
+            image:
+              "https://murad-public-files.s3.amazonaws.com/bazaar/bg-1.png",
+            overlayText: (
+              <>
+                <p className="w-96 md:w-full">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Voluptas doloribus quidem ratione aperiam at officiis dolorem,
+                  aut veniam sequi.
+                </p>
+              </>
+            ),
+            overlayPosition: "center",
+          },
+        ]}
+      />
+      <div
+        id="top-sellers-container"
+        className="my-8 flex w-full flex-col items-center gap-4 px-4"
+      >
+        <div className="flex w-full max-w-screen-xl justify-center md:justify-start">
+          <h1 className="text-3xl font-bold">Top Sellers</h1>
         </div>
 
-        <CrudShowcase />
+        <div
+          id="top-sellers"
+          className="grid max-w-screen-xl grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+        >
+          {[
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/1-white-hat.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/7-simple-t-shirt-blue.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/9-pen.png",
+            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/20-hoodie-green.png",
+          ].map((imageUrl, index) => (
+            <ProductCard
+              key={`top-seller-card-${index + 1}`}
+              imageUrl={imageUrl}
+              productName={`Product ${index + 1}`}
+              price={24.99}
+            />
+          ))}
+        </div>
       </div>
-    </main>
-  );
-}
-
-async function CrudShowcase() {
-  const latestPost = await api.post.getLatest();
-
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
-
-      <CreatePost />
-    </div>
+    </>
   );
 }
