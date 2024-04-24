@@ -40,7 +40,7 @@ export default async function ProductListForCategoryPage({
         id="product-grid-and-filter-container"
         className="flex min-h-screen md:gap-4"
       >
-        <div className="sticky top-0 max-h-[calc(100vh-20px)] overflow-y-auto md:min-w-[200px]">
+        <div className="sticky top-0 max-h-[calc(100vh-120px)] overflow-y-auto md:min-w-[200px]">
           <Filter filters={FilterOptions} />
         </div>
         <div className="h-fit px-2 md:px-0">
