@@ -273,23 +273,17 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
       <button
         onClick={toggleDialog}
         id="filter-button"
-        className="fixed right-5 top-8 inline-flex items-center justify-center rounded-full border border-black px-3 py-1 font-medium text-black hover:border-gray-500 active:scale-95 md:hidden"
+        className="fixed right-5 top-8 md:hidden"
       >
         <AdjustmentsHorizontalIcon
-          className="mr-2 h-6 w-6"
+          className="mr-2 h-6 w-6  hover:text-gray-400"
           aria-hidden="true"
         />
-        Filter
       </button>
 
       {/* drawer effect  */}
       <Transition.Root show={isDialogOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={toggleDialog}
-          style={{ fontFamily: "roboto" }}
-        >
+        <Dialog as="div" className="relative z-10" onClose={toggleDialog}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
