@@ -98,7 +98,7 @@ export default function HomePage() {
             "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/20-hoodie-green.png",
           ].map((imageUrl, index) => (
             <ProductCard
-              key={`top-seller-${index + 1}`}
+              key={`top-seller-card-${index + 1}`}
               imageUrl={imageUrl}
               productName={`Product ${index + 1}`}
               price={24.99}
