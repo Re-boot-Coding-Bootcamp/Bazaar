@@ -54,4 +54,29 @@ export const productRouter = createTRPCRouter({
         },
       });
     }),
+  getProductDetails: publicProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.product.findUnique({
+        where: {
+          id: input.productId,
+        },
+        include: {
+          variants: {
+            include: {
+              images: {
+                select: {
+                  url: true,
+                },
+                take: 1,
+              },
+            },
+          },
+        },
+      });
+    }),
 });
