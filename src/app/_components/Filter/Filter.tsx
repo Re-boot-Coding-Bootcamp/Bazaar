@@ -38,7 +38,10 @@ const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
   );
 };
 
-export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
+export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
+  filters: initialFilters,
+  mobileButton = false,
+}) => {
   const [filters, setFilters] = useState(initialFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -268,18 +271,15 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
   // mobile UI
   return (
-    <div>
-      {/* filter button for mobile */}
-      <button
-        onClick={toggleDialog}
-        id="filter-button"
-        className="fixed right-5 top-8 md:hidden"
-      >
-        <AdjustmentsHorizontalIcon
-          className="mr-2 h-6 w-6  hover:text-gray-400"
-          aria-hidden="true"
-        />
-      </button>
+    <>
+      {mobileButton && (
+        <button onClick={toggleDialog} id="filter-button" className="md:hidden">
+          <AdjustmentsHorizontalIcon
+            className="h-6 w-6 hover:text-gray-400"
+            aria-hidden="true"
+          />
+        </button>
+      )}
 
       {/* drawer effect  */}
       <Transition.Root show={isDialogOpen} as={Fragment}>
@@ -329,7 +329,7 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
           </div>
         </Dialog>
       </Transition.Root>
-      {!isDialogOpen && <>{renderFilters()}</>}
-    </div>
+      {!isDialogOpen && mobileButton === false && <>{renderFilters()}</>}
+    </>
   );
 };

@@ -31,14 +31,17 @@ export default async function ProductListForCategoryPage({
         <BreadCrumb
           items={[{ text: "Home", href: "/" }, { text: categoryName }]}
         />
-        <Sort />
+        <div className="flex items-center justify-center gap-4">
+          <Filter filters={FilterOptions} mobileButton={true} />
+          <Sort />
+        </div>
       </div>
       <div
         id="product-grid-and-filter-container"
         className="flex min-h-screen md:gap-4"
       >
         <div className="sticky top-0 max-h-[calc(100vh-20px)] overflow-y-auto md:min-w-[200px]">
-          <Filter filters={FilterOptions} />
+          <Filter filters={FilterOptions} mobileButton={true} />
         </div>
         <div className="h-fit px-2 md:px-0">
           <ProductGrid products={products} />
