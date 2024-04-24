@@ -11,11 +11,72 @@ type Story = StoryObj<typeof meta>;
 
 export const Primary: Story = {
   args: {
-    height: "500px",
-    images: [
-      "https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      "https://images.unsplash.com/photo-1511300636408-a63a89df3482?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    data: [
+      {
+        image: "https://murad-public-files.s3.amazonaws.com/bazaar/bg-2.png",
+        overlayText: (
+          <>
+            <p className="w-96">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              doloribus quidem ratione aperiam at officiis dolorem, aut veniam
+              sequi.
+            </p>
+          </>
+        ),
+        overlayPosition: "left-top",
+      },
+      {
+        image: "https://murad-public-files.s3.amazonaws.com/bazaar/bg-3.png",
+        overlayText: (
+          <>
+            <p className="w-96">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              doloribus quidem ratione aperiam at officiis dolorem, aut veniam
+              sequi.
+            </p>
+          </>
+        ),
+        overlayPosition: "right-top",
+      },
+      {
+        image: "https://murad-public-files.s3.amazonaws.com/bazaar/bg-4.png",
+        overlayText: (
+          <>
+            <p className="w-96">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              doloribus quidem ratione aperiam at officiis dolorem, aut veniam
+              sequi.
+            </p>
+          </>
+        ),
+        overlayPosition: "left-bottom",
+      },
+      {
+        image: "https://murad-public-files.s3.amazonaws.com/bazaar/bg-5.png",
+        overlayText: (
+          <>
+            <p className="w-96">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              doloribus quidem ratione aperiam at officiis dolorem, aut veniam
+              sequi.
+            </p>
+          </>
+        ),
+        overlayPosition: "right-bottom",
+      },
+      {
+        image: "https://murad-public-files.s3.amazonaws.com/bazaar/bg-1.png",
+        overlayText: (
+          <>
+            <p className="w-96 md:w-full">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
+              doloribus quidem ratione aperiam at officiis dolorem, aut veniam
+              sequi.
+            </p>
+          </>
+        ),
+        overlayPosition: "center",
+      },
     ],
   },
 };
