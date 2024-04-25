@@ -48,7 +48,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
   const selectedImage = imageUrls[selectedImageIndex] ?? "defaultImageUrl";
 
   return (
-    <div className="grid md:flex md:h-screen md:w-screen md:items-center md:justify-center">
+    <div className="grid w-full md:flex md:h-full md:w-fit md:items-center md:justify-center">
       <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
         {imageUrls.map((url, index) => (
           <img
@@ -63,12 +63,12 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       </div>
 
       {!isModalOpen && (
-        <div className="relative md:m-0 md:max-h-[60vh] md:w-auto">
+        <div className="relative md:m-0 md:h-auto md:w-full">
           <img
             loading="lazy"
             src={selectedImage}
             alt="Selected"
-            className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
+            className="mb-4 aspect-square w-full cursor-pointer rounded-lg object-contain md:m-0"
             onClick={toggleModal}
           />
           <div className="absolute bottom-4 right-1 flex space-x-2 p-3 md:bottom-1">

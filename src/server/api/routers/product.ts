@@ -57,22 +57,31 @@ export const productRouter = createTRPCRouter({
   getProductDetails: publicProcedure
     .input(
       z.object({
-        productId: z.string(),
+        productVariantId: z.string(),
       }),
     )
     .query(({ ctx, input }) => {
-      return ctx.db.product.findUnique({
+      return ctx.db.productVariant.findUnique({
         where: {
-          id: input.productId,
+          id: input.productVariantId,
         },
-        include: {
-          variants: {
+        select: {
+          product: {
             include: {
-              images: {
+              category: {
                 select: {
-                  url: true,
+                  name: true,
                 },
-                take: 1,
+              },
+              variants: {
+                include: {
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                },
               },
             },
           },
