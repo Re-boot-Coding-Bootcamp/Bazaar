@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { uniqBy } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
+
+const STORAGEFAVORITEKEY = "favoriteProducts";
 
 export default function ProductDetailsPage({
   params,
@@ -19,6 +24,26 @@ export default function ProductDetailsPage({
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     params.productVariantId,
   );
+
+  const [favoriteProduct, setFavoriteProduct] = useState(false);
+
+  type myObject = {
+    selectedVariantId: string;
+  };
+
+  useEffect(() => {
+    const localData = window.localStorage.getItem(STORAGEFAVORITEKEY);
+    if (localData) {
+      const parsedData: myObject[] = JSON.parse(localData);
+      const checkLocalData = parsedData.filter((item) => {
+        return item.selectedVariantId === selectedVariantId
+      })
+      
+      if (checkLocalData) {
+        setFavoriteProduct(true);
+      }
+    }
+  }, [selectedVariantId]);
 
   if (isFetchingProductDetails) {
     // TODO: loading screen
@@ -41,6 +66,39 @@ export default function ProductDetailsPage({
   const imageUrls = uniqueColorVariants.map(
     (variant) => variant.images[0]?.url ?? "",
   );
+
+  const handleFavorited = () => {
+    const localData = window.localStorage.getItem(STORAGEFAVORITEKEY);
+    let parsedLocalData: myObject[];
+    if (!favoriteProduct && !localData) {
+      window.localStorage.setItem(
+        STORAGEFAVORITEKEY,
+        JSON.stringify([{ selectedVariantId: selectedVariantId }]),
+      );
+      setFavoriteProduct(true);
+    }
+    if (!favoriteProduct && localData) {
+      parsedLocalData = JSON.parse(localData);
+      window.localStorage.setItem(
+        STORAGEFAVORITEKEY,
+        JSON.stringify([
+          ...parsedLocalData,
+          { selectedVariantId: selectedVariantId },
+        ]),
+      );
+      setFavoriteProduct(true);
+    }
+
+    if (favoriteProduct && localData) {
+      parsedLocalData = JSON.parse(localData);
+      const newData = parsedLocalData.filter((item) => {
+        return !(selectedVariantId === item.selectedVariantId);
+      });
+      window.localStorage.setItem(STORAGEFAVORITEKEY, JSON.stringify(newData));
+      setFavoriteProduct(false);
+      console.log(newData);
+    }
+  };
 
   return (
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
@@ -102,7 +160,19 @@ export default function ProductDetailsPage({
 
           <div className="actions-container flex flex-col gap-1">
             <Button>Add to cart</Button>
-            <Button variant="outline">Add to favorites</Button>
+            <Button
+              variant="outline"
+              endIcon={
+                favoriteProduct ? (
+                  <HeartIconSolid className="text-red-500" />
+                ) : (
+                  <HeartIconOutline />
+                )
+              }
+              onClick={handleFavorited}
+            >
+              Add to favorites
+            </Button>
           </div>
         </div>
       </div>
