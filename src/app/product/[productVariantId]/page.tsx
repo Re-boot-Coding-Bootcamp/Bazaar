@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { HeartIcon } from "@heroicons/react/24/outline";
 import { uniqBy } from "lodash";
 import { useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
@@ -19,6 +20,8 @@ export default function ProductDetailsPage({
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
     params.productVariantId,
   );
+
+  const [selectedSize, setSelectedSize] = useState("XS");
 
   if (isFetchingProductDetails) {
     // TODO: loading screen
@@ -41,6 +44,8 @@ export default function ProductDetailsPage({
   const imageUrls = uniqueColorVariants.map(
     (variant) => variant.images[0]?.url ?? "",
   );
+
+  const uniqueSizeVariantas = uniqBy(product.variants, "size");
 
   return (
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
@@ -69,15 +74,22 @@ export default function ProductDetailsPage({
           <ImageGallery imageUrls={imageUrls} />
         </div>
         <div className="flex-grow">
-          <p>{product.name}</p>
-          <p>{product.description}</p>
-          <p>{selectedVariant?.price}</p>
-          <p>{selectedVariant?.color}</p>
+          <p className="text-xl font-bold">{product.name}</p>
+          <p className="mt-2 text-gray-600">{product.description}</p>
+          <p className="mt-4 text-lg font-semibold">
+            {selectedVariant?.price.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </p>
           <p>{selectedVariant?.size}</p>
 
-          <div id="color-options-contaner">
-            <p>Colors:</p>
-            <div className="flex gap-4">
+          <div className="mt-4" id="color-options-contaner">
+            <div className="felx-row flex gap-1">
+              <p className="text-lg font-semibold">Colors:</p>
+              <p className="text-lg font-semibold">{selectedVariant?.color}</p>
+            </div>
+            <div className="mt-2 flex gap-4">
               {uniqueColorVariants.map((variant) => {
                 return (
                   <button
@@ -85,7 +97,7 @@ export default function ProductDetailsPage({
                     onClick={() => setSelectedVariantId(variant.id)}
                   >
                     <div
-                      className={`border-[1px] ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
+                      className={`border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
                     >
                       <img
                         src={variant.images[0]?.url}
@@ -100,7 +112,24 @@ export default function ProductDetailsPage({
             </div>
           </div>
 
-          <div className="actions-container flex flex-col gap-1">
+          <div className="mt-4" id="size-options-container">
+            <p className="text-lg font-semibold">Select size</p>
+            <div className="mt-2 flex gap-2">
+              {uniqueSizeVariantas.map((variant) => {
+                return (
+                  <button
+                    key={variant.id}
+                    onClick={() => setSelectedSize(variant.size)}
+                    className={`h-10 w-12 border-2 ${variant.size === selectedSize ? "border-black" : "border-transparent"} rounded`}
+                  >
+                    {variant.size}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="actions-container mt-8 flex flex-col gap-4">
             <Button>Add to cart</Button>
             <Button variant="outline">Add to favorites</Button>
           </div>
