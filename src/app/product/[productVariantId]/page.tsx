@@ -40,12 +40,11 @@ export default function ProductDetailsPage({
   );
 
   const uniqueColorVariants = uniqBy(product.variants, "color");
+  const uniqueSizeVariantas = uniqBy(product.variants, "size");
 
   const imageUrls = uniqueColorVariants.map(
     (variant) => variant.images[0]?.url ?? "",
   );
-
-  const uniqueSizeVariantas = uniqBy(product.variants, "size");
 
   return (
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">

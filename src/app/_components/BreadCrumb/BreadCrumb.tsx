@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { Fragment } from "react";
 
 type Item = {
   text: string;
@@ -17,8 +17,8 @@ const BreadCrumb = ({ items }: BreadCrumbProps) => (
         const isLastItem = index === items.length - 1;
 
         return (
-          <>
-            <li key={`${item.text}-${index}`} className="flex items-center">
+          <Fragment key={`${item.text}-${index}`}>
+            <li className="flex items-center">
               <Link
                 href={item.href ?? "#"}
                 className={`pointer font-medium ${isLastItem ? "pointer-events-none text-gray-500" : "cursor-pointer font-semibold text-gray-950 underline-offset-2 hover:underline"}`}
@@ -29,7 +29,7 @@ const BreadCrumb = ({ items }: BreadCrumbProps) => (
               </Link>
             </li>
             {index !== items.length - 1 && <>/</>}
-          </>
+          </Fragment>
         );
       })}
     </ol>
