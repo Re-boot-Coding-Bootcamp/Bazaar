@@ -29,6 +29,9 @@ export const productRouter = createTRPCRouter({
         },
         include: {
           variants: {
+            orderBy: {
+              createdAt: "desc",
+            },
             where: {
               size: size,
               color: color,
@@ -49,6 +52,7 @@ export const productRouter = createTRPCRouter({
                 },
                 take: 1,
               },
+              createdAt: true,
             },
           },
         },

@@ -6,23 +6,13 @@ import {
   ChevronDownIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
-
-export interface FilterOption {
-  value: string;
-  label: string;
-  checked: boolean;
-  color?: string;
-}
-
-export interface ProductFilter {
-  id: string;
-  name: string;
-  options: FilterOption[];
-}
-
-interface FilterProps {
-  filters: ProductFilter[];
-}
+import {
+  resetFilters,
+  selectFilters,
+  updateFilters,
+  useAppDispatch,
+  useAppSelector,
+} from "~/lib";
 
 interface ChevronIconProps {
   isOpen: boolean;
@@ -38,36 +28,19 @@ const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
   );
 };
 
-export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
-  filters: initialFilters,
+export const Filter: React.FC<{ mobileButton?: boolean }> = ({
   mobileButton = false,
 }) => {
-  const [filters, setFilters] = useState(initialFilters);
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector(selectFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleFilterChange = useCallback(
     (filterId: string, optionValue: string) => {
-      setFilters((currentFilters) =>
-        currentFilters.map((filter) =>
-          filter.id === filterId
-            ? {
-                ...filter,
-                options: filter.options.map((option) =>
-                  option.value === optionValue
-                    ? { ...option, checked: !option.checked }
-                    : option,
-                ),
-              }
-            : filter,
-        ),
-      );
+      dispatch(updateFilters({ filterId, optionValue }));
     },
-    [],
+    [dispatch],
   );
-
-  const resetFilters = useCallback(() => {
-    setFilters(initialFilters);
-  }, [initialFilters]);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -79,9 +52,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
 
   function renderFilters() {
     const colorFilters = filters.find((filter) => filter.id === "color");
-    const shoesSizeFilters = filters.find(
-      (filter) => filter.id === "shoes size",
-    );
+
     const otherFilters = filters.filter(
       (filter) => filter.id !== "color" && filter.id !== "shoes size",
     );
@@ -89,8 +60,6 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
     return (
       <div className={`${isDialogOpen ? "block" : "hidden md:block"}`}>
         <h1 className="mb-4 text-xl font-bold text-gray-900">Filter</h1>
-
-        {/* colorFilter  */}
 
         {/* filter for category, gender, size, by price */}
         {otherFilters.map((filter, idx) => (
@@ -197,14 +166,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
                                     d="M5 11l2 2 6-6 2 2-8 8-4-4"
                                     clipRule="evenodd"
                                     fill={
-                                      [
-                                        "white",
-                                        "beige",
-                                        "orange",
-                                        "yellow",
-                                      ].includes(option.value)
-                                        ? "black"
-                                        : "currentColor"
+                                      option.checkmarkColor ?? "currentColor"
                                     }
                                   />
                                 </svg>
@@ -229,7 +191,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
 
         {/* reset button for desktop */}
         <button
-          onClick={resetFilters}
+          onClick={() => dispatch(resetFilters())}
           className={`relative ml-2.5 mt-10 hidden h-10 overflow-hidden rounded-full bg-black px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800 md:block`}
         >
           Reset
@@ -280,7 +242,7 @@ export const Filter: React.FC<FilterProps & { mobileButton?: boolean }> = ({
                   {renderFilters()}
                   <div className="mx-5 flex items-center justify-center gap-12">
                     <button
-                      onClick={resetFilters}
+                      onClick={() => dispatch(resetFilters())}
                       className="mt-4 w-[120px] rounded-lg bg-black px-4 py-2 text-sm text-white active:scale-95"
                     >
                       Reset
