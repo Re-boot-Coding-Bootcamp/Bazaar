@@ -2,4 +2,7 @@ const LocalStorageKeys = {
   CART_ID: "bazaar-cartId",
 };
 
-export { LocalStorageKeys };
+const StorageFavoriteKey = "favoriteProducts";
+
+
+export { LocalStorageKeys, StorageFavoriteKey };

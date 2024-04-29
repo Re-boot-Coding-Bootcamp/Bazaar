@@ -7,15 +7,15 @@ import { uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
-
-const StorageFavoriteKey = "favoriteProducts";
+import { StorageFavoriteKey } from "~/constants";
+import type { myFavorites } from "~/types";
 
 export default function ProductDetailsPage({
   params,
 }: {
   params: { productVariantId: string };
 }) {
-  const { data: productData, isFetching: isFetchingProductDetails } =
+  const { data: productData, isFetching: isFetchingProductDetails, refetch } =
     api.product.getProductDetails.useQuery({
       productVariantId: params.productVariantId,
     });
@@ -26,16 +26,12 @@ export default function ProductDetailsPage({
 
   const [favoriteProduct, setFavoriteProduct] = useState(false);
 
-  type myObject = {
-    selectedVariantId: string;
-  };
-
   useEffect(() => {
     const keys = Object.keys(localStorage).includes(StorageFavoriteKey);
     if (keys) {
       const localDataParsed = JSON.parse(
         window.localStorage.getItem(StorageFavoriteKey) ?? "",
-      ) as myObject[];
+      ) as myFavorites[];
       const checkLocalData = localDataParsed.filter((item) => {
         return item.selectedVariantId === selectedVariantId;
       });
@@ -74,7 +70,7 @@ export default function ProductDetailsPage({
   const handleFavorited = () => {
     const localDataParsed = JSON.parse(
       window.localStorage.getItem(StorageFavoriteKey) ?? "",
-    ) as myObject[];
+    ) as myFavorites[];
     if (!favoriteProduct) {
       window.localStorage.setItem(
         StorageFavoriteKey,
@@ -91,7 +87,6 @@ export default function ProductDetailsPage({
       });
       window.localStorage.setItem(StorageFavoriteKey, JSON.stringify(newData));
       setFavoriteProduct(false);
-      console.log(newData);
     }
   };
 
