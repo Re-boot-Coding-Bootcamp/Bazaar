@@ -19,7 +19,7 @@ const MobileNavbar = ({ categories }: MobileNavbarProps): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <nav className="flex w-full items-center justify-between px-4 text-black shadow-md lg:hidden">
+    <nav className="flex w-full items-center justify-between bg-white px-4 text-black shadow-md lg:hidden">
       <MobileSearchBar
         onSubmit={(searchTerm: string) => {
           alert(`Searching for ${searchTerm}...`);
@@ -68,7 +68,7 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
   return (
     <div
       id="mobile-drawer"
-      className={`fixed right-0 top-0 z-30 min-h-dvh w-full transform shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
+      className={`fixed right-0 top-0 z-30 min-h-dvh w-full transform bg-white shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
     >
       <div
         id="header"

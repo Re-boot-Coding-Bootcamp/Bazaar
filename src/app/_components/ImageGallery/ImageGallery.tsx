@@ -1,16 +1,26 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ImageGalleryProps {
   imageUrls: string[];
+  selectedImageIndex: number | undefined;
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+const ImageGallery: React.FC<ImageGalleryProps> = ({
+  imageUrls,
+  selectedImageIndex: externalSelectedImageIndex,
+}) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(
+    externalSelectedImageIndex ?? 0,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setSelectedImageIndex(externalSelectedImageIndex ?? 0);
+  }, [externalSelectedImageIndex]);
 
   const navigateImage = (direction: "left" | "right") => {
     setSelectedImageIndex((prev) => {
@@ -56,14 +66,16 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             key={index}
             src={url}
             alt={`Thumbnail ${index + 1}`}
-            className="h-[125px] w-[125px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px]"
+            className={`h-[100px] w-[100px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px] ${
+              index === selectedImageIndex ? "border-2 border-black" : ""
+            }`}
             onMouseEnter={() => handleThumbnailHover(index)}
           />
         ))}
       </div>
 
       {!isModalOpen && (
-        <div className="relative md:m-0 md:h-auto md:w-full">
+        <div className="relative md:m-0 md:w-2/3">
           <img
             loading="lazy"
             src={selectedImage}
@@ -90,7 +102,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       )}
       {isModalOpen && (
         <div
-          className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-white"
+          className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-white"
           onClick={() => setIsModalOpen(false)}
         >
           <div className="max-w-screen relative flex max-h-screen items-center justify-center">
