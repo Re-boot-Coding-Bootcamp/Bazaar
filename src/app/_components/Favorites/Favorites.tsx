@@ -3,13 +3,13 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { StorageFavoriteKey } from "~/constants";
-import type { myFavorites } from "~/types";
+import type { MyFavorites } from "~/types";
 
 const Favorites = () => {
   const initialState = () => {
     const localData = window.localStorage.getItem(StorageFavoriteKey);
     if (localData) {
-      const localParsedData = JSON.parse(localData) as myFavorites[];
+      const localParsedData = JSON.parse(localData) as MyFavorites[];
       return localParsedData.length;
     } else {
       return 0;
@@ -20,7 +20,7 @@ const Favorites = () => {
   useEffect(() => {
     const localData = window.localStorage.getItem(StorageFavoriteKey);
     if (localData) {
-      const localParsedData = JSON.parse(localData) as myFavorites[];
+      const localParsedData = JSON.parse(localData) as MyFavorites[];
       setNumOfFavorites(localParsedData.length);
     }
   }, []);

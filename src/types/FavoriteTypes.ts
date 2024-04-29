@@ -1,4 +1,4 @@
-export type myFavorites = {
+export type MyFavorites = {
   selectedVariantId: string;
   imageUrl: string;
   productName: string;

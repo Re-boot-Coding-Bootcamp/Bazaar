@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
 import { StorageFavoriteKey } from "~/constants";
-import type { myFavorites } from "~/types";
+import type { MyFavorites } from "~/types";
 
 export default function ProductDetailsPage({
   params,
@@ -29,7 +29,7 @@ export default function ProductDetailsPage({
   useEffect(() => {
     const localData = window.localStorage.getItem(StorageFavoriteKey);
     if (localData) {
-      const localParsedData = JSON.parse(localData) as myFavorites[];
+      const localParsedData = JSON.parse(localData) as MyFavorites[];
       const checkLocalData = localParsedData.filter((item) => {
         return item.selectedVariantId === selectedVariantId;
       });
@@ -68,7 +68,7 @@ export default function ProductDetailsPage({
   const handleFavorited = () => {
     const localParsedData = JSON.parse(
       window.localStorage.getItem(StorageFavoriteKey) ?? "",
-    ) as myFavorites[];
+    ) as MyFavorites[];
     if (!favoriteProduct) {
       window.localStorage.setItem(
         StorageFavoriteKey,
