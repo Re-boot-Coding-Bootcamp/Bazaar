@@ -7,18 +7,22 @@ import type { myFavorites } from "~/types";
 
 const Favorites = () => {
   const initialState = () => {
-    const favorites = JSON.parse(
-      window.localStorage.getItem(StorageFavoriteKey) ?? "",
-    ) as myFavorites[];
-    return favorites.length;
+    const localData = window.localStorage.getItem(StorageFavoriteKey);
+    if (localData) {
+      const localParsedData = JSON.parse(localData) as myFavorites[];
+      return localParsedData.length;
+    } else {
+      return 0;
+    }
   };
   const [numOfFavorites, setNumOfFavorites] = useState(initialState);
 
   useEffect(() => {
-      const favorites = JSON.parse(
-        window.localStorage.getItem(StorageFavoriteKey) ?? "",
-      ) as myFavorites[];
-      setNumOfFavorites(favorites.length);   
+    const localData = window.localStorage.getItem(StorageFavoriteKey);
+    if (localData) {
+      const localParsedData = JSON.parse(localData) as myFavorites[];
+      setNumOfFavorites(localParsedData.length);
+    }
   }, []);
 
   return (

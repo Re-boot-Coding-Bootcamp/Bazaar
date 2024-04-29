@@ -15,7 +15,7 @@ export default function ProductDetailsPage({
 }: {
   params: { productVariantId: string };
 }) {
-  const { data: productData, isFetching: isFetchingProductDetails, refetch } =
+  const { data: productData, isFetching: isFetchingProductDetails } =
     api.product.getProductDetails.useQuery({
       productVariantId: params.productVariantId,
     });
@@ -27,12 +27,10 @@ export default function ProductDetailsPage({
   const [favoriteProduct, setFavoriteProduct] = useState(false);
 
   useEffect(() => {
-    const keys = Object.keys(localStorage).includes(StorageFavoriteKey);
-    if (keys) {
-      const localDataParsed = JSON.parse(
-        window.localStorage.getItem(StorageFavoriteKey) ?? "",
-      ) as myFavorites[];
-      const checkLocalData = localDataParsed.filter((item) => {
+    const localData = window.localStorage.getItem(StorageFavoriteKey);
+    if (localData) {
+      const localParsedData = JSON.parse(localData) as myFavorites[];
+      const checkLocalData = localParsedData.filter((item) => {
         return item.selectedVariantId === selectedVariantId;
       });
       if (checkLocalData.length === 1) {
@@ -68,21 +66,27 @@ export default function ProductDetailsPage({
   );
 
   const handleFavorited = () => {
-    const localDataParsed = JSON.parse(
+    const localParsedData = JSON.parse(
       window.localStorage.getItem(StorageFavoriteKey) ?? "",
     ) as myFavorites[];
     if (!favoriteProduct) {
       window.localStorage.setItem(
         StorageFavoriteKey,
         JSON.stringify([
-          ...localDataParsed,
-          { selectedVariantId: selectedVariantId },
+          ...localParsedData,
+          {
+            selectedVariantId: selectedVariantId,
+            imageUrl: selectedVariant?.images[0]?.url,
+            productName: product.name,
+            price: selectedVariant?.price,
+            productUrl: `/product/${selectedVariantId}`,
+          },
         ]),
       );
       setFavoriteProduct(true);
     }
     if (favoriteProduct) {
-      const newData = localDataParsed.filter((item) => {
+      const newData = localParsedData.filter((item) => {
         return !(selectedVariantId === item.selectedVariantId);
       });
       window.localStorage.setItem(StorageFavoriteKey, JSON.stringify(newData));
