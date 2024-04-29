@@ -1,15 +1,19 @@
 "use client";
 
-import { BreadCrumb, ProductGrid } from "../_components";
-import { StorageFavoriteKey } from "~/constants";
-import type { MyFavorites } from "~/types";
+import { BreadCrumb, ProductCard } from "../_components";
+import { LocalStorageKeys } from "~/constants";
+import type { FavoritedItem } from "~/types";
 import { useEffect, useState } from "react";
+
 export default function FavoritesPage() {
-  const [favoriteData, setFavoriteData] = useState<MyFavorites[]>([]);
+  const [favoriteData, setFavoriteData] = useState<FavoritedItem[]>([]);
+
   useEffect(() => {
-    const localData = window.localStorage.getItem(StorageFavoriteKey);
+    const localData = window.localStorage.getItem(
+      LocalStorageKeys.FAVORITED_PRODUCTS,
+    );
     if (localData) {
-      const localParsedData = JSON.parse(localData) as MyFavorites[];
+      const localParsedData = JSON.parse(localData) as FavoritedItem[];
       setFavoriteData(localParsedData);
     }
   }, []);
@@ -26,7 +30,23 @@ export default function FavoritesPage() {
       <p className="text-gray-500">
         {favoriteData.length} {favoriteData.length === 1 ? "Item" : "Items"}
       </p>
-      <ProductGrid favoriteProducts={favoriteData} />
+      <div className="grid grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {favoriteData.length === 0 ? (
+          <p className="text-gray-500">No Results Found</p>
+        ) : (
+          favoriteData.map((item, index) => {
+            return (
+              <ProductCard
+                key={index}
+                imageUrl={item.imageUrl}
+                productName={item.productName}
+                price={item.price}
+                productUrl={item.productUrl}
+              />
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }

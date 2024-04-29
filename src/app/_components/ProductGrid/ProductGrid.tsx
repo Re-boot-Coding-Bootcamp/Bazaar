@@ -3,13 +3,11 @@
 import React, { useMemo } from "react";
 import { ProductCard } from "../ProductCard/ProductCard";
 import type { ActiveFilterKey, ProductGridItemType } from "~/types";
-import { uniqBy } from "lodash";
 import { isBefore } from "date-fns";
 import { selectFilters, selectSortBy, useAppSelector } from "~/lib";
 
 interface ProductGridProps {
-  products?: ProductGridItemType[];
-  favoriteProducts?: MyFavorites[];
+  products: ProductGridItemType[];
   isLoading?: boolean;
 }
 
@@ -24,7 +22,6 @@ const isWithinPriceRange = (price: number, priceRange: string) => {
 
 const ProductGrid = ({
   products,
-  favoriteProducts,
   isLoading = false,
 }: ProductGridProps): JSX.Element => {
   const allProductVariants = products.flatMap((product) =>

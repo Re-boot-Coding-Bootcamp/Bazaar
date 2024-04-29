@@ -7,8 +7,8 @@ import { uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
-import { StorageFavoriteKey } from "~/constants";
-import type { MyFavorites } from "~/types";
+import { LocalStorageKeys.FAVORITED_PRODUCTS } from "~/constants";
+import type { FavoritedItem } from "~/types";
 
 export default function ProductDetailsPage({
   params,
@@ -27,9 +27,9 @@ export default function ProductDetailsPage({
   const [favoriteProduct, setFavoriteProduct] = useState(false);
 
   useEffect(() => {
-    const localData = window.localStorage.getItem(StorageFavoriteKey);
+    const localData = window.localStorage.getItem(LocalStorageKeys.FAVORITED_PRODUCTS);
     if (localData) {
-      const localParsedData = JSON.parse(localData) as MyFavorites[];
+      const localParsedData = JSON.parse(localData) as FavoritedItem[];
       const checkLocalData = localParsedData.filter((item) => {
         return item.selectedVariantId === selectedVariantId;
       });
@@ -39,7 +39,7 @@ export default function ProductDetailsPage({
         setFavoriteProduct(false);
       }
     } else {
-      window.localStorage.setItem(StorageFavoriteKey, JSON.stringify([]));
+      window.localStorage.setItem(LocalStorageKeys.FAVORITED_PRODUCTS, JSON.stringify([]));
     }
   }, [selectedVariantId]);
 
@@ -71,11 +71,11 @@ export default function ProductDetailsPage({
 
   const handleFavorited = () => {
     const localParsedData = JSON.parse(
-      window.localStorage.getItem(StorageFavoriteKey) ?? "",
-    ) as MyFavorites[];
+      window.localStorage.getItem(LocalStorageKeys.FAVORITED_PRODUCTS) ?? "",
+    ) as FavoritedItem[];
     if (!favoriteProduct) {
       window.localStorage.setItem(
-        StorageFavoriteKey,
+        LocalStorageKeys.FAVORITED_PRODUCTS,
         JSON.stringify([
           ...localParsedData,
           {
@@ -93,7 +93,7 @@ export default function ProductDetailsPage({
       const newData = localParsedData.filter((item) => {
         return !(selectedVariantId === item.selectedVariantId);
       });
-      window.localStorage.setItem(StorageFavoriteKey, JSON.stringify(newData));
+      window.localStorage.setItem(LocalStorageKeys.FAVORITED_PRODUCTS, JSON.stringify(newData));
       setFavoriteProduct(false);
     }
   };
