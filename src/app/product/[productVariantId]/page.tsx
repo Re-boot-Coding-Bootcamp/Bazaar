@@ -43,6 +43,9 @@ export default function ProductDetailsPage({
     }
   }, [selectedVariantId]);
 
+  const [selectedSize, setSelectedSize] = useState<string>();
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>();
+
   if (isFetchingProductDetails) {
     // TODO: loading screen
     return <div>Loading...</div>;
@@ -60,6 +63,7 @@ export default function ProductDetailsPage({
   );
 
   const uniqueColorVariants = uniqBy(product.variants, "color");
+  const uniqueSizeVariantas = uniqBy(product.variants, "size");
 
   const imageUrls = uniqueColorVariants.map(
     (variant) => variant.images[0]?.url ?? "",
@@ -98,7 +102,7 @@ export default function ProductDetailsPage({
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
-        className="ml-4 flex items-center justify-between md:ml-0"
+        className="flex items-center justify-between"
       >
         <BreadCrumb
           items={[
@@ -115,29 +119,39 @@ export default function ProductDetailsPage({
       </div>
       <div
         id="product-details-container"
-        className="flex flex-col md:flex-row md:gap-4"
+        className="flex w-full flex-col gap-4 md:flex-row"
       >
-        <div className="min-w-2/3 w-full">
-          <ImageGallery imageUrls={imageUrls} />
-        </div>
+        <ImageGallery
+          imageUrls={imageUrls}
+          selectedImageIndex={selectedImageIndex}
+        />
         <div className="flex-grow">
-          <p>{product.name}</p>
-          <p>{product.description}</p>
-          <p>{selectedVariant?.price}</p>
-          <p>{selectedVariant?.color}</p>
-          <p>{selectedVariant?.size}</p>
+          <p className="text-xl font-bold">{product.name}</p>
+          <p className="mt-2 text-gray-600">{product.description}</p>
+          <p className="mt-4 text-lg font-semibold">
+            {selectedVariant?.price.toLocaleString("en-US", {
+              style: "currency",
+              currency: "USD",
+            })}
+          </p>
 
-          <div id="color-options-contaner">
-            <p>Colors:</p>
-            <div className="flex gap-4">
-              {uniqueColorVariants.map((variant) => {
+          <div className="mt-4" id="color-options-contaner">
+            <div className="felx-row flex gap-1">
+              <p className="text-lg font-semibold">Colors:</p>
+              <p className="text-lg font-semibold">{selectedVariant?.color}</p>
+            </div>
+            <div className="... mt-2 flex gap-4 truncate">
+              {uniqueColorVariants.map((variant, index) => {
                 return (
                   <button
                     key={variant.id}
-                    onClick={() => setSelectedVariantId(variant.id)}
+                    onClick={() => {
+                      setSelectedVariantId(variant.id);
+                      setSelectedImageIndex(index);
+                    }}
                   >
                     <div
-                      className={`border-[1px] ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
+                      className={`border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
                     >
                       <img
                         src={variant.images[0]?.url}
@@ -152,7 +166,24 @@ export default function ProductDetailsPage({
             </div>
           </div>
 
-          <div className="actions-container flex flex-col gap-1">
+          <div className="mt-4" id="size-options-container">
+            <p className="text-lg font-semibold">Select size</p>
+            <div className="mt-2 flex gap-2">
+              {uniqueSizeVariantas.map((variant) => {
+                return (
+                  <button
+                    key={variant.id}
+                    onClick={() => setSelectedSize(variant.size)}
+                    className={`h-10 w-12 border-2 ${variant.size === selectedSize ? "border-black" : "border-transparent"} rounded`}
+                  >
+                    {variant.size}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="actions-container mt-8 flex flex-col gap-4">
             <Button>Add to cart</Button>
             <Button
               variant="outline"
