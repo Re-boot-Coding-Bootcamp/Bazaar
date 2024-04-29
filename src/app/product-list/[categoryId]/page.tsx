@@ -20,7 +20,7 @@ export default async function ProductListForCategoryPage({
     <div className="flex h-full max-w-screen-xl flex-col gap-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
-        className="ml-4 flex items-center justify-between md:ml-0"
+        className="flex items-center justify-between"
       >
         <BreadCrumb
           items={[{ text: "Home", href: "/" }, { text: categoryName }]}

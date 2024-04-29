@@ -21,6 +21,7 @@ export default function ProductDetailsPage({
   );
 
   const [selectedSize, setSelectedSize] = useState<string>();
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number>();
 
   if (isFetchingProductDetails) {
     // TODO: loading screen
@@ -49,7 +50,7 @@ export default function ProductDetailsPage({
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
-        className="ml-4 flex items-center justify-between md:ml-0"
+        className="flex items-center justify-between"
       >
         <BreadCrumb
           items={[
@@ -66,12 +67,13 @@ export default function ProductDetailsPage({
       </div>
       <div
         id="product-details-container"
-        className="flex flex-col md:flex-row md:gap-4"
+        className="flex w-full flex-col gap-4 md:flex-row"
       >
-        <div className="min-w-2/3 w-full">
-          <ImageGallery imageUrls={imageUrls} />
-        </div>
-        <div className="mx-4 mt-4 flex-grow md:mx-0 md:mt-0">
+        <ImageGallery
+          imageUrls={imageUrls}
+          selectedImageIndex={selectedImageIndex}
+        />
+        <div className="flex-grow">
           <p className="text-xl font-bold">{product.name}</p>
           <p className="mt-2 text-gray-600">{product.description}</p>
           <p className="mt-4 text-lg font-semibold">
@@ -87,11 +89,14 @@ export default function ProductDetailsPage({
               <p className="text-lg font-semibold">{selectedVariant?.color}</p>
             </div>
             <div className="... mt-2 flex gap-4 truncate">
-              {uniqueColorVariants.map((variant) => {
+              {uniqueColorVariants.map((variant, index) => {
                 return (
                   <button
                     key={variant.id}
-                    onClick={() => setSelectedVariantId(variant.id)}
+                    onClick={() => {
+                      setSelectedVariantId(variant.id);
+                      setSelectedImageIndex(index);
+                    }}
                   >
                     <div
                       className={`border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}

@@ -19,7 +19,7 @@ const MainLayout = async ({ children }: MainLayoutProps) => {
       </div>
       <div
         id="content-container"
-        className="flex w-full flex-grow flex-col items-center"
+        className="flex w-full flex-grow flex-col items-center px-4"
       >
         {children}
       </div>

@@ -1,16 +1,26 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ImageGalleryProps {
   imageUrls: string[];
+  selectedImageIndex: number | undefined;
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+const ImageGallery: React.FC<ImageGalleryProps> = ({
+  imageUrls,
+  selectedImageIndex: externalSelectedImageIndex,
+}) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(
+    externalSelectedImageIndex ?? 0,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setSelectedImageIndex(externalSelectedImageIndex ?? 0);
+  }, [externalSelectedImageIndex]);
 
   const navigateImage = (direction: "left" | "right") => {
     setSelectedImageIndex((prev) => {
@@ -92,7 +102,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       )}
       {isModalOpen && (
         <div
-          className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-white"
+          className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-white"
           onClick={() => setIsModalOpen(false)}
         >
           <div className="max-w-screen relative flex max-h-screen items-center justify-center">
