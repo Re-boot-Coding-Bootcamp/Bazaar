@@ -56,7 +56,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             key={index}
             src={url}
             alt={`Thumbnail ${index + 1}`}
-            className={`h-[125px] w-[125px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px] ${
+            className={`h-[100px] w-[100px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px] ${
               index === selectedImageIndex ? "border-2 border-black" : ""
             }`}
             onMouseEnter={() => handleThumbnailHover(index)}
@@ -65,12 +65,12 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       </div>
 
       {!isModalOpen && (
-        <div className="relative md:m-0 md:h-auto md:w-full">
+        <div className="relative md:m-0 md:w-2/3">
           <img
             loading="lazy"
             src={selectedImage}
             alt="Selected"
-            className="max-h-md mb-4 aspect-square max-w-md cursor-pointer rounded-lg object-contain md:m-0"
+            className="mb-4 aspect-square w-full cursor-pointer rounded-lg object-contain md:m-0"
             onClick={toggleModal}
           />
           <div className="absolute bottom-4 right-1 flex space-x-2 p-3 md:bottom-1">

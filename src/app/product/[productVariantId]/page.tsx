@@ -71,7 +71,7 @@ export default function ProductDetailsPage({
         <div className="min-w-2/3 w-full">
           <ImageGallery imageUrls={imageUrls} />
         </div>
-        <div className="flex-grow">
+        <div className="mx-4 mt-4 flex-grow md:mx-0 md:mt-0">
           <p className="text-xl font-bold">{product.name}</p>
           <p className="mt-2 text-gray-600">{product.description}</p>
           <p className="mt-4 text-lg font-semibold">
@@ -86,7 +86,7 @@ export default function ProductDetailsPage({
               <p className="text-lg font-semibold">Colors:</p>
               <p className="text-lg font-semibold">{selectedVariant?.color}</p>
             </div>
-            <div className="mt-2 flex gap-4">
+            <div className="... mt-2 flex gap-4 truncate">
               {uniqueColorVariants.map((variant) => {
                 return (
                   <button
