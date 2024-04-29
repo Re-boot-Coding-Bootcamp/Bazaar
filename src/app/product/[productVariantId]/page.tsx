@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { HeartIcon } from "@heroicons/react/24/outline";
 import { uniqBy } from "lodash";
 import { useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
@@ -21,7 +20,7 @@ export default function ProductDetailsPage({
     params.productVariantId,
   );
 
-  const [selectedSize, setSelectedSize] = useState("XS");
+  const [selectedSize, setSelectedSize] = useState<string>();
 
   if (isFetchingProductDetails) {
     // TODO: loading screen
@@ -81,7 +80,6 @@ export default function ProductDetailsPage({
               currency: "USD",
             })}
           </p>
-          <p>{selectedVariant?.size}</p>
 
           <div className="mt-4" id="color-options-contaner">
             <div className="felx-row flex gap-1">
