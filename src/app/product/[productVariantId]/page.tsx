@@ -36,10 +36,10 @@ export default function ProductDetailsPage({
     if (localData) {
       const parsedData: myObject[] = JSON.parse(localData);
       const checkLocalData = parsedData.filter((item) => {
-        return item.selectedVariantId === selectedVariantId
-      })
-      
-      if (checkLocalData) {
+        return item.selectedVariantId === selectedVariantId;
+      });
+
+      if (checkLocalData.length === 1) {
         setFavoriteProduct(true);
       }
     }
