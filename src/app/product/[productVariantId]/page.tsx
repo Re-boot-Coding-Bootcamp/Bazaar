@@ -143,24 +143,26 @@ export default function ProductDetailsPage({
             </div>
           </div>
 
-          <div className="mt-4" id="size-options-container">
-            <p className="text-lg font-semibold">Select size</p>
-            <div className="mt-2 flex gap-2">
-              {uniqueSizeVariantsDisplay.map((variant) => {
-                return (
-                  <button
-                    key={variant.id}
-                    onClick={() => {
-                      setSelectedVariantId(variant.id);
-                    }}
-                    className={`h-10 w-12 border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
-                  >
-                    {variant.size}
-                  </button>
-                );
-              })}
+          {uniqueSizeVariantsDisplay.length > 1 && (
+            <div className="mt-4" id="size-options-container">
+              <p className="text-lg font-semibold">Select size</p>
+              <div className="mt-2 flex gap-2">
+                {uniqueSizeVariantsDisplay.map((variant) => {
+                  return (
+                    <button
+                      key={variant.id}
+                      onClick={() => {
+                        setSelectedVariantId(variant.id);
+                      }}
+                      className={`h-10 w-12 border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
+                    >
+                      {variant.size}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="actions-container mt-8 flex flex-col gap-4">
             <Button>Add to cart</Button>
