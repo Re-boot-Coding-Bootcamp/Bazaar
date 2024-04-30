@@ -28,8 +28,13 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
     const uniqueColorVariants = uniqBy(variants, "color");
 
     if (selectedVariant) {
-      const combined = [selectedVariant, ...uniqueColorVariants];
-      return uniqBy(combined, "color");
+      const selectedVariantColorIndex = uniqueColorVariants
+        .map((variants) => {
+          return variants.color;
+        })
+        .indexOf(selectedVariant.color);
+      uniqueColorVariants.splice(selectedVariantColorIndex, 1, selectedVariant);
+      return uniqueColorVariants;
     } else {
       return uniqueColorVariants;
     }
