@@ -1,10 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { uniqBy } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
+import {
+  addToFavorite,
+  removeFromFavorite,
+  selectFavoritedItems,
+  useAppDispatch,
+  useAppSelector,
+} from "~/lib";
 
 export default function ProductDetailsPage({
   params,
@@ -20,8 +29,16 @@ export default function ProductDetailsPage({
     params.productVariantId,
   );
 
-  const [selectedSize, setSelectedSize] = useState<string>();
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>();
+  const dispatch = useAppDispatch();
+  const favoritedItems = useAppSelector(selectFavoritedItems);
+  const favoritedItemIds = favoritedItems.map((item) => item.selectedVariantId);
+  const [isFavorited, setIsFavorited] = useState(
+    favoritedItemIds.includes(selectedVariantId),
+  );
+
+  useEffect(() => {
+    setIsFavorited(favoritedItemIds.includes(selectedVariantId));
+  }, [favoritedItemIds, selectedVariantId]);
 
   if (isFetchingProductDetails) {
     // TODO: loading screen
@@ -42,9 +59,20 @@ export default function ProductDetailsPage({
   const uniqueColorVariants = uniqBy(product.variants, "color");
   const uniqueSizeVariantas = uniqBy(product.variants, "size");
 
-  const imageUrls = uniqueColorVariants.map(
-    (variant) => variant.images[0]?.url ?? "",
-  );
+  const handleFavorited = () => {
+    if (!isFavorited) {
+      const newFav = {
+        selectedVariantId: selectedVariantId,
+        imageUrl: selectedVariant?.images[0]?.url ?? "",
+        productName: product.name,
+        price: selectedVariant?.price ?? 0,
+        productUrl: `/product/${selectedVariantId}`,
+      };
+      dispatch(addToFavorite({ item: newFav }));
+    } else {
+      dispatch(removeFromFavorite(selectedVariantId));
+    }
+  };
 
   return (
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
@@ -70,8 +98,8 @@ export default function ProductDetailsPage({
         className="flex w-full flex-col gap-4 md:flex-row"
       >
         <ImageGallery
-          imageUrls={imageUrls}
-          selectedImageIndex={selectedImageIndex}
+          variants={product.variants}
+          selectedId={selectedVariantId}
         />
         <div className="flex-grow">
           <p className="text-xl font-bold">{product.name}</p>
@@ -89,13 +117,12 @@ export default function ProductDetailsPage({
               <p className="text-lg font-semibold">{selectedVariant?.color}</p>
             </div>
             <div className="... mt-2 flex gap-4 truncate">
-              {uniqueColorVariants.map((variant, index) => {
+              {uniqueColorVariants.map((variant) => {
                 return (
                   <button
                     key={variant.id}
                     onClick={() => {
                       setSelectedVariantId(variant.id);
-                      setSelectedImageIndex(index);
                     }}
                   >
                     <div
@@ -121,8 +148,10 @@ export default function ProductDetailsPage({
                 return (
                   <button
                     key={variant.id}
-                    onClick={() => setSelectedSize(variant.size)}
-                    className={`h-10 w-12 border-2 ${variant.size === selectedSize ? "border-black" : "border-transparent"} rounded`}
+                    onClick={() => {
+                      setSelectedVariantId(variant.id);
+                    }}
+                    className={`h-10 w-12 border-2 ${variant.id === selectedVariantId ? "border-black" : "border-transparent"} rounded`}
                   >
                     {variant.size}
                   </button>
@@ -133,7 +162,19 @@ export default function ProductDetailsPage({
 
           <div className="actions-container mt-8 flex flex-col gap-4">
             <Button>Add to cart</Button>
-            <Button variant="outline">Add to favorites</Button>
+            <Button
+              variant="outline"
+              endIcon={
+                isFavorited ? (
+                  <HeartIconSolid className="text-red-500" />
+                ) : (
+                  <HeartIconOutline />
+                )
+              }
+              onClick={handleFavorited}
+            >
+              Add to favorites
+            </Button>
           </div>
         </div>
       </div>

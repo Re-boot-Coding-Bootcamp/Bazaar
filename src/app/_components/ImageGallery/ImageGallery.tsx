@@ -1,33 +1,59 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import type { ProductVariant } from "~/types";
+import { uniqBy } from "lodash";
 
 interface ImageGalleryProps {
-  imageUrls: string[];
-  selectedImageIndex: number | undefined;
+  variants: ProductVariant[];
+  selectedId: string;
 }
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({
-  imageUrls,
-  selectedImageIndex: externalSelectedImageIndex,
+  variants,
+  selectedId,
 }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(
-    externalSelectedImageIndex ?? 0,
-  );
+  const [selectedVariantId, setSelectedVariantId] = useState<
+    string | undefined
+  >(selectedId);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const variantsToDisplay = useMemo(() => {
+    const selectedVariant = variants.find(
+      (variant) => variant.id === selectedId,
+    );
+
+    const uniqueColorVariants = uniqBy(variants, "color");
+
+    if (selectedVariant) {
+      const combined = [selectedVariant, ...uniqueColorVariants];
+      return uniqBy(combined, "color");
+    } else {
+      return uniqueColorVariants;
+    }
+  }, [selectedId, variants]);
+
   useEffect(() => {
-    setSelectedImageIndex(externalSelectedImageIndex ?? 0);
-  }, [externalSelectedImageIndex]);
+    setSelectedVariantId(selectedId);
+  }, [selectedId]);
 
   const navigateImage = (direction: "left" | "right") => {
-    setSelectedImageIndex((prev) => {
+    if (variantsToDisplay.length === 0) return;
+
+    setSelectedVariantId((previousId) => {
+      const previousImageIndex = variantsToDisplay.findIndex(
+        (variant) => variant.id === previousId,
+      );
       if (direction === "left") {
-        return prev === 0 ? imageUrls.length - 1 : prev - 1;
+        return previousImageIndex === 0
+          ? variantsToDisplay[variantsToDisplay.length - 1]?.id
+          : variantsToDisplay[previousImageIndex - 1]?.id;
       } else {
-        return prev === imageUrls.length - 1 ? 0 : prev + 1;
+        return previousImageIndex === variantsToDisplay.length - 1
+          ? variantsToDisplay[0]?.id
+          : variantsToDisplay[previousImageIndex + 1]?.id;
       }
     });
   };
@@ -51,25 +77,23 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
     }
   };
 
-  const handleThumbnailHover = (index: number) => {
-    setSelectedImageIndex(index);
-  };
-
-  const selectedImage = imageUrls[selectedImageIndex] ?? "defaultImageUrl";
+  const selectedVariant = variantsToDisplay.find(
+    (variant) => variant.id === selectedVariantId,
+  );
 
   return (
     <div className="grid w-full md:flex md:h-full md:w-fit md:items-center md:justify-center">
       <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
-        {imageUrls.map((url, index) => (
+        {variantsToDisplay.map((variant) => (
           <img
             loading="lazy"
-            key={index}
-            src={url}
-            alt={`Thumbnail ${index + 1}`}
+            key={variant.id}
+            src={variant.images[0]?.url}
+            alt={`Thumbnail ${variant.id + 1}`}
             className={`h-[100px] w-[100px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px] ${
-              index === selectedImageIndex ? "border-2 border-black" : ""
+              variant.id === selectedVariantId ? "border-2 border-black" : ""
             }`}
-            onMouseEnter={() => handleThumbnailHover(index)}
+            onMouseEnter={() => setSelectedVariantId(variant.id)}
           />
         ))}
       </div>
@@ -78,7 +102,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
         <div className="relative md:m-0 md:w-2/3">
           <img
             loading="lazy"
-            src={selectedImage}
+            src={selectedVariant?.images[0]?.url}
             alt="Selected"
             className="mb-4 aspect-square w-full cursor-pointer rounded-lg object-contain md:m-0"
             onClick={toggleModal}
@@ -114,7 +138,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({
             </button>
             <img
               loading="lazy"
-              src={selectedImage}
+              src={selectedVariant?.images[0]?.url}
               alt="Selected"
               className="max-w-screen max-h-screen"
               onClick={closeModal}

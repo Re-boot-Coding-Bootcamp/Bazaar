@@ -2,6 +2,7 @@ import type { ProductFilter, SortOption } from "~/types";
 
 const LocalStorageKeys = {
   CART_ID: "bazaar-cartId",
+  FAVORITED_PRODUCTS: "bazaar-favoritedProducts",
 };
 
 const FilterOptions: ProductFilter[] = [
