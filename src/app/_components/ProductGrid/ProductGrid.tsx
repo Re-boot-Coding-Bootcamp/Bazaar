@@ -5,6 +5,7 @@ import { ProductCard } from "../ProductCard/ProductCard";
 import type { ActiveFilterKey, ProductGridItemType } from "~/types";
 import { isBefore } from "date-fns";
 import { selectFilters, selectSortBy, useAppSelector } from "~/lib";
+import { uniqBy } from "lodash";
 
 interface ProductGridProps {
   products: ProductGridItemType[];
@@ -84,7 +85,7 @@ const ProductGrid = ({
       return isBefore(a.createdAt, b.createdAt) ? -1 : 1;
     });
 
-    return filteredAndSorted; //uniqBy(filteredAndSorted, "color");
+    return uniqBy(filteredAndSorted, "color");
   }, [allProductVariants, filters, sortBy]);
 
   return (
