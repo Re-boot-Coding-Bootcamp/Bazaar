@@ -3,7 +3,6 @@
 
 import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
 import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
-import { uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import { api } from "~/trpc/react";
@@ -55,9 +54,12 @@ export default function ProductDetailsPage({
   const selectedVariant = product.variants.find(
     (variant) => variant.id === selectedVariantId,
   );
-
-  const uniqueColorVariants = uniqBy(product.variants, "color");
-  const uniqueSizeVariantas = uniqBy(product.variants, "size");
+  const uniqueColorVariantsDisplay = product.variants.filter(
+    (variant) => variant.size === selectedVariant?.size,
+  );
+  const uniqueSizeVariantsDisplay = product.variants.filter(
+    (variant) => variant.color === selectedVariant?.color,
+  );
 
   const handleFavorited = () => {
     if (!isFavorited) {
@@ -117,7 +119,7 @@ export default function ProductDetailsPage({
               <p className="text-lg font-semibold">{selectedVariant?.color}</p>
             </div>
             <div className="... mt-2 flex gap-4 truncate">
-              {uniqueColorVariants.map((variant) => {
+              {uniqueColorVariantsDisplay.map((variant) => {
                 return (
                   <button
                     key={variant.id}
@@ -144,7 +146,7 @@ export default function ProductDetailsPage({
           <div className="mt-4" id="size-options-container">
             <p className="text-lg font-semibold">Select size</p>
             <div className="mt-2 flex gap-2">
-              {uniqueSizeVariantas.map((variant) => {
+              {uniqueSizeVariantsDisplay.map((variant) => {
                 return (
                   <button
                     key={variant.id}
