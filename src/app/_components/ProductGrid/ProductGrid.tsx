@@ -5,7 +5,7 @@ import { ProductCard } from "../ProductCard/ProductCard";
 import type { ActiveFilterKey, ProductGridItemType } from "~/types";
 import { isBefore } from "date-fns";
 import { selectFilters, selectSortBy, useAppSelector } from "~/lib";
-import { uniqBy } from "lodash";
+import { map, uniqBy } from "lodash";
 
 interface ProductGridProps {
   products: ProductGridItemType[];
@@ -25,10 +25,16 @@ const ProductGrid = ({
   products,
   isLoading = false,
 }: ProductGridProps): JSX.Element => {
+  const productIds = useMemo(
+    () => map(uniqBy(products, "id"), (product) => product.id),
+    [products],
+  );
+
   const allProductVariants = products.flatMap((product) =>
     product.variants.map((variant) => ({
       ...variant,
       productName: product.name,
+      productId: product.id,
     })),
   );
 
@@ -85,8 +91,13 @@ const ProductGrid = ({
       return isBefore(a.createdAt, b.createdAt) ? -1 : 1;
     });
 
-    return uniqBy(filteredAndSorted, "color");
-  }, [allProductVariants, filters, sortBy]);
+    return productIds.flatMap((productId) => {
+      const variants = filteredAndSorted.filter(
+        (item) => item.productId === productId,
+      );
+      return uniqBy(variants, "color");
+    });
+  }, [allProductVariants, filters, productIds, sortBy]);
 
   return (
     <div className="grid grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3">
