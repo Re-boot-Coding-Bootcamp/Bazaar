@@ -1,6 +1,6 @@
 export * from "./AccordionItemTypes";
 export * from "./ProductGridItemType";
 export * from "./FavoriteTypes";
-export * from "./ProductVariant";
+export * from "./ProductDetailsTypes";
 export * from "./FilterTypes";
 export * from "./SortTypes";

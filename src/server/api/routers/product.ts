@@ -70,6 +70,9 @@ export const productRouter = createTRPCRouter({
           id: input.productVariantId,
         },
         select: {
+          id: true,
+          size: true,
+          color: true,
           product: {
             include: {
               category: {
