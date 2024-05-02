@@ -43,8 +43,9 @@ export const cartSlice = createAppSlice({
   selectors: {
     selectId: (cart) => cart.id,
     selectItems: (cart) => cart.items,
+    selectCart: (cart) => cart,
   },
 });
 
 export const { updateCart, addToCart } = cartSlice.actions;
-export const { selectId, selectItems } = cartSlice.selectors;
+export const { selectId, selectItems, selectCart } = cartSlice.selectors;

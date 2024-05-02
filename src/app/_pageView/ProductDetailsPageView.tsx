@@ -8,6 +8,7 @@ import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import {
   addToFavorite,
   removeFromFavorite,
+  selectCart,
   selectFavoritedItems,
   selectId,
   updateCart,
@@ -28,14 +29,35 @@ const ProductDetailsPageView = ({
 }: ProductDetailsPageViewProps) => {
   const dispatch = useAppDispatch();
   const favoritedItems = useAppSelector(selectFavoritedItems);
+  const cart = useAppSelector(selectCart);
   const cartId = useAppSelector(selectId);
 
   const { mutateAsync: addProductToCart } =
     api.cart.addProductToCart.useMutation();
 
+  const { mutateAsync: updateProductQuantityInCart } =
+    api.cart.updateProductQuantityInCart.useMutation();
+
   const favoritedItemIds = useMemo(
     () => favoritedItems.map((item) => item.selectedVariantId),
     [favoritedItems],
+  );
+
+  const productVariantIdsInCart = useMemo(
+    () => cart.items.map((item) => item.productVariantId),
+    [cart.items],
+  );
+
+  const productVariantIdAndCartItemIdAndQuantity = useMemo(
+    () =>
+      cart.items.map((cartItem) => {
+        return {
+          productVariantId: cartItem.productVariantId,
+          cartItemId: cartItem.id,
+          quantity: cartItem.quantity,
+        };
+      }),
+    [cart.items],
   );
 
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
@@ -106,30 +128,64 @@ const ProductDetailsPageView = ({
 
   const handleAddToCart = async () => {
     if (cartId) {
-      // check to see if this productVariant is already in the redux cart
-      // if it is, get the current quantity from redux and increment it
-      // and call updateProductQuantityInCart
-
-      // if the quantity is 10, show a snackbar message
-      // the message should say "You already have the maximum quantity of this item in your cart"
-
-      try {
-        const updatedCart = await addProductToCart({
-          cartId,
-          productVariantId: selectedVariantId,
-        });
-        if (updatedCart) {
-          dispatch(updateCart({ items: updatedCart.items }));
-          enqueueSnackbar("Product added to cart", { variant: "success" });
+      if (productVariantIdsInCart.includes(selectedVariantId)) {
+        const selectedVariantCartItem =
+          productVariantIdAndCartItemIdAndQuantity.find(
+            (item) => item.productVariantId === selectedVariantId,
+          );
+        const selectedVariantCartItemId = selectedVariantCartItem?.cartItemId;
+        const selectedVariantQuantity = selectedVariantCartItem?.quantity;
+        if (
+          selectedVariantCartItemId &&
+          selectedVariantQuantity &&
+          selectedVariantQuantity < 10
+        ) {
+          try {
+            const updateQuantityInCart = await updateProductQuantityInCart({
+              cartId,
+              cartItemId: selectedVariantCartItemId,
+              quantity: selectedVariantQuantity + 1,
+            });
+            if (updateQuantityInCart) {
+              dispatch(updateCart({ items: updateQuantityInCart.items }));
+              enqueueSnackbar("Product added to cart", { variant: "success" });
+            } else {
+              enqueueSnackbar("Failed to add product to cart", {
+                variant: "error",
+              });
+            }
+          } catch {
+            enqueueSnackbar("Failed to add product to cart", {
+              variant: "error",
+            });
+          }
         } else {
+          enqueueSnackbar(
+            "You already have the maximum quantity of this item in your cart",
+            {
+              variant: "error",
+            },
+          );
+        }
+      } else {
+        try {
+          const updatedCart = await addProductToCart({
+            cartId,
+            productVariantId: selectedVariantId,
+          });
+          if (updatedCart) {
+            dispatch(updateCart({ items: updatedCart.items }));
+            enqueueSnackbar("Product added to cart", { variant: "success" });
+          } else {
+            enqueueSnackbar("Failed to add product to cart", {
+              variant: "error",
+            });
+          }
+        } catch {
           enqueueSnackbar("Failed to add product to cart", {
             variant: "error",
           });
         }
-      } catch {
-        enqueueSnackbar("Failed to add product to cart", {
-          variant: "error",
-        });
       }
     }
   };
