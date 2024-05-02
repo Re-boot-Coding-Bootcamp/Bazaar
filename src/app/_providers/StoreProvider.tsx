@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Provider } from "react-redux";
 import { LocalStorageKeys } from "~/constants";
 import { addToFavorite, makeStore, updateCart, type AppStore } from "~/lib";
@@ -15,13 +15,27 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
   const isClient = useIsClient();
+  const [cartId, setCartId] = useState<string>();
+
   const { mutate: createCart } = api.cart.createCart.useMutation();
+  const { data: cartData } = api.cart.getCart.useQuery(
+    { cartId: cartId ?? "" },
+    {
+      enabled: !!cartId,
+    },
+  );
 
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
     const newStore = makeStore();
     storeRef.current = newStore;
   }
+
+  useEffect(() => {
+    if (cartData && cartData.items.length > 0) {
+      storeRef.current?.dispatch(updateCart({ items: cartData.items }));
+    }
+  }, [cartData]);
 
   useEffect(() => {
     if (storeRef.current && isClient) {
@@ -33,10 +47,11 @@ export default function StoreProvider({
         LocalStorageKeys.FAVORITED_PRODUCTS,
       );
 
+      enqueueSnackbar("Welcome to Bazaar! Existing Cart ID: " + existingCartId);
+
       if (existingCartId) {
-        // 1, if there is, set it to the state
-        //    fetch for cart from backend
-        //    once we get the cart detail, update the state
+        storeRef.current?.dispatch(updateCart({ id: existingCartId }));
+        setCartId(existingCartId);
       } else {
         createCart(undefined, {
           onSuccess(newCart) {

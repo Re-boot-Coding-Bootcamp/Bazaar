@@ -1,10 +1,10 @@
 import { createAppSlice } from "~/lib/createAppSlice";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { CartItem } from "@prisma/client";
+import type { ExtendedCartItem } from "~/types";
 
 export interface CartSliceState {
   id: string | undefined;
-  items: CartItem[];
+  items: ExtendedCartItem[];
 }
 
 const initialState: CartSliceState = {
@@ -14,7 +14,7 @@ const initialState: CartSliceState = {
 
 interface UpdateCartInput {
   id?: string;
-  items?: CartItem[];
+  items?: ExtendedCartItem[];
 }
 
 export const cartSlice = createAppSlice({
