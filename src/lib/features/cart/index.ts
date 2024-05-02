@@ -33,19 +33,12 @@ export const cartSlice = createAppSlice({
         }
       },
     ),
-    addToCart: create.reducer((state, action: PayloadAction) => {
-      console.log("[RTK]", "addToCart");
-      // add productVariant to the cart
-      // 1, make a backend call to add the productVariant to the cart
-      // 2, once we get the response, update the state
-    }),
   }),
   selectors: {
     selectId: (cart) => cart.id,
     selectItems: (cart) => cart.items,
-    selectCart: (cart) => cart,
   },
 });
 
-export const { updateCart, addToCart } = cartSlice.actions;
-export const { selectId, selectItems, selectCart } = cartSlice.selectors;
+export const { updateCart } = cartSlice.actions;
+export const { selectId, selectItems } = cartSlice.selectors;

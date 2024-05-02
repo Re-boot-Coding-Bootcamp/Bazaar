@@ -8,9 +8,9 @@ import { BreadCrumb, Button, ImageGallery } from "~/app/_components";
 import {
   addToFavorite,
   removeFromFavorite,
-  selectCart,
   selectFavoritedItems,
   selectId,
+  selectItems,
   updateCart,
   useAppDispatch,
   useAppSelector,
@@ -29,7 +29,7 @@ const ProductDetailsPageView = ({
 }: ProductDetailsPageViewProps) => {
   const dispatch = useAppDispatch();
   const favoritedItems = useAppSelector(selectFavoritedItems);
-  const cart = useAppSelector(selectCart);
+  const cartItems = useAppSelector(selectItems);
   const cartId = useAppSelector(selectId);
 
   const { mutateAsync: addProductToCart } =
@@ -41,23 +41,6 @@ const ProductDetailsPageView = ({
   const favoritedItemIds = useMemo(
     () => favoritedItems.map((item) => item.selectedVariantId),
     [favoritedItems],
-  );
-
-  const productVariantIdsInCart = useMemo(
-    () => cart.items.map((item) => item.productVariantId),
-    [cart.items],
-  );
-
-  const productVariantIdAndCartItemIdAndQuantity = useMemo(
-    () =>
-      cart.items.map((cartItem) => {
-        return {
-          productVariantId: cartItem.productVariantId,
-          cartItemId: cartItem.id,
-          quantity: cartItem.quantity,
-        };
-      }),
-    [cart.items],
   );
 
   const [selectedVariantId, setSelectedVariantId] = useState<string>(
@@ -129,24 +112,19 @@ const ProductDetailsPageView = ({
 
   const handleAddToCart = async () => {
     if (cartId) {
-      if (productVariantIdsInCart.includes(selectedVariantId)) {
-        const selectedVariantCartItem =
-          productVariantIdAndCartItemIdAndQuantity.find(
-            (item) => item.productVariantId === selectedVariantId,
-          );
-        const selectedVariantCartItemId = selectedVariantCartItem?.cartItemId;
-        const selectedVariantQuantity = selectedVariantCartItem?.quantity;
-        if (
-          selectedVariantCartItemId &&
-          selectedVariantQuantity &&
-          selectedVariantQuantity < 10
-        ) {
+      const existingCartItem = cartItems.find(
+        (item) => item.productVariantId === selectedVariantId,
+      );
+
+      // if the selected variant is already in the cart
+      if (existingCartItem) {
+        if (existingCartItem.quantity < 10) {
           try {
             setIsMutating(true);
             const updateQuantityInCart = await updateProductQuantityInCart({
               cartId,
-              cartItemId: selectedVariantCartItemId,
-              quantity: selectedVariantQuantity + 1,
+              cartItemId: existingCartItem.id,
+              quantity: existingCartItem.quantity + 1,
             });
             if (updateQuantityInCart) {
               dispatch(updateCart({ items: updateQuantityInCart.items }));
