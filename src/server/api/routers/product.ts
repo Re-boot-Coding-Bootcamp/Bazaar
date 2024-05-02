@@ -2,9 +2,26 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
-  getTopSeller: publicProcedure.query(({ ctx }) => {
-    return ctx.db.topSeller.findMany({
-      orderBy: { quantitySold: "desc" },
+  getTopSellers: publicProcedure.query(({ ctx }) => {
+    return ctx.db.productVariant.findMany({
+      select: {
+        id: true,
+        price: true,
+        product: {
+          select: {
+            name: true,
+          },
+        },
+        images: {
+          select: {
+            url: true,
+          },
+          take: 1,
+        },
+      },
+      orderBy: {
+        quantitySold: "desc",
+      },
       take: 4,
     });
   }),

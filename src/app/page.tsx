@@ -1,8 +1,9 @@
-"use client";
-
+import { api } from "~/trpc/server";
 import { Carousel, ProductCard } from "./_components";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const topSellers = await api.product.getTopSellers();
+
   return (
     <>
       <Carousel
@@ -91,17 +92,13 @@ export default function HomePage() {
           id="top-sellers"
           className="grid max-w-screen-xl grid-cols-1 items-stretch justify-stretch gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
         >
-          {[
-            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/1-white-hat.png",
-            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/7-simple-t-shirt-blue.png",
-            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/9-pen.png",
-            "https://murad-public-files.s3.amazonaws.com/bazaar/product-images/20-hoodie-green.png",
-          ].map((imageUrl, index) => (
+          {topSellers.map((item) => (
             <ProductCard
-              key={`top-seller-card-${index + 1}`}
-              imageUrl={imageUrl}
-              productName={`Product ${index + 1}`}
-              price={24.99}
+              key={`top-seller-card-${item.id}`}
+              imageUrl={item.images[0]?.url}
+              productName={item.product.name}
+              price={item.price}
+              productUrl={`/product/${item.id}`}
             />
           ))}
         </div>
