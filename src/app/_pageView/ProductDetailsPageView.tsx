@@ -9,11 +9,15 @@ import {
   addToFavorite,
   removeFromFavorite,
   selectFavoritedItems,
+  selectId,
+  updateCart,
   useAppDispatch,
   useAppSelector,
 } from "~/lib";
 import { map, uniqBy } from "lodash";
 import type { ProductDetailsReturnType } from "~/types";
+import { api } from "~/trpc/react";
+import { enqueueSnackbar } from "notistack";
 
 interface ProductDetailsPageViewProps {
   data: NonNullable<ProductDetailsReturnType>;
@@ -24,6 +28,10 @@ const ProductDetailsPageView = ({
 }: ProductDetailsPageViewProps) => {
   const dispatch = useAppDispatch();
   const favoritedItems = useAppSelector(selectFavoritedItems);
+  const cartId = useAppSelector(selectId);
+
+  const { mutateAsync: addProductToCart } =
+    api.cart.addProductToCart.useMutation();
 
   const favoritedItemIds = useMemo(
     () => favoritedItems.map((item) => item.selectedVariantId),
@@ -93,6 +101,36 @@ const ProductDetailsPageView = ({
       dispatch(addToFavorite({ item: newFav }));
     } else {
       dispatch(removeFromFavorite(selectedVariantId));
+    }
+  };
+
+  const handleAddToCart = async () => {
+    if (cartId) {
+      // check to see if this productVariant is already in the redux cart
+      // if it is, get the current quantity from redux and increment it
+      // and call updateProductQuantityInCart
+
+      // if the quantity is 10, show a snackbar message
+      // the message should say "You already have the maximum quantity of this item in your cart"
+
+      try {
+        const updatedCart = await addProductToCart({
+          cartId,
+          productVariantId: selectedVariantId,
+        });
+        if (updatedCart) {
+          dispatch(updateCart({ items: updatedCart.items }));
+          enqueueSnackbar("Product added to cart", { variant: "success" });
+        } else {
+          enqueueSnackbar("Failed to add product to cart", {
+            variant: "error",
+          });
+        }
+      } catch {
+        enqueueSnackbar("Failed to add product to cart", {
+          variant: "error",
+        });
+      }
     }
   };
 
@@ -185,7 +223,7 @@ const ProductDetailsPageView = ({
           )}
 
           <div className="actions-container mt-8 flex flex-col gap-4">
-            <Button>Add to cart</Button>
+            <Button onClick={handleAddToCart}>Add to cart</Button>
             <Button
               variant="outline"
               endIcon={

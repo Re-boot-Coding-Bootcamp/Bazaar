@@ -1,12 +1,13 @@
+"use client";
+
 import { ShoppingCartIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import React from "react";
+import { selectItems, useAppSelector } from "~/lib";
 
 const CartIcon = (): JSX.Element => {
-  // needs to get the cart id and check how many items are in the items array probably an api call here
-  const cart = { id: "csvsedsrsergfswe", items: ["1", "2", "3", "4"] };
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const numberOfCartItems = cart.items.length;
+  const cartItems = useAppSelector(selectItems);
+  const numberOfCartItems = cartItems.length;
 
   return (
     <Link href="/cart">
