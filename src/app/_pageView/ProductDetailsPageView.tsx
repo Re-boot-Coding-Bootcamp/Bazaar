@@ -10,6 +10,7 @@ import {
   removeFromFavorite,
   selectFavoritedItems,
   selectId,
+  selectItems,
   updateCart,
   useAppDispatch,
   useAppSelector,
@@ -28,10 +29,14 @@ const ProductDetailsPageView = ({
 }: ProductDetailsPageViewProps) => {
   const dispatch = useAppDispatch();
   const favoritedItems = useAppSelector(selectFavoritedItems);
+  const cartItems = useAppSelector(selectItems);
   const cartId = useAppSelector(selectId);
 
   const { mutateAsync: addProductToCart } =
     api.cart.addProductToCart.useMutation();
+
+  const { mutateAsync: updateProductQuantityInCart } =
+    api.cart.updateProductQuantityInCart.useMutation();
 
   const favoritedItemIds = useMemo(
     () => favoritedItems.map((item) => item.selectedVariantId),
@@ -48,6 +53,7 @@ const ProductDetailsPageView = ({
   const [isFavorited, setIsFavorited] = useState(
     favoritedItemIds.includes(selectedVariantId),
   );
+  const [isMutating, setIsMutating] = useState(false);
 
   const colorsAndImages = useMemo(
     () =>
@@ -106,30 +112,65 @@ const ProductDetailsPageView = ({
 
   const handleAddToCart = async () => {
     if (cartId) {
-      // check to see if this productVariant is already in the redux cart
-      // if it is, get the current quantity from redux and increment it
-      // and call updateProductQuantityInCart
+      const existingCartItem = cartItems.find(
+        (item) => item.productVariantId === selectedVariantId,
+      );
 
-      // if the quantity is 10, show a snackbar message
-      // the message should say "You already have the maximum quantity of this item in your cart"
-
-      try {
-        const updatedCart = await addProductToCart({
-          cartId,
-          productVariantId: selectedVariantId,
-        });
-        if (updatedCart) {
-          dispatch(updateCart({ items: updatedCart.items }));
-          enqueueSnackbar("Product added to cart", { variant: "success" });
+      // if the selected variant is already in the cart
+      if (existingCartItem) {
+        if (existingCartItem.quantity < 10) {
+          try {
+            setIsMutating(true);
+            const updateQuantityInCart = await updateProductQuantityInCart({
+              cartId,
+              cartItemId: existingCartItem.id,
+              quantity: existingCartItem.quantity + 1,
+            });
+            if (updateQuantityInCart) {
+              dispatch(updateCart({ items: updateQuantityInCart.items }));
+              enqueueSnackbar("Product added to cart", { variant: "success" });
+            } else {
+              enqueueSnackbar("Failed to add product to cart", {
+                variant: "error",
+              });
+            }
+          } catch {
+            enqueueSnackbar("Failed to add product to cart", {
+              variant: "error",
+            });
+          } finally {
+            setIsMutating(false);
+          }
         } else {
+          enqueueSnackbar(
+            "You already have the maximum quantity of this item in your cart",
+            {
+              variant: "error",
+            },
+          );
+        }
+      } else {
+        try {
+          setIsMutating(true);
+          const updatedCart = await addProductToCart({
+            cartId,
+            productVariantId: selectedVariantId,
+          });
+          if (updatedCart) {
+            dispatch(updateCart({ items: updatedCart.items }));
+            enqueueSnackbar("Product added to cart", { variant: "success" });
+          } else {
+            enqueueSnackbar("Failed to add product to cart", {
+              variant: "error",
+            });
+          }
+        } catch {
           enqueueSnackbar("Failed to add product to cart", {
             variant: "error",
           });
+        } finally {
+          setIsMutating(false);
         }
-      } catch {
-        enqueueSnackbar("Failed to add product to cart", {
-          variant: "error",
-        });
       }
     }
   };
@@ -223,7 +264,9 @@ const ProductDetailsPageView = ({
           )}
 
           <div className="actions-container mt-8 flex flex-col gap-4">
-            <Button onClick={handleAddToCart}>Add to cart</Button>
+            <Button disabled={isMutating} onClick={handleAddToCart}>
+              Add to cart
+            </Button>
             <Button
               variant="outline"
               endIcon={
