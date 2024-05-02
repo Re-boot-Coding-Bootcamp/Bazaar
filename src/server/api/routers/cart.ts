@@ -153,4 +153,46 @@ export const cartRouter = createTRPCRouter({
         },
       });
     }),
+  checkout: publicProcedure
+    .input(z.object({ cartId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const cart = await ctx.db.cart.findUnique({
+        where: { id: input.cartId },
+        include: {
+          items: {
+            include: {
+              productVariant: {
+                select: {
+                  id: true,
+                  quantitySold: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!cart) {
+        throw new TRPCError({
+          message: "Cart not found",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+
+      const promises = cart.items.map(async (cartItem) => {
+        return await ctx.db.productVariant.update({
+          where: { id: cartItem.productVariantId },
+          data: {
+            quantitySold:
+              cartItem.productVariant.quantitySold + cartItem.quantity,
+          },
+        });
+      });
+
+      await Promise.all(promises);
+
+      return ctx.db.cartItem.deleteMany({
+        where: { cartId: input.cartId },
+      });
+    }),
 });

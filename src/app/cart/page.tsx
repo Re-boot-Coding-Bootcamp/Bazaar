@@ -1,15 +1,53 @@
 "use client";
 
-import { useAppSelector, selectItems } from "~/lib";
-import { BreadCrumb, CartItem, OrderSummary } from "../_components";
+import {
+  useAppSelector,
+  selectItems,
+  selectId,
+  useAppDispatch,
+  clearCart,
+} from "~/lib";
+import { BreadCrumb, Button, CartItem, OrderSummary } from "../_components";
+import { api } from "~/trpc/react";
+import { useState } from "react";
+import { enqueueSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 export default function CartPage() {
+  const { mutateAsync: checkout } = api.cart.checkout.useMutation();
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const cartId = useAppSelector(selectId);
   const cartItems = useAppSelector(selectItems);
+
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   const subtotal = cartItems.reduce((acc, item) => {
     const priceForCartItem = item.quantity * item.productVariant.price;
     return acc + priceForCartItem;
   }, 0);
+
+  const handleCheckout = async () => {
+    if (cartId) {
+      setIsCheckingOut(true);
+      try {
+        await checkout({ cartId });
+        dispatch(clearCart());
+        setIsCheckingOut(false);
+        enqueueSnackbar("Checkout successful", { variant: "success" });
+        setTimeout(() => {
+          router.push("/");
+        }, 500);
+      } catch {
+        setIsCheckingOut(false);
+        enqueueSnackbar(
+          "Unexpected error while checking out, please try again later.",
+          { variant: "error" },
+        );
+      }
+    }
+  };
 
   return (
     <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
@@ -42,6 +80,14 @@ export default function CartPage() {
             </div>
             <div id="order-summary-container" className="flex-1">
               <OrderSummary subtotal={subtotal} />
+              <Button
+                className="mt-2 w-full"
+                variant="standard"
+                onClick={handleCheckout}
+                disabled={isCheckingOut}
+              >
+                {isCheckingOut ? "Processing..." : "Checkout"}
+              </Button>
             </div>
           </>
         ) : (

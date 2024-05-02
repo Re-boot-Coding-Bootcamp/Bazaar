@@ -33,6 +33,9 @@ export const cartSlice = createAppSlice({
         }
       },
     ),
+    clearCart: create.reducer((state) => {
+      state.items = [];
+    }),
   }),
   selectors: {
     selectId: (cart) => cart.id,
@@ -40,5 +43,5 @@ export const cartSlice = createAppSlice({
   },
 });
 
-export const { updateCart } = cartSlice.actions;
+export const { updateCart, clearCart } = cartSlice.actions;
 export const { selectId, selectItems } = cartSlice.selectors;
