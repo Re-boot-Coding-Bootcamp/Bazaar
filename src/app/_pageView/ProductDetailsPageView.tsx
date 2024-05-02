@@ -70,6 +70,7 @@ const ProductDetailsPageView = ({
   const [isFavorited, setIsFavorited] = useState(
     favoritedItemIds.includes(selectedVariantId),
   );
+  const [isMutating, setIsMutating] = useState(false);
 
   const colorsAndImages = useMemo(
     () =>
@@ -141,6 +142,7 @@ const ProductDetailsPageView = ({
           selectedVariantQuantity < 10
         ) {
           try {
+            setIsMutating(true);
             const updateQuantityInCart = await updateProductQuantityInCart({
               cartId,
               cartItemId: selectedVariantCartItemId,
@@ -158,6 +160,8 @@ const ProductDetailsPageView = ({
             enqueueSnackbar("Failed to add product to cart", {
               variant: "error",
             });
+          } finally {
+            setIsMutating(false);
           }
         } else {
           enqueueSnackbar(
@@ -169,6 +173,7 @@ const ProductDetailsPageView = ({
         }
       } else {
         try {
+          setIsMutating(true);
           const updatedCart = await addProductToCart({
             cartId,
             productVariantId: selectedVariantId,
@@ -185,6 +190,8 @@ const ProductDetailsPageView = ({
           enqueueSnackbar("Failed to add product to cart", {
             variant: "error",
           });
+        } finally {
+          setIsMutating(false);
         }
       }
     }
@@ -279,7 +286,9 @@ const ProductDetailsPageView = ({
           )}
 
           <div className="actions-container mt-8 flex flex-col gap-4">
-            <Button onClick={handleAddToCart}>Add to cart</Button>
+            <Button disabled={isMutating} onClick={handleAddToCart}>
+              Add to cart
+            </Button>
             <Button
               variant="outline"
               endIcon={
