@@ -40,11 +40,7 @@ const DesktopNavbar = ({ categories }: DesktopNavbarProps) => {
             id="cart-and-search-container"
             className="flex items-center gap-4"
           >
-            <DesktopSearchBar
-              onSubmit={(searchTerm: string) => {
-                console.log("searching for: ", searchTerm);
-              }}
-            />
+            <DesktopSearchBar />
             <Favorites />
             <CartIcon />
           </div>
