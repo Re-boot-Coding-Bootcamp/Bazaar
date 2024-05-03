@@ -25,7 +25,6 @@ export const filterAndSortSlice = createAppSlice({
   reducers: (create) => ({
     updateFilters: create.reducer(
       (state, action: PayloadAction<FilterInput>) => {
-        console.log("[RTK]", "updateFilters");
         state.filters = state.filters.map((filter) =>
           filter.id === action.payload.filterId
             ? {
@@ -41,19 +40,15 @@ export const filterAndSortSlice = createAppSlice({
       },
     ),
     updateSortBy: create.reducer((state, action: PayloadAction<string>) => {
-      console.log("[RTK]", "updateSortBy");
       state.sortBy = action.payload;
     }),
     resetFilters: create.reducer((state) => {
-      console.log("[RTK]", "resetFilters");
       state.filters = initialState.filters;
     }),
     resetSortBy: create.reducer((state) => {
-      console.log("[RTK]", "resetSortBy");
       state.sortBy = initialState.sortBy;
     }),
     resetFiltersAndSortBy: create.reducer((state) => {
-      console.log("[RTK]", "resetFiltersAndSortBy");
       state.filters = initialState.filters;
       state.sortBy = initialState.sortBy;
     }),

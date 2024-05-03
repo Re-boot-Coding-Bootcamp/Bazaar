@@ -24,7 +24,6 @@ export const favoriteSlice = createAppSlice({
   reducers: (create) => ({
     addToFavorite: create.reducer(
       (state, action: PayloadAction<FavoritedInput>) => {
-        console.log("[RTK]", "addToFavorite");
         if (
           state.items
             .map((item) => item.selectedVariantId)
@@ -42,7 +41,6 @@ export const favoriteSlice = createAppSlice({
     ),
     removeFromFavorite: create.reducer(
       (state, action: PayloadAction<string>) => {
-        console.log("[RTK]", "updateSortBy");
         const variantIdToBeRemoved = action.payload;
         const removeIndex = state.items.findIndex(
           (item) => item.selectedVariantId === variantIdToBeRemoved,

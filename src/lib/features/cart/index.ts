@@ -23,7 +23,6 @@ export const cartSlice = createAppSlice({
   reducers: (create) => ({
     updateCart: create.reducer(
       (state, action: PayloadAction<UpdateCartInput>) => {
-        console.log("[RTK]", "updateCart");
         if (action.payload.id) {
           state.id = action.payload.id;
         }

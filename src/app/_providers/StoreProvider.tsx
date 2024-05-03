@@ -47,8 +47,6 @@ export default function StoreProvider({
         LocalStorageKeys.FAVORITED_PRODUCTS,
       );
 
-      enqueueSnackbar("Welcome to Bazaar! Existing Cart ID: " + existingCartId);
-
       if (existingCartId) {
         storeRef.current?.dispatch(updateCart({ id: existingCartId }));
         setCartId(existingCartId);
