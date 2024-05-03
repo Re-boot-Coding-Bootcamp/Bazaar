@@ -46,7 +46,7 @@ const Button = ({
           {startIcon}
         </span>
       )}
-      {children && <span className="mx-1">{children}</span>}
+      {children && <span className="mx-2">{children}</span>}
       {endIcon && (
         <span className={`h-${iconSizes[iconSize]} w-${iconSizes[iconSize]}`}>
           {endIcon}

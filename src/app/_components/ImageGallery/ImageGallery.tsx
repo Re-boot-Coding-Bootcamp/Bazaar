@@ -1,23 +1,71 @@
 "use client";
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 interface ImageGalleryProps {
-  imageUrls: string[];
+  data: {
+    id: number;
+    color: string;
+    image: string | undefined;
+  }[];
+  defaultColor: string;
+  selectedColor: string | undefined;
 }
 
-const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
-  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+const ImageGallery: React.FC<ImageGalleryProps> = ({
+  data,
+  defaultColor,
+  selectedColor,
+}) => {
+  const [selectedId, setSelectedId] = useState<number>(
+    data.find((item) => item.color === defaultColor)?.id ?? 0,
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // const variantsToDisplay = useMemo(() => {
+  //   const selectedVariant = variants.find(
+  //     (variant) => variant.id === selectedId,
+  //   );
+
+  //   const uniqueColorVariants = uniqBy(variants, "color");
+
+  //   if (selectedVariant) {
+  //     const selectedVariantColorIndex = uniqueColorVariants
+  //       .map((variants) => {
+  //         return variants.color;
+  //       })
+  //       .indexOf(selectedVariant.color);
+  //     uniqueColorVariants.splice(selectedVariantColorIndex, 1, selectedVariant);
+  //     return uniqueColorVariants;
+  //   } else {
+  //     return uniqueColorVariants;
+  //   }
+  // }, [selectedId, variants]);
+
+  useEffect(() => {
+    if (selectedColor) {
+      setSelectedId(data.find((item) => item.color === selectedColor)?.id ?? 0);
+    }
+  }, [data, selectedColor]);
+
   const navigateImage = (direction: "left" | "right") => {
-    setSelectedImageIndex((prev) => {
+    if (data.length === 0) return;
+
+    setSelectedId((previousId) => {
       if (direction === "left") {
-        return prev === 0 ? imageUrls.length - 1 : prev - 1;
+        return (
+          (previousId === 0
+            ? data[data.length - 1]?.id
+            : data[previousId - 1]?.id) ?? 0
+        );
       } else {
-        return prev === imageUrls.length - 1 ? 0 : prev + 1;
+        return (
+          (previousId === data.length - 1
+            ? data[0]?.id
+            : data[previousId + 1]?.id) ?? 0
+        );
       }
     });
   };
@@ -41,34 +89,32 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
     }
   };
 
-  const handleThumbnailHover = (index: number) => {
-    setSelectedImageIndex(index);
-  };
-
-  const selectedImage = imageUrls[selectedImageIndex] ?? "defaultImageUrl";
+  const selectedDataItem = data.find((dataItem) => dataItem.id === selectedId);
 
   return (
-    <div className="grid md:flex md:h-screen md:w-screen md:items-center md:justify-center">
+    <div className="grid w-full md:flex md:h-full md:w-fit md:items-center md:justify-center">
       <div className="row-start-2 flex flex-row space-x-1 overflow-x-auto md:mr-3 md:max-h-[60vh] md:flex-col md:items-end md:space-y-2 md:overflow-y-auto">
-        {imageUrls.map((url, index) => (
+        {data.map((dataItem) => (
           <img
             loading="lazy"
-            key={index}
-            src={url}
-            alt={`Thumbnail ${index + 1}`}
-            className="h-[125px] w-[125px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px]"
-            onMouseEnter={() => handleThumbnailHover(index)}
+            key={"image-gallary" + dataItem.id}
+            src={dataItem.image}
+            alt={`Thumbnail ${dataItem.id + 1}`}
+            className={`h-[100px] w-[100px] flex-shrink-0 cursor-pointer rounded-md object-cover md:h-[60px] md:w-[60px] ${
+              dataItem.id === selectedId ? "border-2 border-black" : ""
+            }`}
+            onMouseEnter={() => setSelectedId(dataItem.id)}
           />
         ))}
       </div>
 
       {!isModalOpen && (
-        <div className="relative md:m-0 md:max-h-[60vh] md:w-auto">
+        <div className="relative md:m-0 md:w-2/3">
           <img
             loading="lazy"
-            src={selectedImage}
+            src={selectedDataItem?.image}
             alt="Selected"
-            className="mb-4 cursor-pointer rounded-lg object-contain md:m-0 md:max-h-[60vh] md:w-auto"
+            className="mb-4 aspect-square w-full cursor-pointer rounded-lg object-contain md:m-0"
             onClick={toggleModal}
           />
           <div className="absolute bottom-4 right-1 flex space-x-2 p-3 md:bottom-1">
@@ -90,7 +136,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
       )}
       {isModalOpen && (
         <div
-          className="fixed left-0 top-0 flex h-screen w-screen items-center justify-center bg-white"
+          className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-white"
           onClick={() => setIsModalOpen(false)}
         >
           <div className="max-w-screen relative flex max-h-screen items-center justify-center">
@@ -102,7 +148,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ imageUrls }) => {
             </button>
             <img
               loading="lazy"
-              src={selectedImage}
+              src={selectedDataItem?.image}
               alt="Selected"
               className="max-w-screen max-h-screen"
               onClick={closeModal}

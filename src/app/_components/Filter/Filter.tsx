@@ -6,23 +6,13 @@ import {
   ChevronDownIcon,
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
-
-export interface FilterOption {
-  value: string;
-  label: string;
-  checked: boolean;
-  color?: string;
-}
-
-export interface ProductFilter {
-  id: string;
-  name: string;
-  options: FilterOption[];
-}
-
-interface FilterProps {
-  filters: ProductFilter[];
-}
+import {
+  resetFilters,
+  selectFilters,
+  updateFilters,
+  useAppDispatch,
+  useAppSelector,
+} from "~/lib";
 
 interface ChevronIconProps {
   isOpen: boolean;
@@ -32,39 +22,25 @@ const ChevronIcon: React.FC<ChevronIconProps> = ({ isOpen }) => {
   return (
     <ChevronDownIcon
       className={`h-5 w-5 transition-transform duration-200 ${
-        isOpen ? "rotate-180 text-red-500" : "rotate-0 text-gray-500"
+        isOpen ? "rotate-180 text-red-500" : "rotate-0 text-black"
       }`}
     />
   );
 };
 
-export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
-  const [filters, setFilters] = useState(initialFilters);
+export const Filter: React.FC<{ mobileButton?: boolean }> = ({
+  mobileButton = false,
+}) => {
+  const dispatch = useAppDispatch();
+  const filters = useAppSelector(selectFilters);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleFilterChange = useCallback(
     (filterId: string, optionValue: string) => {
-      setFilters((currentFilters) =>
-        currentFilters.map((filter) =>
-          filter.id === filterId
-            ? {
-                ...filter,
-                options: filter.options.map((option) =>
-                  option.value === optionValue
-                    ? { ...option, checked: !option.checked }
-                    : option,
-                ),
-              }
-            : filter,
-        ),
-      );
+      dispatch(updateFilters({ filterId, optionValue }));
     },
-    [],
+    [dispatch],
   );
-
-  const resetFilters = useCallback(() => {
-    setFilters(initialFilters);
-  }, [initialFilters]);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -76,9 +52,7 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
   function renderFilters() {
     const colorFilters = filters.find((filter) => filter.id === "color");
-    const shoesSizeFilters = filters.find(
-      (filter) => filter.id === "shoes size",
-    );
+
     const otherFilters = filters.filter(
       (filter) => filter.id !== "color" && filter.id !== "shoes size",
     );
@@ -87,17 +61,78 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
       <div className={`${isDialogOpen ? "block" : "hidden md:block"}`}>
         <h1 className="mb-4 text-xl font-bold text-gray-900">Filter</h1>
 
-        {/* colorFilter  */}
+        {/* filter for category, gender, size, by price */}
+        {otherFilters.map((filter, idx) => (
+          <Disclosure
+            key={idx}
+            as="div"
+            className="border-t border-gray-200 py-4"
+          >
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-black hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                  <span>{filter.name}</span>
+                  <ChevronIcon isOpen={open} />
+                </Disclosure.Button>
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-900">
+                  <div>
+                    {filter.options.map((option, idx) => (
+                      <div
+                        key={idx}
+                        className="ml-2 flex items-center justify-start space-x-3 py-1"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={option.checked}
+                          onChange={() =>
+                            handleFilterChange(filter.id, option.value)
+                          }
+                          id={`${filter.id}-${option.value}-${idx}`}
+                          className="hidden"
+                        />
+                        <label
+                          htmlFor={`${filter.id}-${option.value}-${idx}`}
+                          className="flex cursor-pointer items-center"
+                        >
+                          {/* custom checkbox */}
+                          <span
+                            className={`mr-2 flex h-5 w-5 items-center justify-center rounded border-2 ${
+                              option.checked
+                                ? "border-black bg-black"
+                                : "border border-black bg-white"
+                            }`}
+                          >
+                            {option.checked && (
+                              <svg
+                                className="h-6 w-6 fill-current text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="1 2 15 20"
+                              >
+                                <path d="M5 11l2 2 6-6 2 2-8 8-4-4" />
+                              </svg>
+                            )}
+                          </span>
+                          {option.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </Disclosure.Panel>
+              </>
+            )}
+          </Disclosure>
+        ))}
+
         {colorFilters && (
           <Disclosure as="div" className="border-t border-gray-200 py-4">
             {({ open }) => (
               <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
+                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-black hover:text-gray-500 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
                   <span>{colorFilters.name}</span>
                   <ChevronIcon isOpen={open} />
                 </Disclosure.Button>
-                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                  <div className="ml-2 grid grid-cols-3 gap-1">
+                <Disclosure.Panel className="pb-2 pt-4 text-sm text-black">
+                  <div className="ml-2 grid grid-cols-2 gap-1">
                     {colorFilters.options.map((option, idx) => (
                       <div
                         key={idx}
@@ -131,14 +166,7 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                                     d="M5 11l2 2 6-6 2 2-8 8-4-4"
                                     clipRule="evenodd"
                                     fill={
-                                      [
-                                        "white",
-                                        "beige",
-                                        "orange",
-                                        "yellow",
-                                      ].includes(option.value)
-                                        ? "black"
-                                        : "currentColor"
+                                      option.checkmarkColor ?? "currentColor"
                                     }
                                   />
                                 </svg>
@@ -161,104 +189,10 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
           </Disclosure>
         )}
 
-        {/* filter for category, gender, size, by price */}
-        {otherFilters.map((filter, idx) => (
-          <Disclosure
-            key={idx}
-            as="div"
-            className="border-t border-gray-200 py-4"
-          >
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{filter.name}</span>
-                  <ChevronIcon isOpen={open} />
-                </Disclosure.Button>
-                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                  <div>
-                    {filter.options.map((option, idx) => (
-                      <div
-                        key={idx}
-                        className="ml-2 flex items-center justify-start space-x-3 py-1"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={option.checked}
-                          onChange={() =>
-                            handleFilterChange(filter.id, option.value)
-                          }
-                          id={`${filter.id}-${option.value}-${idx}`}
-                          className="hidden"
-                        />
-                        <label
-                          htmlFor={`${filter.id}-${option.value}-${idx}`}
-                          className="flex cursor-pointer items-center"
-                        >
-                          {/* custom checkbox */}
-                          <span
-                            className={`mr-2 flex h-5 w-5 items-center justify-center rounded border-2 ${
-                              option.checked
-                                ? "border-gray-700 bg-gray-700"
-                                : "border border-gray-400 bg-white"
-                            }`}
-                          >
-                            {option.checked && (
-                              <svg
-                                className="h-6 w-6 fill-current text-white"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="1 2 15 20"
-                              >
-                                <path d="M5 11l2 2 6-6 2 2-8 8-4-4" />
-                              </svg>
-                            )}
-                          </span>
-                          {option.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        ))}
-
-        {/* shoes size filter */}
-        {shoesSizeFilters && (
-          <Disclosure as="div" className="border-t border-gray-200 py-4">
-            {({ open }) => (
-              <>
-                <Disclosure.Button className="text-md flex w-full justify-between px-4 py-2 font-bold text-gray-500 hover:text-gray-900 focus:outline-none focus-visible:ring focus-visible:ring-opacity-75">
-                  <span>{shoesSizeFilters.name}</span>
-                  <ChevronIcon isOpen={open} />
-                </Disclosure.Button>
-                <Disclosure.Panel className="pb-2 pt-4 text-sm text-gray-500">
-                  <div className="grid grid-cols-3 gap-2 px-4">
-                    {shoesSizeFilters.options.map((option, idx) => (
-                      // custom checkbox
-                      <button
-                        key={idx}
-                        className={`rounded-md border px-4 py-2 ${
-                          option.checked ? "bg-gray-700 text-white" : "bg-white"
-                        }`}
-                        onClick={() =>
-                          handleFilterChange(shoesSizeFilters.id, option.value)
-                        }
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </Disclosure.Panel>
-              </>
-            )}
-          </Disclosure>
-        )}
-
         {/* reset button for desktop */}
         <button
-          onClick={resetFilters}
-          className={`relative ml-2.5 mt-10 hidden h-10 overflow-hidden rounded-full bg-gray-700 px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800 md:block`}
+          onClick={() => dispatch(resetFilters())}
+          className={`relative ml-2.5 mt-10 hidden h-10 overflow-hidden rounded-full bg-black px-4 py-1 text-white transition-all duration-200 hover:bg-gray-600 hover:ring-offset-2 active:ring-2 active:ring-neutral-800 md:block`}
         >
           Reset
         </button>
@@ -268,28 +202,19 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
 
   // mobile UI
   return (
-    <div>
-      {/* filter button for mobile */}
-      <button
-        onClick={toggleDialog}
-        id="filter-button"
-        className="fixed right-4 top-8 inline-flex items-center justify-center rounded-full border border-gray-300 px-3 py-1 font-medium text-gray-700 hover:border-gray-700 active:scale-95 md:hidden"
-      >
-        <AdjustmentsHorizontalIcon
-          className="mr-2 h-6 w-6"
-          aria-hidden="true"
-        />
-        Filter
-      </button>
+    <>
+      {mobileButton && (
+        <button onClick={toggleDialog} id="filter-button" className="md:hidden">
+          <AdjustmentsHorizontalIcon
+            className="h-7 w-7 hover:text-gray-400"
+            aria-hidden="true"
+          />
+        </button>
+      )}
 
       {/* drawer effect  */}
       <Transition.Root show={isDialogOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-10"
-          onClose={toggleDialog}
-          style={{ fontFamily: "roboto" }}
-        >
+        <Dialog as="div" className="relative z-10" onClose={toggleDialog}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -317,14 +242,14 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
                   {renderFilters()}
                   <div className="mx-5 flex items-center justify-center gap-12">
                     <button
-                      onClick={resetFilters}
-                      className="mt-4 w-[120px] rounded-lg bg-gray-700 px-4 py-2 text-sm text-white active:scale-95"
+                      onClick={() => dispatch(resetFilters())}
+                      className="mt-4 w-[120px] rounded-lg bg-black px-4 py-2 text-sm text-white active:scale-95"
                     >
                       Reset
                     </button>
                     <button
                       onClick={applyFiltersAndCloseDrawer}
-                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-gray-700 active:scale-95"
+                      className="mt-4 w-[120px] rounded-lg border-2 border-gray-900 px-3 py-1 text-black active:scale-95"
                     >
                       Apply
                     </button>
@@ -335,7 +260,7 @@ export const Filter: React.FC<FilterProps> = ({ filters: initialFilters }) => {
           </div>
         </Dialog>
       </Transition.Root>
-      {!isDialogOpen && <>{renderFilters()}</>}
-    </div>
+      {!isDialogOpen && mobileButton === false && <>{renderFilters()}</>}
+    </>
   );
 };

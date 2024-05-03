@@ -2,9 +2,26 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const productRouter = createTRPCRouter({
-  getTopSeller: publicProcedure.query(({ ctx }) => {
-    return ctx.db.topSeller.findMany({
-      orderBy: { quantitySold: "desc" },
+  getTopSellers: publicProcedure.query(({ ctx }) => {
+    return ctx.db.productVariant.findMany({
+      select: {
+        id: true,
+        price: true,
+        product: {
+          select: {
+            name: true,
+          },
+        },
+        images: {
+          select: {
+            url: true,
+          },
+          take: 1,
+        },
+      },
+      orderBy: {
+        quantitySold: "desc",
+      },
       take: 4,
     });
   }),
@@ -29,6 +46,9 @@ export const productRouter = createTRPCRouter({
         },
         include: {
           variants: {
+            orderBy: {
+              createdAt: "desc",
+            },
             where: {
               size: size,
               color: color,
@@ -48,6 +68,44 @@ export const productRouter = createTRPCRouter({
                   url: true,
                 },
                 take: 1,
+              },
+              createdAt: true,
+            },
+          },
+        },
+      });
+    }),
+  getProductDetails: publicProcedure
+    .input(
+      z.object({
+        productVariantId: z.string(),
+      }),
+    )
+    .query(({ ctx, input }) => {
+      return ctx.db.productVariant.findUnique({
+        where: {
+          id: input.productVariantId,
+        },
+        select: {
+          id: true,
+          size: true,
+          color: true,
+          product: {
+            include: {
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+              variants: {
+                include: {
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                },
               },
             },
           },

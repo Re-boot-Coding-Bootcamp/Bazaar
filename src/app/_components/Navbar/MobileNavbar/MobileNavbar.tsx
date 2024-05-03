@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Favorites } from "../../Favorites";
 import { CartIcon } from "../../CartIcon";
 import type { Category } from "@prisma/client";
+import { resetFiltersAndSortBy, useAppDispatch } from "~/lib";
 
 interface MobileNavbarProps {
   categories: Category[];
@@ -18,12 +19,8 @@ const MobileNavbar = ({ categories }: MobileNavbarProps): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <nav className="flex w-full items-center justify-between px-4 text-black shadow-md lg:hidden">
-      <MobileSearchBar
-        onSubmit={(searchTerm: string) => {
-          alert(`Searching for ${searchTerm}...`);
-        }}
-      />
+    <nav className="flex w-full items-center justify-between bg-white px-4 text-black shadow-md lg:hidden">
+      <MobileSearchBar />
       <Link href="/" id="logo-container" className="ml-[84px]">
         <Image
           src={LogoImage}
@@ -62,10 +59,12 @@ interface DrawerProps {
 }
 
 const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
+  const dispatch = useAppDispatch();
+
   return (
     <div
       id="mobile-drawer"
-      className={`fixed right-0 top-0 z-30 min-h-dvh w-full transform shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
+      className={`fixed right-0 top-0 z-30 min-h-dvh w-full transform bg-white shadow-lg transition-all duration-300 ${drawerOpen ? "translate-x-0" : "-translate-x-[-1536px]"} bg-white`}
     >
       <div
         id="header"
@@ -81,7 +80,13 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
           <XMarkIcon className="h-8 w-8" />
         </button>
       </div>
-      <Link onClick={() => setDrawerOpen(false)} href={`/product-list/all`}>
+      <Link
+        onClick={() => {
+          setDrawerOpen(false);
+          dispatch(resetFiltersAndSortBy());
+        }}
+        href={`/product-list/all`}
+      >
         <div className="border-b border-black p-4 text-lg font-medium">
           Shop All
         </div>
@@ -89,7 +94,10 @@ const Drawer = ({ drawerOpen, setDrawerOpen, categories }: DrawerProps) => {
       {categories.map((category) => (
         <Link
           key={category.id}
-          onClick={() => setDrawerOpen(false)}
+          onClick={() => {
+            setDrawerOpen(false);
+            dispatch(resetFiltersAndSortBy());
+          }}
           href={`/product-list/${category.id}`}
         >
           <div className="border-b border-black p-4 text-lg font-medium">

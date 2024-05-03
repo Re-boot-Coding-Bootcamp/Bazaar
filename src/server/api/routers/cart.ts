@@ -33,7 +33,35 @@ export const cartRouter = createTRPCRouter({
       if (input.quantity === 0) {
         await ctx.db.cartItem.delete({ where: { id: input.cartItemId } });
       }
-      return await ctx.db.cart.findUnique({ where: { id: input.cartId } });
+      return await ctx.db.cart.findUnique({
+        where: { id: input.cartId },
+        include: {
+          items: {
+            include: {
+              productVariant: {
+                select: {
+                  id: true,
+                  price: true,
+                  size: true,
+                  color: true,
+                  stock: true,
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                  product: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
     }),
   addProductToCart: publicProcedure
     .input(z.object({ productVariantId: z.string(), cartId: z.string() }))
@@ -63,6 +91,32 @@ export const cartRouter = createTRPCRouter({
       });
       return await ctx.db.cart.findUnique({
         where: { id: input.cartId },
+        include: {
+          items: {
+            include: {
+              productVariant: {
+                select: {
+                  id: true,
+                  price: true,
+                  size: true,
+                  color: true,
+                  stock: true,
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                  product: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       });
     }),
   getCart: publicProcedure
@@ -70,7 +124,75 @@ export const cartRouter = createTRPCRouter({
     .query(({ ctx, input: { cartId } }) => {
       return ctx.db.cart.findUnique({
         where: { id: cartId },
-        include: { items: true },
+        select: {
+          id: true,
+          items: {
+            include: {
+              productVariant: {
+                select: {
+                  id: true,
+                  price: true,
+                  size: true,
+                  color: true,
+                  stock: true,
+                  images: {
+                    select: {
+                      url: true,
+                    },
+                    take: 1,
+                  },
+                  product: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    }),
+  checkout: publicProcedure
+    .input(z.object({ cartId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const cart = await ctx.db.cart.findUnique({
+        where: { id: input.cartId },
+        include: {
+          items: {
+            include: {
+              productVariant: {
+                select: {
+                  id: true,
+                  quantitySold: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!cart) {
+        throw new TRPCError({
+          message: "Cart not found",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+
+      const promises = cart.items.map(async (cartItem) => {
+        return await ctx.db.productVariant.update({
+          where: { id: cartItem.productVariantId },
+          data: {
+            quantitySold:
+              cartItem.productVariant.quantitySold + cartItem.quantity,
+          },
+        });
+      });
+
+      await Promise.all(promises);
+
+      return ctx.db.cartItem.deleteMany({
+        where: { cartId: input.cartId },
       });
     }),
 });

@@ -12,6 +12,7 @@ export const IsClientContextProvider = ({
 }) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
+
   return (
     <IsClientContext.Provider value={isClient}>
       <SnackbarProvider

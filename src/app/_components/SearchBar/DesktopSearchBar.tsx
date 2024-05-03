@@ -2,16 +2,14 @@
 
 import React, { useState } from "react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
+import { useRouter } from "next/navigation";
 
-interface DesktopSearchBarProps {
-  onSubmit: (searchTerm: string) => void;
-}
-
-const DesktopSearchBar = ({ onSubmit }: DesktopSearchBarProps): JSX.Element => {
+const DesktopSearchBar = (): JSX.Element => {
+  const router = useRouter();
   const [searchFieldValue, setSearchFieldValue] = useState("");
 
   const handleSubmit = () => {
-    onSubmit(searchFieldValue);
+    router.push(`/search?q=${searchFieldValue.trim()}`);
     setSearchFieldValue("");
   };
 

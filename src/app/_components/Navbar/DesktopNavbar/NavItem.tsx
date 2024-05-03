@@ -2,6 +2,7 @@ import type { Category } from "@prisma/client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { resetFiltersAndSortBy, useAppDispatch } from "~/lib";
 
 interface NavItemProps {
   category: Category;
@@ -9,6 +10,7 @@ interface NavItemProps {
 }
 
 const NavItem = ({ category, children }: NavItemProps) => {
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const isActive = pathname.includes(category.id);
 
@@ -17,6 +19,9 @@ const NavItem = ({ category, children }: NavItemProps) => {
       href={`/product-list/${category.id}`}
       className="group relative box-border"
       id="nav-item-container"
+      onClick={() => {
+        dispatch(resetFiltersAndSortBy());
+      }}
     >
       <p
         className={`cursor-pointer border-b-2 hover:border-black ${isActive ? "border-black" : "border-transparent"}`}

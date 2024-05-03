@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Provider } from "react-redux";
 import { LocalStorageKeys } from "~/constants";
-import { makeStore, updateCart, type AppStore } from "~/lib";
+import { addToFavorite, makeStore, updateCart, type AppStore } from "~/lib";
 import { api } from "~/trpc/react";
 import { useIsClient } from "./IsClientContextProvider";
 import { enqueueSnackbar } from "notistack";
+import type { FavoritedItem } from "~/types";
 
 export default function StoreProvider({
   children,
@@ -14,7 +15,15 @@ export default function StoreProvider({
   children: React.ReactNode;
 }) {
   const isClient = useIsClient();
+  const [cartId, setCartId] = useState<string>();
+
   const { mutate: createCart } = api.cart.createCart.useMutation();
+  const { data: cartData } = api.cart.getCart.useQuery(
+    { cartId: cartId ?? "" },
+    {
+      enabled: !!cartId,
+    },
+  );
 
   const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
@@ -23,17 +32,24 @@ export default function StoreProvider({
   }
 
   useEffect(() => {
+    if (cartData && cartData.items.length > 0) {
+      storeRef.current?.dispatch(updateCart({ items: cartData.items }));
+    }
+  }, [cartData]);
+
+  useEffect(() => {
     if (storeRef.current && isClient) {
       const existingCartId = window.localStorage.getItem(
         LocalStorageKeys.CART_ID,
       );
 
-      enqueueSnackbar("Existing cart id: " + existingCartId);
+      const favoritedItems = window.localStorage.getItem(
+        LocalStorageKeys.FAVORITED_PRODUCTS,
+      );
 
       if (existingCartId) {
-        // 1, if there is, set it to the state
-        //    fetch for cart from backend
-        //    once we get the cart detail, update the state
+        storeRef.current?.dispatch(updateCart({ id: existingCartId }));
+        setCartId(existingCartId);
       } else {
         createCart(undefined, {
           onSuccess(newCart) {
@@ -48,6 +64,13 @@ export default function StoreProvider({
               },
             );
           },
+        });
+      }
+
+      if (favoritedItems) {
+        const favItemsObject = JSON.parse(favoritedItems) as FavoritedItem[];
+        favItemsObject.forEach((item) => {
+          storeRef.current?.dispatch(addToFavorite({ item }));
         });
       }
     }
