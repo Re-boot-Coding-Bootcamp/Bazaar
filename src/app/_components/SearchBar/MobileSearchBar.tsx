@@ -14,7 +14,7 @@ const MobileSearchBar = (): JSX.Element => {
 
   const handleSubmit = () => {
     setisOpen(false);
-    router.push(`/search?q=${searchFieldValue}`);
+    router.push(`/search?q=${searchFieldValue.trim()}`);
     setSearchFieldValue("");
   };
 

@@ -9,7 +9,7 @@ const DesktopSearchBar = (): JSX.Element => {
   const [searchFieldValue, setSearchFieldValue] = useState("");
 
   const handleSubmit = () => {
-    router.push(`/search?q=${searchFieldValue}`);
+    router.push(`/search?q=${searchFieldValue.trim()}`);
     setSearchFieldValue("");
   };
 

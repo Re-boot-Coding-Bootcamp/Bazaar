@@ -8,26 +8,40 @@ export const searchRouter = createTRPCRouter({
         searchInput: z.string().min(1, "Search input cannot be empty"),
       }),
     )
-    .query(({ ctx, input: { searchInput } }) => {
-      return ctx.db.productVariant.findMany({
+    .query(async ({ ctx, input: { searchInput } }) => {
+      let searchTerm;
+      const additionalKeywords: string[] = [];
+      if (searchInput.includes(" ")) {
+        const [firstKeyword, ...otherKeywords] = searchInput.split(" ");
+        if (firstKeyword) {
+          searchTerm = firstKeyword;
+        }
+        if (otherKeywords.length) {
+          additionalKeywords.push(...otherKeywords);
+        }
+      } else {
+        searchTerm = searchInput;
+      }
+
+      const initialSearchResults = await ctx.db.productVariant.findMany({
         where: {
           OR: [
             {
               color: {
-                contains: searchInput,
+                contains: searchTerm,
               },
             },
             {
               product: {
                 name: {
-                  contains: searchInput,
+                  contains: searchTerm,
                 },
               },
             },
             {
               product: {
                 description: {
-                  contains: searchInput,
+                  contains: searchTerm,
                 },
               },
             },
@@ -48,9 +62,30 @@ export const searchRouter = createTRPCRouter({
             select: {
               id: true,
               name: true,
+              description: true,
             },
           },
         },
       });
+
+      if (additionalKeywords.length) {
+        let reducedResults = initialSearchResults;
+        additionalKeywords.forEach((keyword) => {
+          reducedResults = reducedResults.filter((result) => {
+            return (
+              result.color.toLowerCase().includes(keyword.toLowerCase()) ||
+              result.product.name
+                .toLowerCase()
+                .includes(keyword.toLowerCase()) ||
+              result.product.description
+                .toLowerCase()
+                .includes(keyword.toLowerCase())
+            );
+          });
+        });
+        return reducedResults;
+      } else {
+        return initialSearchResults;
+      }
     }),
 });
