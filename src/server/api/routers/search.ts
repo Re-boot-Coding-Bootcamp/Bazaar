@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const searchRouter = createTRPCRouter({
   searchProducts: publicProcedure
@@ -11,49 +8,49 @@ export const searchRouter = createTRPCRouter({
         searchInput: z.string().min(1, "Search input cannot be empty"),
       }),
     )
-    .query(async ({ ctx, input }) => {
-      console.log("searchProducts called with input:", input);
-      const { searchInput } = input;
-      const products = await ctx.db.product.findMany({
+    .query(({ ctx, input: { searchInput } }) => {
+      return ctx.db.productVariant.findMany({
         where: {
           OR: [
             {
-              name: {
+              color: {
                 contains: searchInput,
               },
             },
             {
-              description: {
-                contains: searchInput,
+              product: {
+                name: {
+                  contains: searchInput,
+                },
               },
             },
             {
-              variants: {
-                some: {
-                  color: {
-                    contains: searchInput,
-                  },
+              product: {
+                description: {
+                  contains: searchInput,
                 },
               },
             },
           ],
         },
-        include: {
-          variants: {
+        select: {
+          id: true,
+          price: true,
+          color: true,
+          size: true,
+          images: {
+            select: {
+              url: true,
+            },
+            take: 1,
+          },
+          product: {
             select: {
               id: true,
-              color: true,
-              size: true,
-              images: {
-                select: {
-                  url: true,
-                },
-                take: 1,
-              },
+              name: true,
             },
           },
         },
       });
-      return products;
     }),
 });

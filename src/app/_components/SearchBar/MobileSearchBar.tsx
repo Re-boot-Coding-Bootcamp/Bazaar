@@ -4,19 +4,17 @@ import React, { useRef, useState } from "react";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { Modal } from "../Modal";
+import { useRouter } from "next/navigation";
 
-interface MobileSearchBarProps {
-  onSubmit: (searchTerm: string) => void;
-}
-
-const MobileSearchBar = ({ onSubmit }: MobileSearchBarProps): JSX.Element => {
+const MobileSearchBar = (): JSX.Element => {
+  const router = useRouter();
   const [isOpen, setisOpen] = useState(false);
   const [searchFieldValue, setSearchFieldValue] = useState("");
   const searchFieldRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = () => {
     setisOpen(false);
-    onSubmit(searchFieldValue);
+    router.push(`/search?q=${searchFieldValue}`);
     setSearchFieldValue("");
   };
 

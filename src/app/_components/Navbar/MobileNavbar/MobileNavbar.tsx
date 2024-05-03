@@ -20,11 +20,7 @@ const MobileNavbar = ({ categories }: MobileNavbarProps): JSX.Element => {
 
   return (
     <nav className="flex w-full items-center justify-between bg-white px-4 text-black shadow-md lg:hidden">
-      <MobileSearchBar
-        onSubmit={(searchTerm: string) => {
-          alert(`Searching for ${searchTerm}...`);
-        }}
-      />
+      <MobileSearchBar />
       <Link href="/" id="logo-container" className="ml-[84px]">
         <Image
           src={LogoImage}
