@@ -115,8 +115,6 @@ const ProductDetailsPageView = ({
       const existingCartItem = cartItems.find(
         (item) => item.productVariantId === selectedVariantId,
       );
-
-      // if the selected variant is already in the cart
       if (existingCartItem) {
         if (existingCartItem.quantity < 10) {
           try {
@@ -176,7 +174,7 @@ const ProductDetailsPageView = ({
   };
 
   return (
-    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 px-4 py-8">
       <div
         id="breadcrumb-and-sort-container"
         className="flex items-center justify-between"

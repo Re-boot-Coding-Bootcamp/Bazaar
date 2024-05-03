@@ -13,6 +13,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "~/lib";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 interface ChevronIconProps {
   isOpen: boolean;
@@ -238,8 +239,15 @@ export const Filter: React.FC<{ mobileButton?: boolean }> = ({
                 leaveFrom="translate-x-0"
                 leaveTo="translate-x-full"
               >
-                <Dialog.Panel className="relative ml-auto flex h-[90vh] w-screen max-w-sm flex-col overflow-y-auto rounded-lg bg-white px-2 py-4 shadow-xl">
+                <Dialog.Panel className="relative flex h-[80vh] w-screen max-w-sm flex-col overflow-y-auto rounded-lg bg-white px-2 py-4 shadow-xl">
                   {renderFilters()}
+                  <button
+                    id="close-dialog-button"
+                    onClick={() => setIsDialogOpen(false)}
+                    className="right-4 top-2 rounded p-1 hover:bg-gray-100 absolute"
+                  >
+                    <XMarkIcon className="h-8 w-8" />
+                  </button>
                   <div className="mx-5 flex items-center justify-center gap-12">
                     <button
                       onClick={() => dispatch(resetFilters())}
