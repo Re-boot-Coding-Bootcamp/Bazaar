@@ -79,7 +79,16 @@ const ProductGrid = ({
       );
     }
 
-    const filteredAndSorted = filteredProductVariants.sort((a, b) => {
+    const filteredUniqueByColorProductVariants = productIds.flatMap(
+      (productId) => {
+        const variants = filteredProductVariants.filter(
+          (item) => item.productId === productId,
+        );
+        return uniqBy(variants, "color");
+      },
+    );
+
+    return filteredUniqueByColorProductVariants.sort((a, b) => {
       if (sortBy === "price-low-to-high") {
         return a.price - b.price;
       }
@@ -89,13 +98,6 @@ const ProductGrid = ({
       }
 
       return isBefore(a.createdAt, b.createdAt) ? -1 : 1;
-    });
-
-    return productIds.flatMap((productId) => {
-      const variants = filteredAndSorted.filter(
-        (item) => item.productId === productId,
-      );
-      return uniqBy(variants, "color");
     });
   }, [allProductVariants, filters, productIds, sortBy]);
 
@@ -116,7 +118,9 @@ const ProductGrid = ({
           />
         ))
       ) : (
-        <div className="col-span-full min-w-max">No result</div>
+        <div className="w-[917px]">
+          <p className="aspect-square w-full">No results</p>
+        </div>
       )}
     </div>
   );

@@ -50,7 +50,7 @@ export default function CartPage() {
   };
 
   return (
-    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8 px-4">
       <BreadCrumb
         items={[
           { text: "Home", href: "/" },
@@ -91,7 +91,7 @@ export default function CartPage() {
             </div>
           </>
         ) : (
-          <p>There are no items in your cart 👀</p>
+          <p className="text-gray-500">There are no items in your cart 👀</p>
         )}
       </div>
     </div>
