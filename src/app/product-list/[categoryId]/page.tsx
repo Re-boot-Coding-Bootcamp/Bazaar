@@ -17,7 +17,7 @@ export default async function ProductListForCategoryPage({
     : (await api.category.getCategoryById({ id: categoryId }))?.name ?? "";
 
   return (
-    <div className="flex h-full max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full max-w-screen-xl flex-col gap-4 py-8 px-4">
       <div
         id="breadcrumb-and-sort-container"
         className="flex items-center justify-between"

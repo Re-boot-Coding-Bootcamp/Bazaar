@@ -7,7 +7,7 @@ export default function FavoritesPage() {
   const favoritedItems = useAppSelector(selectFavoritedItems);
 
   return (
-    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8 px-4">
       <BreadCrumb
         items={[
           { text: "Shop All", href: "/product-list/all" },

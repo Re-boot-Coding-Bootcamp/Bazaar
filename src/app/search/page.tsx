@@ -43,7 +43,7 @@ export default function SearchPage() {
   };
 
   return (
-    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8">
+    <div className="flex h-full w-full max-w-screen-xl flex-col gap-4 py-8 px-4">
       <div
         id="breadcrumb-and-sort-container"
         className="flex items-center justify-between"
